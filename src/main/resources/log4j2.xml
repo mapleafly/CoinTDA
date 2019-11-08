@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="appenderPatternLayout">%d{dd.MM.yyyy HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
+        <Property name="path">logs</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- 输出到控制台 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!-- 输出格式 -->
+            <PatternLayout pattern="${appenderPatternLayout}"/>
+        </Console>
+
+        <File name="File" fileName="${path}/cointda.log">
+            <PatternLayout pattern="${appenderPatternLayout}"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <!--OFF、FATAL、ERROR、WARN、INFO、DEBUG、TRACE、 ALL -->
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <!-- Uncomment this for logging to file-->
+            <AppenderRef ref="File"/>
+            
+        </Root>
+    </Loggers>
+</Configuration>
