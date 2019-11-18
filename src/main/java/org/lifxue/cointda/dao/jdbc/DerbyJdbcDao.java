@@ -22,7 +22,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
-import java.util.logging.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -108,8 +107,8 @@ public class DerbyJdbcDao {
      * @param sql
      * @return
      */
-    public boolean insert(String sql) {
-        return execute(sql);
+    public int insert(String sql) {
+        return EexecuteInsert(sql);
     }
 
     /**
@@ -132,6 +131,34 @@ public class DerbyJdbcDao {
         return execute(sql);
     }
 
+    public int EexecuteInsert(String sql) {
+        int key = -1;
+        try {
+            if (conn == null) {
+                return key;
+            }
+            conn.setAutoCommit(false);
+            try (Statement s = conn.createStatement()) {
+                s.execute(sql, Statement.RETURN_GENERATED_KEYS);
+                ResultSet rs = s.getGeneratedKeys();
+                if (rs.next()) {
+                    key = rs.getInt(1);
+                }
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            logger.debug("exception thrown:");
+            if (e instanceof SQLException) {
+                logger.debug(e.toString());
+            } else {
+                logger.debug(e.toString());
+            }
+            key = -1;
+        }
+        return key;
+
+    }
+    
     public boolean execute(String sql) {
         boolean isOK = true;
         try {

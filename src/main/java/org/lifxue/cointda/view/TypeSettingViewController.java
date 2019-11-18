@@ -1,7 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2019 xuelf.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.lifxue.cointda.view;
 
@@ -17,6 +27,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lifxue.cointda.dao.CoinTypeDao;
@@ -57,11 +68,7 @@ public class TypeSettingViewController implements Initializable {
 
         CoinTypeDao dao = new CoinTypeDao();
         List<CoinType> list = dao.QueryAll();
-        if (list == null || list.isEmpty()) {
-            logger.info("数据库CoinType表为空");
-        } else {
-            coinTypeData.addAll(list);
-        }
+        coinTypeData.addAll(list);
     }
 
     /**
@@ -75,9 +82,9 @@ public class TypeSettingViewController implements Initializable {
         typeTable.setItems(coinTypeData);
         showCoinTypeDetails(null);
 
-        shortNameColumn.setCellValueFactory(clbck -> clbck.getValue().shortNameProperty());
-        fullNameColumn.setCellValueFactory(clbck -> clbck.getValue().fullNameProperty());
-        cnNameColumn.setCellValueFactory(clbck -> clbck.getValue().cnNameProperty());
+        shortNameColumn.setCellValueFactory(cellData -> cellData.getValue().shortNameProperty());
+        fullNameColumn.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+        cnNameColumn.setCellValueFactory(cellData -> cellData.getValue().cnNameProperty());
 
         typeTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showCoinTypeDetails(newValue));
@@ -101,12 +108,11 @@ public class TypeSettingViewController implements Initializable {
 
     @FXML
     private void handleAddType(ActionEvent event) {
-        String shortName = this.shortNameTextField.getText();
-        String fullName = this.fullNameTextField.getText();
-        String cnName = this.cnNameTextField.getText();
-        if (coinTypeData == null || coinTypeData.isEmpty()) {
-            saveData(shortName, fullName, cnName);
-        } else {
+        if (isInputValid()) {
+            String shortName = this.shortNameTextField.getText();
+            String fullName = this.fullNameTextField.getText();
+            String cnName = this.cnNameTextField.getText();
+
             int len = coinTypeData.size();
             boolean re = false;
             for (int i = 0; i < len; i++) {
@@ -129,10 +135,10 @@ public class TypeSettingViewController implements Initializable {
     }
 
     /**
-     * 
+     *
      * @param shortName
      * @param fullName
-     * @param cnName 
+     * @param cnName
      */
     private void saveData(String shortName, String fullName, String cnName) {
         CoinType coinType = new CoinType(shortName, fullName, cnName);
@@ -167,6 +173,39 @@ public class TypeSettingViewController implements Initializable {
             alert.setHeaderText("没有选中数据!");
             alert.setContentText("请从表格中选择一行数据。");
             alert.showAndWait();
+        }
+    }
+
+    /**
+     * Validates the user input in the text fields.
+     *
+     * @return true if the input is valid
+     */
+    private boolean isInputValid() {
+        String errorMessage = "";
+
+        if (shortNameTextField.getText() == null || shortNameTextField.getText().length() == 0) {
+            errorMessage += "无效的英文简称!\n";
+        }
+        if (fullNameTextField.getText() == null || fullNameTextField.getText().length() == 0) {
+            errorMessage += "无效的英文全称!\n";
+        }
+        if (cnNameTextField.getText() == null || cnNameTextField.getText().length() == 0) {
+            errorMessage += "无效的中文名称!\n";
+        }
+
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            // Show the error message.
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("无效的字段");
+            alert.setHeaderText("请修改无效的字段");
+            alert.setContentText(errorMessage);
+
+            alert.showAndWait();
+
+            return false;
         }
     }
 

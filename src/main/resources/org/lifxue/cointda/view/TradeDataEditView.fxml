@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lifxue.cointda.view.DataEditViewController">
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lifxue.cointda.view.TradeDataEditViewController">
    <children>
       <SplitPane dividerPositions="0.7" orientation="VERTICAL" prefHeight="700.0" prefWidth="850.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -23,6 +23,7 @@
                <children>
                   <TableView fx:id="dataTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
+                        <TableColumn fx:id="idColumn" prefWidth="75.0" text="id" visible="false" />
                       <TableColumn fx:id="typeColumn" prefWidth="116.0" text="类别" />
                         <TableColumn fx:id="salebuyColumn" prefWidth="166.0" text="买/卖" />
                       <TableColumn fx:id="priceColumn" prefWidth="75.0" text="单价" />
@@ -60,8 +61,8 @@
                         <DatePicker fx:id="dateDatePicker" prefHeight="23.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                         <ChoiceBox fx:id="typeChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                         <ChoiceBox fx:id="salebuyChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <TextField fx:id="priceTextField" maxWidth="150.0" minWidth="150.0" prefHeight="23.0" prefWidth="164.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <TextField fx:id="numTextField" maxWidth="150.0" onKeyReleased="#onNumTextFieldKeyReleased" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <TextField fx:id="priceTextField" maxWidth="150.0" minWidth="150.0" onKeyReleased="#handlePriceTextFieldKeyReleased" prefHeight="23.0" prefWidth="164.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <TextField fx:id="numTextField" maxWidth="150.0" onKeyReleased="#handleNumTextFieldKeyReleased" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                         <TextField fx:id="totalTextField" maxWidth="150.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                      </children>
                      <opaqueInsets>

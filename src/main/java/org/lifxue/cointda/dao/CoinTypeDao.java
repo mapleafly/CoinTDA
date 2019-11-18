@@ -46,9 +46,10 @@ public class CoinTypeDao {
         String shortName = coinType.getShortName();
         String fullName = coinType.getFullName();
         String cnName = coinType.getCnName();
-        String sql = "insert into TAB_COINTYPE values ('" + shortName + "','" + fullName + "','" + cnName + "')";
+        String sql = "insert into TAB_COINTYPE values ('" 
+                + shortName + "','" + fullName + "','" + cnName + "')";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        return dbjd.insert(sql);
+        return (dbjd.insert(sql) != -1);
     }
 
     /**
@@ -61,7 +62,9 @@ public class CoinTypeDao {
         String shortName = coinType.getShortName();
         String fullName = coinType.getFullName();
         String cnName = coinType.getCnName();
-        String sql = "update TAB_COINTYPE set FULL_NAME='" + fullName + "',CN_NAME='" + cnName + "' where SHORT_NAME='" + shortName + "'";
+        String sql = "update TAB_COINTYPE set FULL_NAME='" 
+                + fullName + "',CN_NAME='" + cnName 
+                + "' where SHORT_NAME='" + shortName + "'";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         return dbjd.update(sql);
     }
@@ -110,6 +113,27 @@ public class CoinTypeDao {
         return ct;
     }
 
+     /**
+     * 查询全部简称
+     * @return
+     */
+    public List<String> QueryAllShortName() {
+        List list = new ArrayList<String>();
+        String sql = "SELECT SHORT_NAME FROM TAB_COINTYPE";
+        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
+        ResultSet rs = dbjd.executeQuery(sql);
+        try {
+            while (rs.next()) {
+                list.add(rs.getString("SHORT_NAME"));
+            }
+        } catch (SQLException ex) {
+            logger.debug(ex);
+            dbjd.close();
+        }
+        return list;
+    }
+
+    
     /**
      * 查询全部
      * @return
