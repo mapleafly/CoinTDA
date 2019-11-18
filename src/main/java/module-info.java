@@ -1,8 +1,12 @@
 module org.lifxue.cointda {
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.base;
     requires javafx.graphics;
+    requires java.base;
+    requires java.sql;
+    requires org.apache.derby.engine;
+    requires org.apache.derby.locale_zh_CN;
+    requires org.apache.derby.commons;
     
     requires org.apache.logging.log4j;
 

@@ -63,7 +63,7 @@ public class RootLayoutController implements Initializable {
     @FXML
     private void handleCloseApp(ActionEvent event) {
         //Platform.exit();
-        Stage stage = (Stage)pane.getScene().getWindow();
+        Stage stage = (Stage) pane.getScene().getWindow();
         stage.close();
     }
 
@@ -84,6 +84,8 @@ public class RootLayoutController implements Initializable {
             loader.setLocation(RootLayoutController.class.getResource("DataEditView.fxml"));
             AnchorPane dataEditView = (AnchorPane) loader.load();
             pane.setCenter(dataEditView);
+            //转移焦点到center
+            dataEditView.requestFocus();
         } catch (IOException e) {
             LOGGER.error(e);
         }
@@ -98,12 +100,14 @@ public class RootLayoutController implements Initializable {
             loader.setLocation(RootLayoutController.class.getResource("TypePieChartView.fxml"));
             AnchorPane dataEditView = (AnchorPane) loader.load();
             pane.setCenter(dataEditView);
+            //转移焦点到center
+            dataEditView.requestFocus();
         } catch (IOException e) {
             LOGGER.error(e);
         }
     }
-    
-     /**
+
+    /**
      * 显示平均价格视图
      */
     public void showPATableView() {
@@ -112,12 +116,14 @@ public class RootLayoutController implements Initializable {
             loader.setLocation(RootLayoutController.class.getResource("PATableView.fxml"));
             AnchorPane dataEditView = (AnchorPane) loader.load();
             pane.setCenter(dataEditView);
+            //转移焦点到center
+            dataEditView.requestFocus();
         } catch (IOException e) {
             LOGGER.error(e);
         }
     }
 
-      /**
+    /**
      * 显示品种类型设置视图
      */
     public void showTypeSettingView() {
@@ -126,6 +132,8 @@ public class RootLayoutController implements Initializable {
             loader.setLocation(RootLayoutController.class.getResource("TypeSettingView.fxml"));
             AnchorPane dataEditView = (AnchorPane) loader.load();
             pane.setCenter(dataEditView);
+            //转移焦点到center
+            dataEditView.requestFocus();
         } catch (IOException e) {
             LOGGER.error(e);
         }

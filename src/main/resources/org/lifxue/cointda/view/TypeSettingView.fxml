@@ -64,7 +64,6 @@
                               <HBox layoutX="352.0" layoutY="17.0" spacing="20.0" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0">
                                  <children>
                                     <Button mnemonicParsing="false" onAction="#handleAddType" prefHeight="30.0" prefWidth="80.0" text="增加" />
-                                    <Button mnemonicParsing="false" onAction="#handleEditType" prefHeight="30.0" prefWidth="80.0" text="修改" />
                                     <Button mnemonicParsing="false" onAction="#handleDelType" prefHeight="30.0" prefWidth="80.0" text="删除" />
                                  </children>
                               </HBox>

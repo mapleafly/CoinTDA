@@ -14,6 +14,7 @@ import org.lifxue.cointda.view.RootLayoutController;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lifxue.cointda.dao.jdbc.InitTable;
 
 /**
  * JavaFX App
@@ -31,13 +32,17 @@ public class App extends Application {
         this.primaryStage.setTitle("CoinTDA");
 
         initRootLayout();
-        //showDataEditView();
         
+        //初始化数据库
+        //InitTable initTable = new InitTable();
+        //initTable.createTable();
+
         //监听到窗口关闭
         primaryStage.setOnCloseRequest((WindowEvent event) -> {
             LOGGER.info("监听到窗口关闭");
             primaryStage.close();
         });
+
     }
 
     /**

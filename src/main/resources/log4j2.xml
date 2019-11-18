@@ -18,7 +18,7 @@
     </Appenders>
     <Loggers>
         <!--OFF、FATAL、ERROR、WARN、INFO、DEBUG、TRACE、 ALL -->
-        <Root level="INFO">
+        <Root level="DEBUG">
             <AppenderRef ref="Console"/>
             <!-- Uncomment this for logging to file-->
             <AppenderRef ref="File"/>

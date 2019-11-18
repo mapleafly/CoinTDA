@@ -17,12 +17,12 @@ public class CoinType {
     private StringProperty shortName;
     private StringProperty fullName;
     private StringProperty cnName;
-    
-    public CoinType(){
-        this(null,null,null);
+
+    public CoinType() {
+        this(null, null, null);
     }
-    
-    public CoinType(String shortName, String fullName, String cnName){
+
+    public CoinType(String shortName, String fullName, String cnName) {
         this.shortName = new SimpleStringProperty(shortName);
         this.fullName = new SimpleStringProperty(fullName);
         this.cnName = new SimpleStringProperty(cnName);
@@ -34,7 +34,7 @@ public class CoinType {
     public String getShortName() {
         return shortName.get();
     }
-    
+
     public StringProperty shortNameProperty() {
         return shortName;
     }
@@ -52,8 +52,8 @@ public class CoinType {
     public String getFullName() {
         return fullName.get();
     }
-    
-    public StringProperty fullNameProperty(){
+
+    public StringProperty fullNameProperty() {
         return fullName;
     }
 
@@ -71,9 +71,10 @@ public class CoinType {
         return cnName.get();
     }
 
-    public StringProperty cnNameProperty(){
+    public StringProperty cnNameProperty() {
         return cnName;
     }
+
     /**
      * @param cnName the cnName to set
      */
