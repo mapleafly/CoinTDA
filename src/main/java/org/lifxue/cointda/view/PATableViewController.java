@@ -23,6 +23,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * FXML Controller class
@@ -31,6 +33,7 @@ import javafx.scene.control.Label;
  */
 public class PATableViewController implements Initializable {
 
+    private static final Logger logger = LogManager.getLogger(PATableViewController.class.getName());
     @FXML
     private DatePicker startDatePicker;
     @FXML
@@ -48,16 +51,17 @@ public class PATableViewController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     @FXML
     private void handleSearch(ActionEvent event) {
     }
-    
+
 }

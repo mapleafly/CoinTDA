@@ -40,7 +40,7 @@ import org.lifxue.cointda.models.CoinType;
  */
 public class TypeSettingViewController implements Initializable {
 
-    private static final Logger logger = LogManager.getLogger(RootLayoutController.class.getName());
+    private static final Logger logger = LogManager.getLogger(TypeSettingViewController.class.getName());
 
     @FXML
     private TableView<CoinType> typeTable;

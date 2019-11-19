@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="850.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="org.lifxue.cointda.view.TypePieChartViewController">
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lifxue.cointda.view.TypePieChartViewController">
    <children>
-      <PieChart layoutX="175.0" layoutY="130.0" />
+      <Label fx:id="caption" layoutX="88.0" layoutY="53.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="5.0" />
+      <PieChart fx:id="pieChart" labelLineLength="30.0" layoutX="175.0" layoutY="130.0" legendSide="RIGHT" prefHeight="700.0" prefWidth="850.0" title="持有品种金额比例" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>
