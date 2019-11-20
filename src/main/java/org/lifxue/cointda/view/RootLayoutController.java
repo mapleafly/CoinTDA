@@ -22,6 +22,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
+import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -38,6 +42,15 @@ public class RootLayoutController implements Initializable {
     private static final Logger LOGGER = LogManager.getLogger(RootLayoutController.class.getName());
 
     private BorderPane pane;
+
+    @FXML
+    private ContextMenu settingMenu;
+    @FXML
+    private MenuItem typeItem;
+    @FXML
+    private MenuItem priceItem;
+    @FXML
+    private Button settingButton;
 
     /**
      * Initializes the controller class.
@@ -67,7 +80,7 @@ public class RootLayoutController implements Initializable {
 
     @FXML
     private void handleSetting(ActionEvent event) {
-        showTypeSettingView();
+        settingMenu.show(settingButton, Side.RIGHT, 0, 0);
     }
 
     @FXML
@@ -75,6 +88,15 @@ public class RootLayoutController implements Initializable {
         //Platform.exit();
         Stage stage = (Stage) pane.getScene().getWindow();
         stage.close();
+    }
+
+    @FXML
+    private void handleSettingType(ActionEvent event) {
+        showTypeSettingView();
+    }
+
+    @FXML
+    private void handleSettingPrice(ActionEvent event) {
     }
 
     /**
@@ -148,4 +170,5 @@ public class RootLayoutController implements Initializable {
             LOGGER.error(e);
         }
     }
+
 }

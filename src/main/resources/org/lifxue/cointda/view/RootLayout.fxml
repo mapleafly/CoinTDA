@@ -2,6 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -16,7 +18,15 @@
             </Button>
             <Button mnemonicParsing="false" onAction="#handlePieChart" prefHeight="40.0" prefWidth="100.0" text="品种比例图" />
             <Button mnemonicParsing="false" onAction="#handlePATable" prefHeight="40.0" prefWidth="100.0" text="平均价格分析表" />
-            <Button mnemonicParsing="false" onAction="#handleSetting" prefHeight="40.0" prefWidth="100.0" text="设置" />
+            <Button fx:id="settingButton" mnemonicParsing="false" onAction="#handleSetting" prefHeight="40.0" prefWidth="100.0" text="设置">
+               <contextMenu>
+                  <ContextMenu fx:id="settingMenu">
+                    <items>
+                      <MenuItem fx:id="typeItem" mnemonicParsing="false" text="交易品种" onAction="#handleSettingType" />
+                      <MenuItem fx:id="priceItem" mnemonicParsing="false" text="当前价格" onAction="#handleSettingPrice"  />
+                    </items>
+                  </ContextMenu>
+               </contextMenu></Button>
             <Button mnemonicParsing="false" onAction="#handleCloseApp" prefHeight="40.0" prefWidth="100.0" text="退出" />
          </children>
          <BorderPane.margin>
