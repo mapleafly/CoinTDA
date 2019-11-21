@@ -24,18 +24,16 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lifxue.cointda.dao.CoinTypeDao;
 import org.lifxue.cointda.dao.TypePieChartDao;
+import org.lifxue.cointda.models.CoinType;
 
 /**
  * FXML Controller class
@@ -48,8 +46,6 @@ public class TypePieChartViewController implements Initializable {
 
     @FXML
     private PieChart pieChart;
-    @FXML
-    private Label caption;
 
     /**
      *
@@ -70,52 +66,54 @@ public class TypePieChartViewController implements Initializable {
         pieChartData.addAll(getData());
         pieChart.setData(pieChartData);
 
-        caption.setTextFill(Color.DARKORANGE);
-        caption.setFont(new Font("Arial", 30));
-
         double n = 0;
         for (PieChart.Data data : pieChart.getData()) {
             n += data.getPieValue();
         }
         final double total = n;
 
-        pieChart.getData().forEach((PieChart.Data data) -> {
-            data.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent e) -> {
-                DecimalFormat decimalFormat = new DecimalFormat(".00");
-                String p = decimalFormat.format(data.getPieValue() / total * 100);
-                caption.setText(p + "%");
-
-            });
-        });
         pieChart.getData().forEach(data -> {
             DecimalFormat decimalFormat = new DecimalFormat(".00");
             String p = decimalFormat.format(data.getPieValue() / total * 100);
-            Tooltip toolTip = new Tooltip(p + "%");
+            String t = decimalFormat.format(data.getPieValue());
+            Tooltip toolTip = new Tooltip(data.getName() + "总价:" + t + "； 占比:" + p + "%");
             toolTip.setFont(new Font("Arial", 20));
             Tooltip.install(data.getNode(), toolTip);
         });
 
     }
 
+    /**
+     * 生成饼图数据
+     * @return 
+     */
     private List<PieChart.Data> getData() {
         List list = new ArrayList<PieChart.Data>();
         TypePieChartDao dao = new TypePieChartDao();
-        List<Map<String, Double>> buyList = dao.QueryBuyTotal();
-        List<Map<String, Double>> saleList = dao.QuerySaleTotal();
+        CoinTypeDao ctDao = new CoinTypeDao();
+        List<Map<String, Double>> buyList = dao.QueryBuyNum();
+        List<Map<String, Double>> saleList = dao.QuerySaleNum();
         buyList.forEach((buy) -> {
             Iterator<String> buyIter = buy.keySet().iterator();
             if (buyIter.hasNext()) {
                 String buyKey = (String) buyIter.next();
-                double saleTotal = 0;
+                double saleNum = 0;
                 for (Map sale : saleList) {
                     if (sale.get(buyKey) == null) {
                         continue;
                     }
-                    saleTotal = (double) sale.get(buyKey);
+                    saleNum = (double) sale.get(buyKey);
                 }
-                double total = (double) buy.get(buyKey) - saleTotal;
-                if (total > 0) {
-                    list.add(new PieChart.Data(buyKey, total));
+                double num = (double) buy.get(buyKey) - saleNum;
+                if (num > 0) {
+                    List<CoinType> ctList = ctDao.QueryAll();
+                    double price = 0;
+                    for (CoinType ct : ctList) {
+                        if (ct.getShortName().equals(buyKey)) {
+                            price = ct.getPrice();
+                        }
+                    }
+                    list.add(new PieChart.Data(buyKey, num * price));
                 }
             }
         });
