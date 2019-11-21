@@ -40,12 +40,16 @@ public class InitTable {
         ////////////////////////////////
         //sql = "drop table TAB_COINTYPE";
         //dbjd.dropTable(sql);
+        //sql = "drop table TAB_TRADEDATA";
+        //dbjd.dropTable(sql);
 
         /////////////////////////////////////
         sql = "CREATE TABLE TAB_COINTYPE ("
                 + "SHORT_NAME VARCHAR(10) NOT NULL,"
                 + "FULL_NAME VARCHAR(100) NOT NULL,"
                 + "CN_NAME VARCHAR(100) NOT NULL,"
+                + "PRICE DECIMAL(9,2),"
+                + "C_DATE DATE,"
                 + "primary key (SHORT_NAME))";
         //dbjd.createTable(sql);
 
@@ -58,7 +62,7 @@ public class InitTable {
                 + "TD_TOTALPRICE DECIMAL(9,2) NOT NULL,"
                 + "TD_DATE DATE NOT NULL,"
                 + "primary key (TD_ID))";
-        dbjd.createTable(sql);
+        //dbjd.createTable(sql);
         
         /*
         sql = "CREATE TABLE TAB_COLORTYPE_CONTENT ("

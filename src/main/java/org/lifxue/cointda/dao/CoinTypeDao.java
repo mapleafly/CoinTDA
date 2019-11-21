@@ -37,7 +37,7 @@ public class CoinTypeDao {
     }
 
     /**
-     * 插入数据
+     * 插入CoinType数据
      *
      * @param coinType
      * @return
@@ -46,27 +46,41 @@ public class CoinTypeDao {
         String shortName = coinType.getShortName();
         String fullName = coinType.getFullName();
         String cnName = coinType.getCnName();
-        String sql = "insert into TAB_COINTYPE values ('" 
-                + shortName + "','" + fullName + "','" + cnName + "')";
+        String sql = "insert into TAB_COINTYPE (SHORT_NAME,FULL_NAME,CN_NAME) values ('" 
+                + shortName + "','" + fullName + "','" 
+                + cnName + "')";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         return (dbjd.insert(sql) != -1);
     }
 
+   
     /**
-     * 修改数据
+     * 更新价格数据数据
      *
      * @param coinType
      * @return
      */
     public boolean update(CoinType coinType) {
         String shortName = coinType.getShortName();
-        String fullName = coinType.getFullName();
-        String cnName = coinType.getCnName();
-        String sql = "update TAB_COINTYPE set FULL_NAME='" 
-                + fullName + "',CN_NAME='" + cnName 
+        double price = coinType.getPrice();
+        String date = coinType.getDate();
+        return update(shortName, price, date);
+    }
+    
+    /**
+     * 更新价格数据
+     * @param shortName
+     * @param price
+     * @param date
+     * @return 
+     */
+    public boolean update(String shortName, double price, String date){
+        String sql = "update TAB_COINTYPE set PRICE=" + price 
+                + ",C_DATE='" + date 
                 + "' where SHORT_NAME='" + shortName + "'";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         return dbjd.update(sql);
+        
     }
 
     /**
@@ -80,7 +94,7 @@ public class CoinTypeDao {
     }
 
     /**
-     *
+     *删除数据
      * @param shortName
      * @return
      */
@@ -102,9 +116,11 @@ public class CoinTypeDao {
         CoinType ct = new CoinType();
         try {
             if (rs.next()) {
-                ct.setShortName(rs.getString("SHORT_NAME"));
-                ct.setFullName(rs.getString("FULL_NAME"));
-                ct.setCnName(rs.getString("CN_NAME"));
+                ct.setShortName(rs.getString(1));
+                ct.setFullName(rs.getString(2));
+                ct.setCnName(rs.getString(3));
+                ct.setPrice(rs.getDouble(4));
+                ct.setDate(rs.getString(5));
             }
         } catch (SQLException ex) {
             logger.debug(ex);
@@ -132,7 +148,6 @@ public class CoinTypeDao {
         }
         return list;
     }
-
     
     /**
      * 查询全部
@@ -146,9 +161,11 @@ public class CoinTypeDao {
         try {
             while (rs.next()) {
                 CoinType ct = new CoinType();
-                ct.setShortName(rs.getString("SHORT_NAME"));
-                ct.setFullName(rs.getString("FULL_NAME"));
-                ct.setCnName(rs.getString("CN_NAME"));
+                ct.setShortName(rs.getString(1));
+                ct.setFullName(rs.getString(2));
+                ct.setCnName(rs.getString(3));
+                ct.setPrice(rs.getDouble(4));
+                ct.setDate(rs.getString(5));
                 list.add(ct);
             }
         } catch (SQLException ex) {

@@ -29,6 +29,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -71,20 +72,27 @@ public class TypePieChartViewController implements Initializable {
 
         caption.setTextFill(Color.DARKORANGE);
         caption.setFont(new Font("Arial", 30));
-        
+
         double n = 0;
         for (PieChart.Data data : pieChart.getData()) {
             n += data.getPieValue();
         }
         final double total = n;
-        
+
         pieChart.getData().forEach((PieChart.Data data) -> {
             data.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent e) -> {
                 DecimalFormat decimalFormat = new DecimalFormat(".00");
                 String p = decimalFormat.format(data.getPieValue() / total * 100);
                 caption.setText(p + "%");
-                
+
             });
+        });
+        pieChart.getData().forEach(data -> {
+            DecimalFormat decimalFormat = new DecimalFormat(".00");
+            String p = decimalFormat.format(data.getPieValue() / total * 100);
+            Tooltip toolTip = new Tooltip(p + "%");
+            toolTip.setFont(new Font("Arial", 20));
+            Tooltip.install(data.getNode(), toolTip);
         });
 
     }

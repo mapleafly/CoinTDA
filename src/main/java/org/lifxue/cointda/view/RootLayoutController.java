@@ -97,6 +97,7 @@ public class RootLayoutController implements Initializable {
 
     @FXML
     private void handleSettingPrice(ActionEvent event) {
+        showSettingPriceView();
     }
 
     /**
@@ -170,5 +171,22 @@ public class RootLayoutController implements Initializable {
             LOGGER.error(e);
         }
     }
+    
+      /**
+     * 显示品种价格设置视图
+     */
+    public void showSettingPriceView() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(RootLayoutController.class.getResource("SettingPriceView.fxml"));
+            AnchorPane dataEditView = (AnchorPane) loader.load();
+            pane.setCenter(dataEditView);
+            //转移焦点到center
+            dataEditView.requestFocus();
+        } catch (IOException e) {
+            LOGGER.error(e);
+        }
+    }
+    
 
 }

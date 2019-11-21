@@ -15,6 +15,7 @@
  */
 package org.lifxue.cointda.models;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -27,15 +28,23 @@ public class CoinType {
     private final SimpleStringProperty shortName;
     private final SimpleStringProperty fullName;
     private final SimpleStringProperty cnName;
+    private final SimpleDoubleProperty price;
+    private final SimpleStringProperty date;
 
     public CoinType() {
-        this(null, null, null);
+        this(null, null, null, 0, null);
     }
 
     public CoinType(String shortName, String fullName, String cnName) {
+        this(shortName, fullName, cnName, 0, null);
+    }
+    
+    public CoinType(String shortName, String fullName, String cnName, double price, String date) {
         this.shortName = new SimpleStringProperty(shortName);
         this.fullName = new SimpleStringProperty(fullName);
         this.cnName = new SimpleStringProperty(cnName);
+        this.price = new SimpleDoubleProperty(price);
+        this.date = new SimpleStringProperty(date);
     }
 
     /**
@@ -92,4 +101,39 @@ public class CoinType {
         this.cnName.set(cnName);
     }
 
+    /**
+     * @return the price
+     */
+    public double getPrice() {
+        return price.get();
+    }
+
+    public SimpleDoubleProperty priceProperty() {
+        return price;
+    }
+
+    /**
+     * @param price the price to set
+     */
+    public void setPrice(double price) {
+        this.price.set(price);
+    }
+
+    /**
+     * @return the date
+     */
+    public String getDate() {
+        return date.get();
+    }
+
+    public SimpleStringProperty dateProperty() {
+        return date;
+    }
+
+    /**
+     * @param date the date to set
+     */
+    public void setDate(String date) {
+        this.date.set(date);
+    }
 }
