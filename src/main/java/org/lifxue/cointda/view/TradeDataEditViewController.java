@@ -111,8 +111,7 @@ public class TradeDataEditViewController implements Initializable {
      * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb
-    ) {
+    public void initialize(URL url, ResourceBundle rb ) {
         dataTable.setItems(tradeDataList);
 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
