@@ -123,7 +123,7 @@ public class CoinTypeDao {
                 ct.setDate(rs.getString(5));
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return ct;
@@ -134,7 +134,7 @@ public class CoinTypeDao {
      * @return
      */
     public List<String> QueryAllShortName() {
-        List list = new ArrayList<String>();
+        List<String> list = new ArrayList<String>();
         String sql = "SELECT SHORT_NAME FROM TAB_COINTYPE";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         ResultSet rs = dbjd.executeQuery(sql);
@@ -143,7 +143,7 @@ public class CoinTypeDao {
                 list.add(rs.getString("SHORT_NAME"));
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return list;
@@ -154,7 +154,7 @@ public class CoinTypeDao {
      * @return
      */
     public List<CoinType> QueryAll() {
-        List list = new ArrayList();
+        List<CoinType> list = new ArrayList<CoinType>();
         String sql = "SELECT * FROM TAB_COINTYPE";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         ResultSet rs = dbjd.executeQuery(sql);
@@ -169,7 +169,7 @@ public class CoinTypeDao {
                 list.add(ct);
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return list;

@@ -21,8 +21,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import javafx.event.EventHandler;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.WindowEvent;
 import org.lifxue.cointda.view.RootLayoutController;
@@ -36,7 +34,7 @@ import org.lifxue.cointda.dao.jdbc.InitTable;
  */
 public class App extends Application {
 
-    private static final Logger LOGGER = LogManager.getLogger(App.class.getName());
+    private static final Logger logger = LogManager.getLogger(App.class.getName());
 
     private Stage primaryStage;
     private BorderPane rootLayout;
@@ -47,14 +45,14 @@ public class App extends Application {
         this.primaryStage.setTitle("CoinTDA");
 
         initRootLayout();
-        
-        //初始化数据库
-        //InitTable initTable = new InitTable();
-        //initTable.createTable();
 
+        //初始化数据库
+        InitTable initTable = new InitTable();
+        initTable.createTable();
+        logger.info("数据库初始化完成");
         //监听到窗口关闭
         primaryStage.setOnCloseRequest((WindowEvent event) -> {
-            LOGGER.info("监听到窗口关闭");
+            logger.info("监听到窗口关闭");
             primaryStage.close();
         });
 
@@ -79,7 +77,7 @@ public class App extends Application {
             RootLayoutController controller = loader.getController();
             controller.setPane(rootLayout);
         } catch (IOException e) {
-            LOGGER.error(e);
+            logger.error(e);
         }
     }
 

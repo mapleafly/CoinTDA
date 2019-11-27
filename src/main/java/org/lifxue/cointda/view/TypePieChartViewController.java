@@ -88,7 +88,7 @@ public class TypePieChartViewController implements Initializable {
      * @return 
      */
     private List<PieChart.Data> getData() {
-        List list = new ArrayList<PieChart.Data>();
+        List<PieChart.Data> list = new ArrayList<PieChart.Data>();
         TypePieChartDao dao = new TypePieChartDao();
         CoinTypeDao ctDao = new CoinTypeDao();
         List<Map<String, Double>> buyList = dao.QueryBuyNum();
@@ -98,7 +98,7 @@ public class TypePieChartViewController implements Initializable {
             if (buyIter.hasNext()) {
                 String buyKey = (String) buyIter.next();
                 double saleNum = 0;
-                for (Map sale : saleList) {
+                for (Map<String, Double> sale : saleList) {
                     if (sale.get(buyKey) == null) {
                         continue;
                     }

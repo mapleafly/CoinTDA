@@ -17,7 +17,6 @@ package org.lifxue.cointda.view;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lifxue.cointda.dao.CoinTypeDao;
 import org.lifxue.cointda.dao.PATableDao;
-import org.lifxue.cointda.dao.TradeDataDao;
 import org.lifxue.cointda.models.TradeData;
 import org.lifxue.cointda.util.DateHelper;
 
@@ -156,7 +154,7 @@ public class PATableViewController implements Initializable {
     }
 
     private Map<String, Double> getPAData(String strCoinType, List<TradeData> tradeDataList) {
-        Map map = new HashMap<String, String>();
+        Map<String, Double> map = new HashMap<String, Double>();
         double paPrice = 0, numTotal = 0;
         double buy = 0, sale = 0;
 

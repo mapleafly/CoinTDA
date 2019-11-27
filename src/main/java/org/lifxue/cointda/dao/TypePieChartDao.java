@@ -38,18 +38,18 @@ public class TypePieChartDao {
      * @return
      */
     public List<Map<String,Double>> QueryBuyTotal() {
-        List list = new ArrayList();
+        List<Map<String,Double>> list = new ArrayList<Map<String,Double>>();
         String sql = "SELECT TD_COINTYPE,SUM(TD_TOTALPRICE) FROM TAB_TRADEDATA WHERE TD_SALEORBUY='买' GROUP BY TD_COINTYPE";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         ResultSet rs = dbjd.executeQuery(sql);
         try {
             while (rs.next()) {
-                Map map = new HashMap<String,Double>();
+                Map<String,Double> map = new HashMap<String,Double>();
                 map.put(rs.getString(1), rs.getDouble(2));
                 list.add(map);
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return list;
@@ -61,18 +61,18 @@ public class TypePieChartDao {
      * @return
      */
     public List<Map<String,Double>> QuerySaleTotal() {
-        List list = new ArrayList();
+        List<Map<String,Double>> list = new ArrayList<Map<String,Double>>();
         String sql = "SELECT TD_COINTYPE,SUM(TD_TOTALPRICE) FROM TAB_TRADEDATA WHERE TD_SALEORBUY='卖' GROUP BY TD_COINTYPE";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         ResultSet rs = dbjd.executeQuery(sql);
         try {
             while (rs.next()) {
-                Map map = new HashMap<String,Double>();
+                Map<String,Double> map = new HashMap<String,Double>();
                 map.put(rs.getString(1), rs.getDouble(2));
                 list.add(map);
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return list;
@@ -84,18 +84,18 @@ public class TypePieChartDao {
      * @return
      */
     public List<Map<String,Double>> QueryBuyNum() {
-        List list = new ArrayList();
+        List<Map<String,Double>> list = new ArrayList<Map<String,Double>>();
         String sql = "SELECT TD_COINTYPE,SUM(TD_NUM) FROM TAB_TRADEDATA WHERE TD_SALEORBUY='买' GROUP BY TD_COINTYPE";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         ResultSet rs = dbjd.executeQuery(sql);
         try {
             while (rs.next()) {
-                Map map = new HashMap<String,Double>();
+                Map<String,Double> map = new HashMap<String,Double>();
                 map.put(rs.getString(1), rs.getDouble(2));
                 list.add(map);
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return list;
@@ -107,18 +107,18 @@ public class TypePieChartDao {
      * @return
      */
     public List<Map<String,Double>> QuerySaleNum() {
-        List list = new ArrayList();
+        List<Map<String,Double>> list = new ArrayList<Map<String,Double>>();
         String sql = "SELECT TD_COINTYPE,SUM(TD_NUM) FROM TAB_TRADEDATA WHERE TD_SALEORBUY='卖' GROUP BY TD_COINTYPE";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         ResultSet rs = dbjd.executeQuery(sql);
         try {
             while (rs.next()) {
-                Map map = new HashMap<String,Double>();
+                Map<String,Double> map = new HashMap<String,Double>();
                 map.put(rs.getString(1), rs.getDouble(2));
                 list.add(map);
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return list;

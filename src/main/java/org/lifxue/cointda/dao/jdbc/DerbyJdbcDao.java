@@ -59,14 +59,13 @@ public class DerbyJdbcDao {
             conn = DriverManager.getConnection(protocol
                     + dbName + ";create=true", props);
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e) {
-            logger.debug("exception thrown:");
             if (e instanceof SQLException) {
-                logger.debug(e.toString());
+                logger.error(e.toString());
             } else {
-                logger.debug(e.toString());
+                logger.error(e.toString());
             }
         } catch (IllegalArgumentException | SecurityException | NoSuchMethodException | InvocationTargetException ex) {
-            logger.debug(ex.toString());
+            logger.error(ex.toString());
         }
     }
 
@@ -147,11 +146,10 @@ public class DerbyJdbcDao {
             }
             conn.commit();
         } catch (SQLException e) {
-            logger.debug("exception thrown:");
             if (e instanceof SQLException) {
-                logger.debug(e.toString());
+                logger.error(e.toString());
             } else {
-                logger.debug(e.toString());
+                logger.error(e.toString());
             }
             key = -1;
         }
@@ -171,11 +169,10 @@ public class DerbyJdbcDao {
             }
             conn.commit();
         } catch (SQLException e) {
-            logger.debug("exception thrown:");
             if (e instanceof SQLException) {
-                logger.debug(e.toString());
+                logger.error(e.toString());
             } else {
-                logger.debug(e.toString());
+                logger.error(e.toString());
             }
             isOK = false;
         }
@@ -192,11 +189,10 @@ public class DerbyJdbcDao {
 
             conn.commit();
         } catch (SQLException e) {
-            logger.debug("exception thrown:");
             if (e instanceof SQLException) {
-                logger.debug(e.toString());
+                logger.error(e.toString());
             } else {
-                logger.debug(e.toString());
+                logger.error(e.toString());
             }
         }
         return rs;
@@ -210,7 +206,7 @@ public class DerbyJdbcDao {
             conn.close();
             DriverManager.getConnection("jdbc:derby:;shutdown=true");
         } catch (SQLException e) {
-            logger.debug(e.toString());
+            logger.error(e.toString());
         }
     }
 }

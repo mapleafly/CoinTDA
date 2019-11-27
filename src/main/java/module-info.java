@@ -11,8 +11,7 @@ module org.lifxue.cointda {
     requires org.apache.logging.log4j;
 
     opens org.lifxue.cointda to javafx.fxml;
-    opens org.lifxue.cointda.models to javafx.base, java.base;
+    opens org.lifxue.cointda.models to javafx.base;
     opens org.lifxue.cointda.view to javafx.fxml;
     exports org.lifxue.cointda;
-    exports org.lifxue.cointda.view;
 }

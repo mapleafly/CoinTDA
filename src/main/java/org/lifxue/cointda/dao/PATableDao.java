@@ -56,7 +56,7 @@ public class PATableDao {
                 td.setDate(rs.getString(7));
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return td;
@@ -71,7 +71,7 @@ public class PATableDao {
      * @return
      */
     public List<TradeData> QueryByTypeAndDate(String strCoinType, String strStartDate, String strEndDate) {
-        List list = new ArrayList();
+        List<TradeData> list = new ArrayList<TradeData>();
         String sql = "SELECT * FROM TAB_TRADEDATA where "
                 + "TD_COINTYPE='"+ strCoinType+ "' "
                 + "and TD_DATE>='"+strStartDate+"' "
@@ -92,7 +92,7 @@ public class PATableDao {
                 list.add(td);
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return list;
@@ -105,7 +105,7 @@ public class PATableDao {
      * @return
      */
     public List<TradeData> QueryByType(String strCoinType) {
-        List list = new ArrayList();
+        List<TradeData> list = new ArrayList<TradeData>();
         String sql = "SELECT * FROM TAB_TRADEDATA where TD_COINTYPE='"+ strCoinType+ "' ORDER BY TD_ID";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         ResultSet rs = dbjd.executeQuery(sql);
@@ -122,7 +122,7 @@ public class PATableDao {
                 list.add(td);
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return list;
@@ -134,7 +134,7 @@ public class PATableDao {
      * @return
      */
     public List<TradeData> QueryAll() {
-        List list = new ArrayList();
+        List<TradeData> list = new ArrayList<TradeData>();
         String sql = "SELECT * FROM TAB_TRADEDATA ORDER BY TD_ID";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         ResultSet rs = dbjd.executeQuery(sql);
@@ -151,7 +151,7 @@ public class PATableDao {
                 list.add(td);
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return list;
@@ -163,18 +163,18 @@ public class PATableDao {
      * @return
      */
     public List<Map<String, Double>> QueryBuyNum() {
-        List list = new ArrayList();
+        List<Map<String, Double>> list = new ArrayList<Map<String, Double>>();
         String sql = "SELECT TD_COINTYPE,SUM(TD_NUM) FROM TAB_TRADEDATA WHERE TD_SALEORBUY='买' GROUP BY TD_COINTYPE";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         ResultSet rs = dbjd.executeQuery(sql);
         try {
             while (rs.next()) {
-                Map map = new HashMap<String, Double>();
+                Map<String, Double> map = new HashMap<String, Double>();
                 map.put(rs.getString(1), rs.getDouble(2));
                 list.add(map);
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return list;
@@ -186,18 +186,18 @@ public class PATableDao {
      * @return
      */
     public List<Map<String, Double>> QuerySaleNum() {
-        List list = new ArrayList();
+        List<Map<String, Double>> list = new ArrayList<Map<String, Double>>();
         String sql = "SELECT TD_COINTYPE,SUM(TD_NUM) FROM TAB_TRADEDATA WHERE TD_SALEORBUY='卖' GROUP BY TD_COINTYPE";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         ResultSet rs = dbjd.executeQuery(sql);
         try {
             while (rs.next()) {
-                Map map = new HashMap<String, Double>();
+                Map<String, Double> map = new HashMap<>();
                 map.put(rs.getString(1), rs.getDouble(2));
                 list.add(map);
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return list;

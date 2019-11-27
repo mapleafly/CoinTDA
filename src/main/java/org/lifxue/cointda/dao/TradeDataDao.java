@@ -129,7 +129,7 @@ public class TradeDataDao {
                 td.setDate(rs.getString(7));
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return td;
@@ -141,7 +141,7 @@ public class TradeDataDao {
      * @return
      */
     public List<TradeData> QueryAll() {
-        List list = new ArrayList();
+        List<TradeData> list = new ArrayList<TradeData>();
         String sql = "SELECT * FROM TAB_TRADEDATA ORDER BY TD_ID";
         DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
         ResultSet rs = dbjd.executeQuery(sql);
@@ -158,7 +158,7 @@ public class TradeDataDao {
                 list.add(td);
             }
         } catch (SQLException ex) {
-            logger.debug(ex);
+            logger.error(ex);
             dbjd.close();
         }
         return list;
