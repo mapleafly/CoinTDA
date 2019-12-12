@@ -6,20 +6,19 @@
             <packaging>jar</packaging>
         </packagings>
         <goals>
-            <goal>package</goal>
-            <goal>org.codehaus.mojo:exec-maven-plugin:1.6.0:exec</goal>
+            <goal>clean</goal>
+            <goal>javafx:run</goal>
         </goals>
-        <properties>
-            <exec.args>--module-path ${project.build.directory}/modules --module ${moduleName}/${mainClass}</exec.args>
-            <exec.executable>java</exec.executable>
-        </properties>
+          
     </action>
     <action>
-            <actionName>CUSTOM-dev run</actionName>
-            <displayName>dev run</displayName>
-            <goals>
-                <goal>clean</goal>
-                <goal>javafx:run</goal>
-            </goals>
-        </action>
+        <actionName>build</actionName>
+        <packagings>
+            <packaging>*</packaging>
+        </packagings>
+        <goals>
+            <goal>compile</goal>
+            <goal>package</goal>
+        </goals>
+    </action>
 </actions>

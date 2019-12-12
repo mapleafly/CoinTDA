@@ -23,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Side;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -31,6 +32,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lifxue.cointda.crypto.CoinListingCollector;
+import org.lifxue.cointda.dao.CoinListingDao;
 
 /**
  * FXML Controller class
@@ -100,12 +103,51 @@ public class RootLayoutController implements Initializable {
         showSettingPriceView();
     }
 
+    @FXML
+    private void handleUpdate(ActionEvent event) {
+        if (update()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("消息");
+            alert.setHeaderText("更新基础数据成功");
+            alert.setContentText("更新基础数据成功！");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("错误");
+            alert.setHeaderText("更新基础数据失败");
+            alert.setContentText("请首先确认网络状况和网站key！");
+            alert.showAndWait();
+        }
+    }
+
     /**
      *
      * @param pane
      */
     public void setPane(BorderPane pane) {
         this.pane = pane;
+    }
+
+    /**
+     * 更新基础数据 从coinmarketcap.com获取coin id 价格等数据
+     *
+     * @param event
+     */
+    private boolean update() {
+        boolean ok = false;
+//        CoinIDMapCollector coin = new CoinIDMapCollector();
+//        if (CoinMarketCapDao.truncate()) {
+//            if (CoinMarketCapDao.batchInsert(coin.getCoinMarketCapIds()).length > 0) {
+//                ok = true;
+//            }
+//        }
+        CoinListingCollector listing = new CoinListingCollector();
+        if (CoinListingDao.truncate()) {
+            if (CoinListingDao.batchInsert(listing.getCoinMarketListing()).length > 0) {
+                ok = true;
+            }
+        }
+        return ok;
     }
 
     /**
@@ -171,8 +213,8 @@ public class RootLayoutController implements Initializable {
             LOGGER.error(e);
         }
     }
-    
-      /**
+
+    /**
      * 显示品种价格设置视图
      */
     public void showSettingPriceView() {
@@ -187,6 +229,5 @@ public class RootLayoutController implements Initializable {
             LOGGER.error(e);
         }
     }
-    
 
 }

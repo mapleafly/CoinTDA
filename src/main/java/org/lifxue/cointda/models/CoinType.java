@@ -15,9 +15,8 @@
  */
 package org.lifxue.cointda.models;
 
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 /**
  *
@@ -25,97 +24,133 @@ import javafx.beans.property.StringProperty;
  */
 public class CoinType {
 
-    private final SimpleStringProperty shortName;
-    private final SimpleStringProperty fullName;
-    private final SimpleStringProperty cnName;
-    private final SimpleDoubleProperty price;
+    private final SimpleStringProperty id;
+    private final SimpleBooleanProperty select;
+    private final SimpleStringProperty name;
+    private final SimpleStringProperty symbol;
+    private final SimpleStringProperty rank;
+    private final SimpleStringProperty price;
     private final SimpleStringProperty date;
 
     public CoinType() {
-        this(null, null, null, 0, null);
+        this(null, false, null, null, null, "0", null);
     }
 
-    public CoinType(String shortName, String fullName, String cnName) {
-        this(shortName, fullName, cnName, 0, null);
-    }
-    
-    public CoinType(String shortName, String fullName, String cnName, double price, String date) {
-        this.shortName = new SimpleStringProperty(shortName);
-        this.fullName = new SimpleStringProperty(fullName);
-        this.cnName = new SimpleStringProperty(cnName);
-        this.price = new SimpleDoubleProperty(price);
+    public CoinType(String id, boolean select, String name, String symbol, String rank, String price, String date) {
+        this.id = new SimpleStringProperty(id);
+        this.select = new SimpleBooleanProperty(select);
+        this.name = new SimpleStringProperty(name);
+        this.symbol = new SimpleStringProperty(symbol);
+        this.rank = new SimpleStringProperty(rank);
+        this.price = new SimpleStringProperty(price);
         this.date = new SimpleStringProperty(date);
     }
 
     /**
-     * @return the shortName
+     * @return the id
      */
-    public String getShortName() {
-        return shortName.get();
+    public String getId() {
+        return id.get();
     }
 
-    public SimpleStringProperty shortNameProperty() {
-        return shortName;
+    public SimpleStringProperty idProperty() {
+        return id;
     }
 
     /**
-     * @param shortName the shortName to set
+     * @param id the id to set
      */
-    public void setShortName(String shortName) {
-        this.shortName.set(shortName);
+    public void setId(String id) {
+        this.id.set(id);
     }
 
     /**
-     * @return the fullName
+     * @return the name
      */
-    public String getFullName() {
-        return fullName.get();
+    public boolean getSelect() {
+        return select.get();
     }
 
-    public SimpleStringProperty fullNameProperty() {
-        return fullName;
+    public SimpleBooleanProperty selectProperty() {
+        return select;
     }
 
     /**
-     * @param fullName the fullName to set
+     * @param select
      */
-    public void setFullName(String fullName) {
-        this.fullName.set(fullName);
+    public void setSelect(boolean select) {
+        this.select.set(select);
     }
 
     /**
-     * @return the cnName
+     * @return the name
      */
-    public String getCnName() {
-        return cnName.get();
+    public String getName() {
+        return name.get();
     }
 
-    public SimpleStringProperty cnNameProperty() {
-        return cnName;
+    public SimpleStringProperty nameProperty() {
+        return name;
     }
 
     /**
-     * @param cnName the cnName to set
+     * @param name the name to set
      */
-    public void setCnName(String cnName) {
-        this.cnName.set(cnName);
+    public void setName(String name) {
+        this.name.set(name);
+    }
+
+    /**
+     * @return the symbol
+     */
+    public String getSymbol() {
+        return symbol.get();
+    }
+
+    public SimpleStringProperty symbolProperty() {
+        return symbol;
+    }
+
+    /**
+     * @param symbol the symbol to set
+     */
+    public void setSymbol(String symbol) {
+        this.symbol.set(symbol);
+    }
+
+    /**
+     * @return the rank
+     */
+    public String getRank() {
+        return rank.get();
+    }
+
+    public SimpleStringProperty rankProperty() {
+        return rank;
+    }
+
+    /**
+     * @param rank the rank to set
+     */
+    public void setRank(String rank) {
+        this.rank.set(rank);
     }
 
     /**
      * @return the price
      */
-    public double getPrice() {
+    public String getPrice() {
         return price.get();
     }
 
-    public SimpleDoubleProperty priceProperty() {
+    public SimpleStringProperty priceProperty() {
         return price;
     }
 
     /**
      * @param price the price to set
      */
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price.set(price);
     }
 
@@ -135,5 +170,17 @@ public class CoinType {
      */
     public void setDate(String date) {
         this.date.set(date);
+    }
+
+    @Override
+    public String toString() {
+        return "CoinType [id:" + getId()
+                + ",select:" + getSelect()
+                + ",name:" + getName()
+                + ",symbol:" + getSymbol()
+                + ",rank:" + getRank()
+                + ",price:" + this.getPrice()
+                + ",last updated:" + this.getDate()
+                + "]";
     }
 }

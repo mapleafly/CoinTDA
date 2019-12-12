@@ -15,112 +15,32 @@
  */
 package org.lifxue.cointda.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lifxue.cointda.dao.jdbc.DerbyJdbcDao;
+import org.lifxue.cointda.bean.CoinMarketCapListingBean;
+import org.lifxue.cointda.bean.TradeDataBean;
+import org.lifxue.cointda.pool.DBUtilsHelper;
 
 /**
  *
  * @author xuelf
  */
 public class TypePieChartDao {
-     private static final Logger logger = LogManager.getLogger(TypePieChartDao.class.getName());
-     
-     /**
-     * 查询各个品种的买入总价
-     *
-     * @return
-     */
-    public List<Map<String,Double>> QueryBuyTotal() {
-        List<Map<String,Double>> list = new ArrayList<Map<String,Double>>();
-        String sql = "SELECT TD_COINTYPE,SUM(TD_TOTALPRICE) FROM TAB_TRADEDATA WHERE TD_SALEORBUY='买' GROUP BY TD_COINTYPE";
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        ResultSet rs = dbjd.executeQuery(sql);
-        try {
-            while (rs.next()) {
-                Map<String,Double> map = new HashMap<String,Double>();
-                map.put(rs.getString(1), rs.getDouble(2));
-                list.add(map);
-            }
-        } catch (SQLException ex) {
-            logger.error(ex);
-            dbjd.close();
-        }
-        return list;
+
+    private static final Logger logger = LogManager.getLogger(
+            TypePieChartDao.class.getName());
+
+    public static List<TradeDataBean> queryAllTradeData() {
+        String sql = "select * from tab_trade_data";
+        return DBUtilsHelper.queryList(TradeDataBean.class, sql);
     }
     
-     /**
-     * 查询各个品种的卖出总价
-     *
-     * @return
-     */
-    public List<Map<String,Double>> QuerySaleTotal() {
-        List<Map<String,Double>> list = new ArrayList<Map<String,Double>>();
-        String sql = "SELECT TD_COINTYPE,SUM(TD_TOTALPRICE) FROM TAB_TRADEDATA WHERE TD_SALEORBUY='卖' GROUP BY TD_COINTYPE";
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        ResultSet rs = dbjd.executeQuery(sql);
-        try {
-            while (rs.next()) {
-                Map<String,Double> map = new HashMap<String,Double>();
-                map.put(rs.getString(1), rs.getDouble(2));
-                list.add(map);
-            }
-        } catch (SQLException ex) {
-            logger.error(ex);
-            dbjd.close();
-        }
-        return list;
+    public static List<CoinMarketCapListingBean> queryByTradeData(){
+          String sql = "select * from tab_CoinMarketCap_listings where id in"
+                  + " (select coin_id from tab_trade_data group by coin_id ) "
+                  + "order by cmc_rank";
+         return DBUtilsHelper.queryList(CoinMarketCapListingBean.class, sql);
     }
-    
-    /**
-     * 查询各个品种的买入总量
-     *
-     * @return
-     */
-    public List<Map<String,Double>> QueryBuyNum() {
-        List<Map<String,Double>> list = new ArrayList<Map<String,Double>>();
-        String sql = "SELECT TD_COINTYPE,SUM(TD_NUM) FROM TAB_TRADEDATA WHERE TD_SALEORBUY='买' GROUP BY TD_COINTYPE";
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        ResultSet rs = dbjd.executeQuery(sql);
-        try {
-            while (rs.next()) {
-                Map<String,Double> map = new HashMap<String,Double>();
-                map.put(rs.getString(1), rs.getDouble(2));
-                list.add(map);
-            }
-        } catch (SQLException ex) {
-            logger.error(ex);
-            dbjd.close();
-        }
-        return list;
-    }
-    
-     /**
-     * 查询各个品种的卖出总量
-     *
-     * @return
-     */
-    public List<Map<String,Double>> QuerySaleNum() {
-        List<Map<String,Double>> list = new ArrayList<Map<String,Double>>();
-        String sql = "SELECT TD_COINTYPE,SUM(TD_NUM) FROM TAB_TRADEDATA WHERE TD_SALEORBUY='卖' GROUP BY TD_COINTYPE";
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        ResultSet rs = dbjd.executeQuery(sql);
-        try {
-            while (rs.next()) {
-                Map<String,Double> map = new HashMap<String,Double>();
-                map.put(rs.getString(1), rs.getDouble(2));
-                list.add(map);
-            }
-        } catch (SQLException ex) {
-            logger.error(ex);
-            dbjd.close();
-        }
-        return list;
-    }
+
 }

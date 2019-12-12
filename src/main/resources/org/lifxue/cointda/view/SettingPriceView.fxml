@@ -14,9 +14,13 @@
                <children>
                   <TableView fx:id="priceTable" editable="true" layoutX="98.0" layoutY="103.0" prefHeight="625.0" prefWidth="848.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="typeColumn" prefWidth="423.0" text="类别" />
-                      <TableColumn fx:id="priceColumn" prefWidth="423.0" text="价格" />
-                        <TableColumn fx:id="dateColumn" prefWidth="75.0" text="日期" />
+                        <TableColumn fx:id="idCol" prefWidth="75.0" text="id" visible="false" />
+                        <TableColumn fx:id="selectCol" prefWidth="423.0" text="选择" />
+                        <TableColumn fx:id="nameCol" prefWidth="423.0" text="名称" />
+                        <TableColumn fx:id="symbolCol" prefWidth="122.0" text="简称" />
+                        <TableColumn fx:id="rankCol" prefWidth="216.0" text="排名" />
+                      <TableColumn fx:id="priceCol" prefWidth="423.0" text="价格" />
+                        <TableColumn fx:id="dateCol" prefWidth="75.0" text="更新日期" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -26,10 +30,8 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#handleSave" prefHeight="30.0" prefWidth="80.0" text="保存" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="40.0" />
-                  <Button layoutX="27.0" layoutY="22.0" mnemonicParsing="false" onAction="#handleAUtoUpdate" prefHeight="30.0" prefWidth="80.0" text="自动更新" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="40.0" />
-               </children>
-            </AnchorPane>
+                  <Button layoutX="749.0" layoutY="22.0" mnemonicParsing="false" onAction="#handleSave" prefHeight="30.0" prefWidth="80.0" text="保  存" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+               </children></AnchorPane>
         </items>
       </SplitPane>
    </children>

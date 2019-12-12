@@ -21,13 +21,14 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.WindowEvent;
 import org.lifxue.cointda.view.RootLayoutController;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lifxue.cointda.dao.jdbc.InitTable;
+import org.lifxue.cointda.pool.InitTable;
 
 /**
  * JavaFX App
@@ -43,16 +44,14 @@ public class App extends Application {
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("CoinTDA");
+        this.primaryStage.getIcons().add(new Image(App.class.getResource("images/cointda.png").toString()));
 
         initRootLayout();
 
         //初始化数据库
-        InitTable initTable = new InitTable();
-        initTable.createTable();
-        logger.info("数据库初始化完成");
+        InitTable.createTable();
         //监听到窗口关闭
         primaryStage.setOnCloseRequest((WindowEvent event) -> {
-            logger.info("监听到窗口关闭");
             primaryStage.close();
         });
 

@@ -15,16 +15,14 @@
  */
 package org.lifxue.cointda.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lifxue.cointda.dao.jdbc.DerbyJdbcDao;
-import org.lifxue.cointda.models.TradeData;
+import org.lifxue.cointda.bean.CoinMarketCapListingBean;
+import org.lifxue.cointda.bean.TradeDataBean;
+import org.lifxue.cointda.models.TradeDataFXC;
+import org.lifxue.cointda.pool.DBUtilsHelper;
 
 /**
  *
@@ -34,172 +32,81 @@ public class PATableDao {
 
     private static final Logger logger = LogManager.getLogger(PATableDao.class.getName());
 
-     /**
-     * 查询单个
-     *
-     * @param id
-     * @return
-     */
-    public TradeData QueryById(int id) {
-        String sql = "SELECT * FROM TAB_TRADEDATA where TD_ID=" + id;
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        ResultSet rs = dbjd.executeQuery(sql);
-        TradeData td = new TradeData();
-        try {
-            if (rs.next()) {
-                td.setId(rs.getInt(1));
-                td.setCoinType(rs.getString(2));
-                td.setSaleOrBuy(rs.getString(3));
-                td.setPrice(rs.getDouble(4));
-                td.setNum(rs.getDouble(5));
-                td.setTotalPrice(rs.getDouble(6));
-                td.setDate(rs.getString(7));
-            }
-        } catch (SQLException ex) {
-            logger.error(ex);
-            dbjd.close();
+     
+    public static List<TradeDataFXC> queryBy(String strCoinSymbol, 
+            String strStartDate, String strEndDate){
+          String sql = "select * from tab_trade_data where coin_symbol=? "
+                  + "and trade_date>=? and trade_date<=? order by id";
+          Object[] params = new Object[3];
+          params[0] = strCoinSymbol;
+          params[1] = strStartDate;
+          params[2] = strEndDate;
+        List<TradeDataBean> list = DBUtilsHelper.queryList(TradeDataBean.class, sql, params);
+        List<TradeDataFXC> fxcList = new ArrayList<>();
+        if(list == null || list.isEmpty()){
+            return fxcList;
         }
-        return td;
-    }
-    
-     /**
-     * 查询某类全部
-     *
-     * @param strCoinType
-     * @param strStartDate
-     * @param strEndDate
-     * @return
-     */
-    public List<TradeData> QueryByTypeAndDate(String strCoinType, String strStartDate, String strEndDate) {
-        List<TradeData> list = new ArrayList<TradeData>();
-        String sql = "SELECT * FROM TAB_TRADEDATA where "
-                + "TD_COINTYPE='"+ strCoinType+ "' "
-                + "and TD_DATE>='"+strStartDate+"' "
-                + "and TD_DATE <='"+strEndDate+"'"
-                + "  ORDER BY TD_ID";
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        ResultSet rs = dbjd.executeQuery(sql);
-        try {
-            while (rs.next()) {
-                TradeData td = new TradeData();
-                td.setId(rs.getInt(1));
-                td.setCoinType(rs.getString(2));
-                td.setSaleOrBuy(rs.getString(3));
-                td.setPrice(rs.getDouble(4));
-                td.setNum(rs.getDouble(5));
-                td.setTotalPrice(rs.getDouble(6));
-                td.setDate(rs.getString(7));
-                list.add(td);
-            }
-        } catch (SQLException ex) {
-            logger.error(ex);
-            dbjd.close();
+        for(TradeDataBean bean : list){
+            TradeDataFXC fxc = new TradeDataFXC();
+            fxc.setId(bean.getId());
+            fxc.setCoinId(bean.getCoin_id());
+            fxc.setCoinSymbol(bean.getCoin_symbol());
+            fxc.setSaleOrBuy(bean.getSale_or_buy());
+            fxc.setPrice(bean.getPrice().toString());
+            fxc.setNum(bean.getNum().toString());
+            fxc.setTotalPrice(bean.getTotal_price().toString());
+            fxc.setDate(bean.getTrade_date());
+            fxcList.add(fxc);
         }
-        return list;
+        return fxcList;
     }
-    
+      
     /**
-     * 查询某类全部
-     *
-     * @param strCoinType
-     * @return
+     * 根据简称查询coin信息
+     * @param symbol
+     * @return 
      */
-    public List<TradeData> QueryByType(String strCoinType) {
-        List<TradeData> list = new ArrayList<TradeData>();
-        String sql = "SELECT * FROM TAB_TRADEDATA where TD_COINTYPE='"+ strCoinType+ "' ORDER BY TD_ID";
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        ResultSet rs = dbjd.executeQuery(sql);
-        try {
-            while (rs.next()) {
-                TradeData td = new TradeData();
-                td.setId(rs.getInt(1));
-                td.setCoinType(rs.getString(2));
-                td.setSaleOrBuy(rs.getString(3));
-                td.setPrice(rs.getDouble(4));
-                td.setNum(rs.getDouble(5));
-                td.setTotalPrice(rs.getDouble(6));
-                td.setDate(rs.getString(7));
-                list.add(td);
-            }
-        } catch (SQLException ex) {
-            logger.error(ex);
-            dbjd.close();
-        }
-        return list;
-    }
-    
-     /**
-     * 查询全部
-     *
-     * @return
-     */
-    public List<TradeData> QueryAll() {
-        List<TradeData> list = new ArrayList<TradeData>();
-        String sql = "SELECT * FROM TAB_TRADEDATA ORDER BY TD_ID";
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        ResultSet rs = dbjd.executeQuery(sql);
-        try {
-            while (rs.next()) {
-                TradeData td = new TradeData();
-                td.setId(rs.getInt(1));
-                td.setCoinType(rs.getString(2));
-                td.setSaleOrBuy(rs.getString(3));
-                td.setPrice(rs.getDouble(4));
-                td.setNum(rs.getDouble(5));
-                td.setTotalPrice(rs.getDouble(6));
-                td.setDate(rs.getString(7));
-                list.add(td);
-            }
-        } catch (SQLException ex) {
-            logger.error(ex);
-            dbjd.close();
-        }
-        return list;
-    }
-    
-    /**
-     * 查询各个品种的买入总量
-     *
-     * @return
-     */
-    public List<Map<String, Double>> QueryBuyNum() {
-        List<Map<String, Double>> list = new ArrayList<Map<String, Double>>();
-        String sql = "SELECT TD_COINTYPE,SUM(TD_NUM) FROM TAB_TRADEDATA WHERE TD_SALEORBUY='买' GROUP BY TD_COINTYPE";
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        ResultSet rs = dbjd.executeQuery(sql);
-        try {
-            while (rs.next()) {
-                Map<String, Double> map = new HashMap<String, Double>();
-                map.put(rs.getString(1), rs.getDouble(2));
-                list.add(map);
-            }
-        } catch (SQLException ex) {
-            logger.error(ex);
-            dbjd.close();
-        }
-        return list;
-    }
+    public static CoinMarketCapListingBean queryBySymbol(String symbol) {
+        String sql = "select * from tab_CoinMarketCap_listings where symbol=?";
+        return DBUtilsHelper.queryBean(
+                CoinMarketCapListingBean.class, sql, symbol);
 
-    /**
-     * 查询各个品种的卖出总量
-     *
-     * @return
-     */
-    public List<Map<String, Double>> QuerySaleNum() {
-        List<Map<String, Double>> list = new ArrayList<Map<String, Double>>();
-        String sql = "SELECT TD_COINTYPE,SUM(TD_NUM) FROM TAB_TRADEDATA WHERE TD_SALEORBUY='卖' GROUP BY TD_COINTYPE";
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        ResultSet rs = dbjd.executeQuery(sql);
-        try {
-            while (rs.next()) {
-                Map<String, Double> map = new HashMap<>();
-                map.put(rs.getString(1), rs.getDouble(2));
-                list.add(map);
-            }
-        } catch (SQLException ex) {
-            logger.error(ex);
-            dbjd.close();
-        }
-        return list;
     }
+    
+     /**
+     * 查询全部数据
+     *
+     * @return 返回 list
+     */
+    public static List<String> queryAllSymbol() {
+        String sql = "select distinct coin_symbol from tab_trade_data";
+        return DBUtilsHelper.queryColumn(sql);
+    }
+    
+     /**
+     * 查询全部数据
+     * @return 返回用于页面显示的list
+     */
+    public static List<TradeDataFXC> queryAllFXC(){
+        List<TradeDataBean> list = TradeDataDao.queryAll();
+        List<TradeDataFXC> fxcList = new ArrayList<>();
+        for(TradeDataBean bean : list){
+            TradeDataFXC fxc = new TradeDataFXC();
+            fxc.setId(bean.getId());
+            fxc.setCoinId(bean.getCoin_id());
+            fxc.setCoinSymbol(bean.getCoin_symbol());
+            fxc.setSaleOrBuy(bean.getSale_or_buy());
+            fxc.setPrice(bean.getPrice().toString());
+            fxc.setNum(bean.getNum().toString());
+            fxc.setTotalPrice(bean.getTotal_price().toString());
+            fxc.setDate(bean.getTrade_date());
+            fxcList.add(fxc);
+        }
+        return fxcList;
+    }
+    
+    public static void main(String[] s){
+        PATableDao.queryAllSymbol().forEach(action ->logger.info(action));
+    }
+   
 }

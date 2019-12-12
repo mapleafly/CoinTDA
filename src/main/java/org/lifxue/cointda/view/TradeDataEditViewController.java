@@ -15,6 +15,8 @@
  */
 package org.lifxue.cointda.view;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
@@ -37,9 +39,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lifxue.cointda.dao.CoinTypeDao;
+import org.lifxue.cointda.bean.TradeDataBean;
 import org.lifxue.cointda.dao.TradeDataDao;
-import org.lifxue.cointda.models.TradeData;
+import org.lifxue.cointda.models.TradeDataFXC;
 import org.lifxue.cointda.util.DateHelper;
 
 /**
@@ -52,21 +54,24 @@ public class TradeDataEditViewController implements Initializable {
     private static final Logger logger = LogManager.getLogger(TradeDataEditViewController.class.getName());
 
     @FXML
-    private TableView<TradeData> dataTable;
+    private TableView<TradeDataFXC> dataTable;
     @FXML
-    private TableColumn<TradeData, Integer> idColumn;
+    private TableColumn<TradeDataFXC, Integer> idCol;
     @FXML
-    private TableColumn<TradeData, String> typeColumn;
+    private TableColumn<TradeDataFXC, Integer> coinIdCol;
     @FXML
-    private TableColumn<TradeData, String> salebuyColumn;
+    private TableColumn<TradeDataFXC, String> symbolCol;
     @FXML
-    private TableColumn<TradeData, Double> priceColumn;
+    private TableColumn<TradeDataFXC, String> salebuyCol;
     @FXML
-    private TableColumn<TradeData, Double> numColumn;
+    private TableColumn<TradeDataFXC, String> priceCol;
     @FXML
-    private TableColumn<TradeData, Double> totalColumn;
+    private TableColumn<TradeDataFXC, String> numCol;
     @FXML
-    private TableColumn<TradeData, String> dateColumn;
+    private TableColumn<TradeDataFXC, String> totalCol;
+    @FXML
+    private TableColumn<TradeDataFXC, String> dateCol;
+
     @FXML
     private DatePicker dateDatePicker;
     @FXML
@@ -83,23 +88,21 @@ public class TradeDataEditViewController implements Initializable {
     /**
      * The data as an observable list of TradeData.
      */
-    private final ObservableList<TradeData> tradeDataList;
-    private final List<String> coinTypeShortName;
+    private final ObservableList<TradeDataFXC> tradeDataList;
+    private final List<String> coinList;
 
     public TradeDataEditViewController() {
 
         tradeDataList = FXCollections.observableArrayList();
-        TradeDataDao tdDao = new TradeDataDao();
-        List<TradeData> list = tdDao.QueryAll();
+        List<TradeDataFXC> list = TradeDataDao.queryAllFXC();
         tradeDataList.addAll(list);
-        
-        CoinTypeDao ctDao = new CoinTypeDao();
-        coinTypeShortName = ctDao.QueryAllShortName();
-        if (coinTypeShortName == null || coinTypeShortName.isEmpty()) {
+
+        coinList = TradeDataDao.queryAllSymbol();
+        if (coinList == null || coinList.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("提示");
-            alert.setHeaderText("缺少数据");
-            alert.setContentText("请首先去设置界面设置coin类型！");
+            alert.setHeaderText("缺少coin数据");
+            alert.setContentText("请首先去设置界面更新数据,选择设置可用coin！");
             alert.showAndWait();
         }
     }
@@ -111,18 +114,19 @@ public class TradeDataEditViewController implements Initializable {
      * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb ) {
+    public void initialize(URL url, ResourceBundle rb) {
         dataTable.setItems(tradeDataList);
 
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        typeColumn.setCellValueFactory(cellData -> cellData.getValue().coinTypeProperty());
-        salebuyColumn.setCellValueFactory(cellData -> cellData.getValue().saleOrBuyProperty());
-        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        numColumn.setCellValueFactory(new PropertyValueFactory<>("num"));
-        totalColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
-        dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        coinIdCol.setCellValueFactory(new PropertyValueFactory<>("coinId"));
+        symbolCol.setCellValueFactory(cellData -> cellData.getValue().coinSymbolProperty());
+        salebuyCol.setCellValueFactory(cellData -> cellData.getValue().saleOrBuyProperty());
+        priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        numCol.setCellValueFactory(new PropertyValueFactory<>("num"));
+        totalCol.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
+        dateCol.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
 
-        typeChoiceBox.setItems(FXCollections.observableArrayList(coinTypeShortName));
+        typeChoiceBox.setItems(FXCollections.observableArrayList(coinList));
         typeChoiceBox.setTooltip(new Tooltip("选择交易品种"));
 
         salebuyChoiceBox.setItems(FXCollections.observableArrayList("买", "卖"));
@@ -161,18 +165,19 @@ public class TradeDataEditViewController implements Initializable {
     @FXML
     private void handleAddData(ActionEvent event) {
         if (isInputValid()) {
-            String coinType = this.typeChoiceBox.getValue();
-            String sob = this.salebuyChoiceBox.getValue();
-            double price = Double.parseDouble(this.priceTextField.getText());
-            double num = Double.parseDouble(this.numTextField.getText());
-            double total = Double.parseDouble(this.totalTextField.getText());
-            String date = DateHelper.toString(this.dateDatePicker.getValue());
-            TradeData td = new TradeData(coinType, sob, price, num, total, date);
-            TradeDataDao dao = new TradeDataDao();
-            int key = dao.insert(td);
-            if (key != -1) {
-                td.setId(key);
-                tradeDataList.add(td);
+            TradeDataBean bean = new TradeDataBean();
+            bean.setCoin_id(TradeDataDao.queryBySymbol(typeChoiceBox.getValue()).getId());
+            bean.setCoin_symbol(typeChoiceBox.getValue());
+            bean.setSale_or_buy(salebuyChoiceBox.getValue());
+            bean.setPrice(new BigDecimal(priceTextField.getText()));
+            bean.setNum(new BigDecimal(numTextField.getText()));
+            bean.setTotal_price(new BigDecimal(totalTextField.getText()));
+            bean.setTrade_date(DateHelper.toString(this.dateDatePicker.getValue()));
+
+            Integer id = TradeDataDao.insert(bean);
+            if (id != -1) {
+                bean.setId(id);
+                tradeDataList.add(beanToFXC(bean));
                 priceTextField.setText("");
                 numTextField.setText("");
                 totalTextField.setText("");
@@ -184,22 +189,23 @@ public class TradeDataEditViewController implements Initializable {
     @FXML
     private void handleEdtitData(ActionEvent event) {
         if (isInputValid()) {
-            String coinType = this.typeChoiceBox.getValue();
-            String sob = this.salebuyChoiceBox.getValue();
-            double price = Double.parseDouble(this.priceTextField.getText());
-            double num = Double.parseDouble(this.numTextField.getText());
-            double total = Double.parseDouble(this.totalTextField.getText());
-            String date = DateHelper.toString(this.dateDatePicker.getValue());
-            TradeData td = new TradeData(coinType, sob, price, num, total, date);
             int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
-                td.setId(dataTable.getItems().get(selectedIndex).getId());
-                TradeDataDao dao = new TradeDataDao();
-                if (dao.update(td)) {
+                TradeDataFXC fxc = dataTable.getItems().get(selectedIndex);
+                TradeDataBean bean = fxcToBean(fxc);
+                bean.setCoin_symbol(typeChoiceBox.getValue());
+                bean.setSale_or_buy(salebuyChoiceBox.getValue());
+                bean.setPrice(new BigDecimal(priceTextField.getText()));
+                bean.setNum(new BigDecimal(numTextField.getText()));
+                bean.setTotal_price(new BigDecimal(totalTextField.getText()));
+                bean.setTrade_date(DateHelper.toString(this.dateDatePicker.getValue()));
+                int n = TradeDataDao.update(bean);
+                if (n == 1) {
+                    fxc = beanToFXC(bean);
                     for (int i = 0; i < tradeDataList.size(); i++) {
-                        if (tradeDataList.get(i).getId() == td.getId()) {
+                        if (tradeDataList.get(i).getId().intValue() == fxc.getId().intValue()) {
                             tradeDataList.remove(i);
-                            tradeDataList.add(i, td);
+                            tradeDataList.add(i, fxc);
                             dataTable.getSelectionModel().select(i);
                             break;
                         }
@@ -226,9 +232,8 @@ public class TradeDataEditViewController implements Initializable {
     private void handleDelData(ActionEvent event) {
         int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            TradeData td = dataTable.getItems().get(selectedIndex);
-            TradeDataDao dao = new TradeDataDao();
-            if (dao.delete(td)) {
+            TradeDataFXC fxc = dataTable.getItems().get(selectedIndex);
+            if (TradeDataDao.delete(fxcToBean(fxc)) == 1) {
                 dataTable.getItems().remove(selectedIndex);
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -253,9 +258,9 @@ public class TradeDataEditViewController implements Initializable {
                 || priceTextField.getText().trim().equals("")) {
             return;
         }
-        double num = Double.parseDouble(numTextField.getText());
-        double price = Double.parseDouble(priceTextField.getText());
-        totalTextField.setText(Double.toString(price * num));
+        BigDecimal num = new BigDecimal(numTextField.getText());
+        BigDecimal price = new BigDecimal(priceTextField.getText());
+        totalTextField.setText(num.multiply(price).setScale(8, RoundingMode.HALF_UP).toString());
     }
 
     @FXML
@@ -264,22 +269,49 @@ public class TradeDataEditViewController implements Initializable {
                 || priceTextField.getText().trim().equals("")) {
             return;
         }
-        double num = Double.parseDouble(numTextField.getText());
-        double price = Double.parseDouble(priceTextField.getText());
-        totalTextField.setText(Double.toString(price * num));
+        BigDecimal num = new BigDecimal(numTextField.getText());
+        BigDecimal price = new BigDecimal(priceTextField.getText());
+        totalTextField.setText(num.multiply(price).setScale(8, RoundingMode.HALF_UP).toString());
+    }
+
+    private TradeDataFXC beanToFXC(TradeDataBean bean) {
+        TradeDataFXC fxc = new TradeDataFXC();
+        fxc.setId(bean.getId());
+        fxc.setCoinId(bean.getCoin_id());
+        fxc.setCoinSymbol(bean.getCoin_symbol());
+        fxc.setSaleOrBuy(bean.getSale_or_buy());
+        fxc.setPrice(bean.getPrice().toString());
+        fxc.setNum(bean.getNum().toString());
+        fxc.setTotalPrice(bean.getTotal_price().toString());
+        fxc.setDate(bean.getTrade_date());
+        return fxc;
+    }
+
+    private TradeDataBean fxcToBean(TradeDataFXC fxc) {
+        TradeDataBean bean = new TradeDataBean();
+        bean.setId(fxc.getId());
+        bean.setCoin_id(fxc.getCoinId());
+        bean.setCoin_symbol(fxc.getCoinSymbol());
+        bean.setSale_or_buy(fxc.getSaleOrBuy());
+        bean.setPrice(new BigDecimal(fxc.getPrice()));
+        bean.setNum(new BigDecimal(fxc.getNum()));
+        bean.setTotal_price(new BigDecimal(fxc.getTotalPrice()));
+        bean.setTrade_date(fxc.getDate());
+
+        return bean;
     }
 
     /**
      *
      * @param coinType
      */
-    private void showTradeDataDetails(TradeData tradeData) {
+    private void showTradeDataDetails(TradeDataFXC tradeData) {
         if (tradeData != null) {
-            typeChoiceBox.setValue(tradeData.getCoinType());
+            typeChoiceBox.setValue(tradeData.getCoinSymbol());
             salebuyChoiceBox.setValue(tradeData.getSaleOrBuy());
-            priceTextField.setText(Double.toString(tradeData.getPrice()));
-            numTextField.setText(Double.toString(tradeData.getNum()));
-            totalTextField.setText(Double.toString(tradeData.getTotalPrice()));
+            priceTextField.setText(tradeData.getPrice());
+            numTextField.setText(tradeData.getNum());
+            totalTextField.setText(tradeData.getTotalPrice());
             dateDatePicker.setValue(DateHelper.fromString(tradeData.getDate()));
         } else {
             salebuyChoiceBox.setValue("买");

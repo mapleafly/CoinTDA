@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.lifxue.cointda.util;
 
 import java.time.LocalDate;
@@ -31,7 +30,9 @@ public class DateHelper {
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private static final DateTimeFormatter DATE_FORMATTER
             = DateTimeFormatter.ofPattern(DATE_PATTERN);
-    public static final StringConverter<LocalDate> CONVERTER = new StringConverter<LocalDate>() {
+
+    public static final StringConverter<LocalDate> CONVERTER
+            = new StringConverter<LocalDate>() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
 
         @Override
@@ -54,8 +55,8 @@ public class DateHelper {
     };
 
     /**
-     * 
-     * @param date 
+     *
+     * @param date
      * @return formatted string
      */
     public static String toString(LocalDate date) {
@@ -66,7 +67,7 @@ public class DateHelper {
     }
 
     /**
-     * 
+     *
      * @param date
      * @return the date object or null if it could not be converted
      */
@@ -87,5 +88,15 @@ public class DateHelper {
     public static boolean validDate(String date) {
         // Try to parse the String.
         return DateHelper.fromString(date) != null;
+    }
+
+    public static String utcToLocal(String utc) {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        try {
+            return DATE_FORMATTER.format(format.parse(utc));
+        } catch (DateTimeParseException e) {
+            return null;
+        }
+
     }
 }

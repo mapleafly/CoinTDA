@@ -9,39 +9,25 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <javafx.version>11.0.2</javafx.version>
-        <mainClass>org.lifxue.cointda.App</mainClass>
+        <mainClass>org.lifxue.cointda.Launcher</mainClass>
         <moduleName>org.lifxue.cointda</moduleName>
+        <derby.version>10.15.1.3</derby.version>
+        <log4j.version>2.12.1</log4j.version>
+        <jackson.version>2.10.1</jackson.version>
     </properties>
-    <repositories>
-        <repository>
-            <id>apache-snapshots</id>
-            <url>https://maven.aliyun.com/repository/apache-snapshots</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
     <dependencies>
         <!-- Logging -->
-<!--        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.12.1</version>
-        </dependency>-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.12.1</version>
+            <version>${log4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.12.1</version>
+            <version>${log4j.version}</version>
         </dependency>
-        <!--Logging end-->
+        <!--openjfx-->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -59,24 +45,53 @@
         </dependency>
         <!-- database -->
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.1.20</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-dbutils</groupId>
+            <artifactId>commons-dbutils</artifactId>
+            <version>1.7</version>
+        </dependency>
+
+        <!-- derby -->
+        <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
-            <version>10.15.1.3</version>
+            <version>${derby.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derbyLocale_zh_CN</artifactId>
-            <version>10.15.1.3</version>
+            <version>${derby.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derbyshared</artifactId>
-            <version>10.15.1.3</version>
+            <version>${derby.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derbytools</artifactId>
-            <version>10.15.1.3</version>
+            <version>${derby.version}</version>
+        </dependency>
+        <!--http-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.9</version>
+        </dependency>
+        <!--yaml-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
     </dependencies>
     <build>
@@ -86,186 +101,41 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <release>11</release>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${java.home}/bin/java</executable>
-                            <arguments>
-                                <argument>--module-path</argument>
-                                <argument>${project.build.directory}/modules</argument>
-                                <argument>--module</argument>
-                                <argument>${moduleName}/${mainClass}</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.1</version>
-                <executions>
-                    <execution>
-                        <id>copy-libs</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/modules</outputDirectory>
-                            <includeScope>runtime</includeScope>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.coderplus.maven.plugins</groupId>
-                <artifactId>copy-rename-maven-plugin</artifactId>
-                <version>1.0.1</version>
-                <executions>
-                    <execution>
-                        <id>copy-target</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <sourceFile>${project.build.directory}/${project.build.finalName}.jar</sourceFile>
-                            <destinationFile>${project.build.directory}/modules/${project.build.finalName}.jar</destinationFile>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.moditect</groupId>
-                <artifactId>moditect-maven-plugin</artifactId>
-                <version>1.0.0.Beta2</version>
-                <executions>
-                    <!--
-                    <execution>
-                        <id>add-module-info-to-deps</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>add-module-info</goal>
-                        </goals>
-                        <configuration>
-                            <overwriteExistingFiles>true</overwriteExistingFiles>
-                            <jvmVersion>${jvm.version}</jvmVersion>
-                            <modules>
-                                <module>
-                                    <artifact>
-                                        <groupId>org.apache.derby</groupId>
-                                        <artifactId>derby</artifactId>
-                                        <version>10.15.1.3</version>
-                                    </artifact>
-                                    <moduleInfo>
-                                        <name>org.apache.derby.engine</name>
-                                    </moduleInfo>
-                                </module>
-                            </modules>
-                            <module>    
-                                <moduleInfo>
-                                    <name>org.lifxue.cointda</name>
-                                    <opens>org.lifxue.cointda;</opens>
-                                </moduleInfo>
-                            </module>
-                            <module>
-                                <artifact>
-                                    <groupId>org.apache.derby</groupId>
-                                    <artifactId>derbyshared</artifactId>
-                                    <version>10.15.1.3</version>
-                                </artifact>
-                                <moduleInfo>
-                                    <name>org.apache.derby.commons</name>
-                                </moduleInfo>
-                            </module>
-                            <module>
-                                <artifact>
-                                    <groupId>org.apache.derby</groupId>
-                                    <artifactId>derbyLocale_zh_CN</artifactId>
-                                    <version>10.15.1.3</version>
-                                </artifact>
-                                <additionalDependencies>
-                                    <dependency>
-                                        <groupId>org.apache.derby</groupId>
-                                        <artifactId>derbyshared</artifactId>
-                                        <version>10.15.1.3</version>
-                                    </dependency>
-                                </additionalDependencies>
-                                <moduleInfo>
-                                    <name>org.apache.derby.locale_zh_CN</name>
-                                </moduleInfo>
-                            </module>
-                        </configuration>
-                    </execution>
-                    -->
-                    <execution>
-                        <id>create-runtime-image</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>create-runtime-image</goal>
-                        </goals>
-                        <configuration>
-                            <modulePath>
-                                <path>${project.build.directory}/modules</path> <!--our modules-->
-                            </modulePath>
-                            <modules> <!--everything we need-->
-                                <module>${moduleName}</module>
-                                <!--
-                                <module>javafx.base</module>
-                                -->
-                                <module>javafx.fxml</module>
-                                <module>javafx.controls</module>
-                                <module>javafx.graphics</module>
-                                <!--
-                                <module>javafx.swing</module>
-                                <module>javafx.web</module>
-                                -->
-                                <module>java.base</module>
-                                <module>java.sql</module>
-                                <module>org.apache.derby.engine</module>
-                                <module>org.apache.derby.locale_zh_CN</module>
-                                <module>org.apache.derby.commons</module>
-                                <module>org.apache.derby.tools</module>
-                                <module>org.apache.logging.log4j</module>
-                            </modules>
-                            <excludedResources>
-                                <pattern>glob:/org.lifxue/**</pattern>
-                            </excludedResources>
-                            <launcher>
-                                <name>CoinTDA</name> <!--the name of the application executable-->
-                                <module>${moduleName}/${mainClass}</module>
-                            </launcher>
-                            <stripDebug>true</stripDebug>
-                            <compression>2</compression>
-                            <no-header-files>true</no-header-files>
-                            <no-man-pages>true</no-man-pages>
-                            <jdepsExtraArgs>
-                                <args>--strip-native-commands</args>
-                            </jdepsExtraArgs>
-                            <outputDirectory>${project.build.directory}/jlink-image</outputDirectory>
-                        </configuration>
-                    </execution>
-                    
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.3</version>
                 <configuration>
-                    <mainClass>org.lifxue.cointda.App</mainClass>
+                    <mainClass>${mainClass}</mainClass>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>project-classifier</shadedClassifierName>
+                            <outputFile>shade\${project.artifactId}.jar</outputFile>
+                            <transformers>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>${mainClass}</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

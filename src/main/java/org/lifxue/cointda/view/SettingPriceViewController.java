@@ -16,26 +16,25 @@
 package org.lifxue.cointda.view;
 
 import java.net.URL;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lifxue.cointda.bean.CurUsedCoinBean;
 import org.lifxue.cointda.dao.CoinTypeDao;
+import org.lifxue.cointda.dao.CurUsedCoinDao;
 import org.lifxue.cointda.models.CoinType;
-import org.lifxue.cointda.util.DateHelper;
 
 /**
  * FXML Controller class
@@ -48,12 +47,21 @@ public class SettingPriceViewController implements Initializable {
 
     @FXML
     private TableView<CoinType> priceTable;
+
     @FXML
-    private TableColumn<CoinType, String> typeColumn;
+    private TableColumn<CoinType, String> idCol;
     @FXML
-    private TableColumn<CoinType, Double> priceColumn;
+    private TableColumn<CoinType, Boolean> selectCol;
     @FXML
-    private TableColumn<CoinType, String> dateColumn;
+    private TableColumn<CoinType, String> nameCol;
+    @FXML
+    private TableColumn<CoinType, String> symbolCol;
+    @FXML
+    private TableColumn<CoinType, String> rankCol;
+    @FXML
+    private TableColumn<CoinType, String> priceCol;
+    @FXML
+    private TableColumn<CoinType, String> dateCol;
 
     private final ObservableList<CoinType> coinTypeData;
 
@@ -62,8 +70,7 @@ public class SettingPriceViewController implements Initializable {
     public SettingPriceViewController() {
         this.coinTypeData = FXCollections.observableArrayList();
 
-        CoinTypeDao dao = new CoinTypeDao();
-        List<CoinType> list = dao.QueryAll();
+        List<CoinType> list = CoinTypeDao.queryAll();
         coinTypeData.addAll(list);
         updateData = list;
 
@@ -78,115 +85,136 @@ public class SettingPriceViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         priceTable.setItems(coinTypeData);
-        typeColumn.setCellValueFactory(cellData -> cellData.getValue().shortNameProperty());
-        priceColumn.setCellFactory(cellData -> {
-            TextField priceTextField = new TextField();
-            TableCell<CoinType, Double> cell = new TableCell<CoinType, Double>() {
-                @Override
-                protected void updateItem(Double chuzhi, boolean empty) {
-                    super.updateItem(chuzhi, empty);
-                    if (empty) {
-                        setGraphic(null);
-                    } else {
-                        double price = priceTable.getItems().get(this.getIndex()).getPrice();
-                        if (price == -1) {
-                            priceTextField.setText("0");
-                        } else {
-                            priceTextField.setText(Double.toString(price));
-                        }
-                        setGraphic(priceTextField);
-                    }
+        idCol.setCellValueFactory(cellData -> cellData.getValue().idProperty());
+        selectCol.setCellValueFactory(new PropertyValueFactory<>("select"));
+        selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
+
+        nameCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        symbolCol.setCellValueFactory(cellData -> cellData.getValue().symbolProperty());
+        rankCol.setCellValueFactory(cellData -> cellData.getValue().rankProperty());
+        priceCol.setCellValueFactory(cellData -> cellData.getValue().priceProperty());
+        dateCol.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
+
+        List<CoinType> list = CoinTypeDao.queryCurAll();
+        for (CoinType coin : list) {
+            for (int i = 0; i < coinTypeData.size(); i++) {
+                if (coin.getId().equals(coinTypeData.get(i).getId())) {
+                    coinTypeData.get(i).setSelect(true);
+                    break;
                 }
-            };
+            }
+        }
 
-            priceTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-                if (!newValue.matches("\\d*(\\.\\d*)?")) {
-                    priceTextField.setText(oldValue);
-                }
-                int rank = cell.getIndex();//获取正在编辑的单元格所在行序号
-                double value = 0;
-                try {
-                    value = Double.parseDouble(priceTextField.getText());
-                } catch (NumberFormatException | NullPointerException e) {
-                    value = 0;
-                }
-                String shortName = priceTable.getItems().get(rank).getShortName();
-                for (int i = 0; i < updateData.size(); i++) {
-                    if (updateData.get(i).getShortName().equals(shortName)) {
-                        updateData.get(i).setPrice(value);
-                    }
-                }
-
-            });
-            return cell;
-        });
-
-        dateColumn.setCellFactory(cellData -> {
-            DatePicker datePicker = new DatePicker();
-            datePicker.setEditable(true);
-            TableCell<CoinType, String> cell = new TableCell<CoinType, String>() {
-                @Override
-                protected void updateItem(String chuzhi, boolean empty) {
-                    super.updateItem(chuzhi, empty);
-                    if (empty) {
-                        setGraphic(null);
-                    } else {
-                        datePicker.setConverter(DateHelper.CONVERTER);
-
-                        String date = priceTable.getItems().get(this.getIndex()).getDate();
-                        if (date == null || date.trim().isEmpty()) {
-                            datePicker.setValue(LocalDate.now());
-                        } else {
-                            datePicker.setValue(DateHelper.fromString(date));
-                        }
-                        String shortName = priceTable.getItems().get(this.getIndex()).getShortName();
-                        String value = DateHelper.toString(datePicker.getValue());
-                        for (int i = 0; i < updateData.size(); i++) {
-                            if (updateData.get(i).getShortName().equals(shortName)) {
-                                updateData.get(i).setDate(value);
-                            }
-                        }
-                        setGraphic(datePicker);
-                    }
-                }
-            };
-
-            datePicker.setOnAction(e -> {
-                int rank = cell.getIndex();//获取正在编辑的单元格所在行序号
-                String value = DateHelper.toString(datePicker.getValue());//获取正在编辑的单元格值
-                String shortName = priceTable.getItems().get(rank).getShortName();
-                for (int i = 0; i < updateData.size(); i++) {
-                    if (updateData.get(i).getShortName().equals(shortName)) {
-                        updateData.get(i).setDate(value);
-                    }
-                }
-            });
-
-            return cell;
-
-        });
+//        priceCol.setCellFactory(cellData -> {
+//            TextField priceTextField = new TextField();
+//            TableCell<CoinType, String> cell = new TableCell<CoinType, String>() {
+//                @Override
+//                protected void updateItem(String chuzhi, boolean empty) {
+//                    super.updateItem(chuzhi, empty);
+//                    if (empty) {
+//                        setGraphic(null);
+//                    } else {
+//                        String price = priceTable.getItems().get(this.getIndex()).getPrice();
+//                        if (price == null || price.isEmpty() || price.equals("-1")) {
+//                            priceTextField.setText("0");
+//                        } else {
+//                            priceTextField.setText(price);
+//                        }
+//                        setGraphic(priceTextField);
+//                    }
+//                }
+//            };
+//
+//            priceTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+//                if (!newValue.matches("\\d*(\\.\\d*)?")) {
+//                    priceTextField.setText(oldValue);
+//                }
+//                int ind = cell.getIndex();//获取正在编辑的单元格所在行序号
+//                BigDecimal value;
+//                try {
+//                    value = new BigDecimal(priceTextField.getText());
+//                } catch (NumberFormatException | NullPointerException e) {
+//                    value = new BigDecimal("0");
+//                }
+//                String id = priceTable.getItems().get(ind).getId();
+//                for (int i = 0; i < updateData.size(); i++) {
+//                    if (updateData.get(i).getId().equals(id)) {
+//                        updateData.get(i).setPrice(value.toString());
+//                    }
+//                }
+//
+//            });
+//            return cell;
+//        });
+//        dateCol.setCellFactory(cellData -> {
+//            DatePicker datePicker = new DatePicker();
+//            datePicker.setEditable(true);
+//            TableCell<CoinType, String> cell = new TableCell<CoinType, String>() {
+//                @Override
+//                protected void updateItem(String chuzhi, boolean empty) {
+//                    super.updateItem(chuzhi, empty);
+//                    if (empty) {
+//                        setGraphic(null);
+//                    } else {
+//                        datePicker.setConverter(DateHelper.CONVERTER);
+//
+//                        String date = priceTable.getItems().get(this.getIndex()).getDate();
+//                        if (date == null || date.trim().isEmpty()) {
+//                            datePicker.setValue(LocalDate.now());
+//                        } else {
+//                            datePicker.setValue(DateHelper.fromString(date));
+//                        }
+//                        String id = priceTable.getItems().get(this.getIndex()).getId();
+//                        String value = DateHelper.toString(datePicker.getValue());
+//                        for (int i = 0; i < updateData.size(); i++) {
+//                            if (updateData.get(i).getId().equals(id)) {
+//                                updateData.get(i).setDate(value);
+//                            }
+//                        }
+//                        setGraphic(datePicker);
+//                    }
+//                }
+//            };
+//
+//            datePicker.setOnAction(e -> {
+//                int rank = cell.getIndex();//获取正在编辑的单元格所在行序号
+//                String value = DateHelper.toString(datePicker.getValue());//获取正在编辑的单元格值
+//                String id = priceTable.getItems().get(rank).getId();
+//                for (int i = 0; i < updateData.size(); i++) {
+//                    if (updateData.get(i).getId().equals(id)) {
+//                        updateData.get(i).setDate(value);
+//                    }
+//                }
+//            });
+//
+//            return cell;
+//
+//        });
     }
 
     @FXML
     private void handleSave(ActionEvent event) {
-        CoinTypeDao dao = new CoinTypeDao();
-        for (CoinType ct : updateData) {
-            String shortName = ct.getShortName();
-            double price = ct.getPrice();
-            String date = ct.getDate();
-            dao.update(shortName, price, date);
+        List<CurUsedCoinBean> list = new ArrayList<>();
+        for (int i = 0; i < priceTable.getItems().size(); i++) {
+            if (priceTable.getItems().get(i).getSelect()) {
+                CurUsedCoinBean bean = new CurUsedCoinBean();
+                bean.setId(Integer.valueOf(priceTable.getItems().get(i).getId()));
+                bean.setSymbol(priceTable.getItems().get(i).getSymbol());
+                bean.setCmc_rank(Integer.valueOf(priceTable.getItems().get(i).getRank()));
+                bean.setLastUpdated(priceTable.getItems().get(i).getDate());
+                list.add(bean);
+            }
         }
+        if (CurUsedCoinDao.truncate()) {
+            if (CurUsedCoinDao.batchInsert(list).length == list.size()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("完成");
+                alert.setHeaderText("完成保存操作");
+                alert.setContentText("已经保存选中数据。");
 
-    }
-
-    @FXML
-    private void handleAUtoUpdate(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("信息");
-        alert.setHeaderText("近期实现");
-        alert.setContentText("敬请期待。");
-        alert.showAndWait();
-
+                alert.showAndWait();
+            }
+        }
     }
 
 }

@@ -22,11 +22,11 @@
                <contextMenu>
                   <ContextMenu fx:id="settingMenu">
                     <items>
-                      <MenuItem fx:id="typeItem" mnemonicParsing="false" text="交易品种" onAction="#handleSettingType" />
-                      <MenuItem fx:id="priceItem" mnemonicParsing="false" text="当前价格" onAction="#handleSettingPrice"  />
+                      <MenuItem fx:id="priceItem" mnemonicParsing="false" onAction="#handleSettingPrice" text="选择可用品种" />
                     </items>
                   </ContextMenu>
                </contextMenu></Button>
+            <Button mnemonicParsing="false" onAction="#handleUpdate" prefHeight="40.0" prefWidth="100.0" text="更新基础数据" />
             <Button mnemonicParsing="false" onAction="#handleCloseApp" prefHeight="40.0" prefWidth="100.0" text="退出" />
          </children>
          <BorderPane.margin>

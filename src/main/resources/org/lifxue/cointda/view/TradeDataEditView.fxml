@@ -23,13 +23,14 @@
                <children>
                   <TableView fx:id="dataTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                        <TableColumn fx:id="idColumn" prefWidth="75.0" text="id" visible="false" />
-                      <TableColumn fx:id="typeColumn" prefWidth="116.0" text="类别" />
-                        <TableColumn fx:id="salebuyColumn" prefWidth="166.0" text="买/卖" />
-                      <TableColumn fx:id="priceColumn" prefWidth="75.0" text="单价" />
-                        <TableColumn fx:id="numColumn" prefWidth="75.0" text="数量" />
-                        <TableColumn fx:id="totalColumn" prefWidth="75.0" text="总价" />
-                        <TableColumn fx:id="dateColumn" prefWidth="75.0" text="时间" />
+                        <TableColumn fx:id="idCol" prefWidth="75.0" text="id" visible="false" />
+                        <TableColumn fx:id="coinIdCol" prefWidth="75.0" text="coin_id" visible="false" />
+                      <TableColumn fx:id="symbolCol" prefWidth="116.0" text="名称" />
+                        <TableColumn fx:id="salebuyCol" prefWidth="166.0" text="买/卖" />
+                      <TableColumn fx:id="priceCol" prefWidth="75.0" text="单价" />
+                        <TableColumn fx:id="numCol" prefWidth="75.0" text="数量" />
+                        <TableColumn fx:id="totalCol" prefWidth="75.0" text="总价" />
+                        <TableColumn fx:id="dateCol" prefWidth="75.0" text="交易时间" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -52,9 +53,9 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label alignment="CENTER" text="类别" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Label alignment="CENTER" text="名称" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                         <Label text="买/卖" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <Label text="时间" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Label text="交易时间" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                         <Label text="单价" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                         <Label text="数量" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                         <Label text="总价" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />

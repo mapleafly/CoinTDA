@@ -15,12 +15,13 @@
  */
 package org.lifxue.cointda.view;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,9 +32,9 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.text.Font;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lifxue.cointda.dao.CoinTypeDao;
+import org.lifxue.cointda.bean.CoinMarketCapListingBean;
+import org.lifxue.cointda.bean.TradeDataBean;
 import org.lifxue.cointda.dao.TypePieChartDao;
-import org.lifxue.cointda.models.CoinType;
 
 /**
  * FXML Controller class
@@ -42,7 +43,8 @@ import org.lifxue.cointda.models.CoinType;
  */
 public class TypePieChartViewController implements Initializable {
 
-    private static final Logger logger = LogManager.getLogger(TypePieChartViewController.class.getName());
+    private static final Logger logger = LogManager.getLogger(
+            TypePieChartViewController.class.getName());
 
     @FXML
     private PieChart pieChart;
@@ -62,10 +64,10 @@ public class TypePieChartViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        ObservableList<PieChart.Data> pieChartData = FXCollections
+                .observableArrayList();
         pieChartData.addAll(getData());
         pieChart.setData(pieChartData);
-
         double n = 0;
         for (PieChart.Data data : pieChart.getData()) {
             n += data.getPieValue();
@@ -73,10 +75,15 @@ public class TypePieChartViewController implements Initializable {
         final double total = n;
 
         pieChart.getData().forEach(data -> {
-            DecimalFormat decimalFormat = new DecimalFormat(".00");
-            String p = decimalFormat.format(data.getPieValue() / total * 100);
-            String t = decimalFormat.format(data.getPieValue());
-            Tooltip toolTip = new Tooltip(data.getName() + "总价:" + t + "； 占比:" + p + "%");
+            //建立货币格式化引用 
+            NumberFormat currency = NumberFormat.getCurrencyInstance(Locale.US);
+            //建立百分比格式化引用 
+            NumberFormat percent = NumberFormat.getPercentInstance();
+            //百分比小数点最多3位 
+            percent.setMaximumFractionDigits(3);
+            Tooltip toolTip = new Tooltip(data.getName()
+                    + "总价:" + currency.format(data.getPieValue())
+                    + "； 占比:" + percent.format(data.getPieValue() / total));
             toolTip.setFont(new Font("Arial", 20));
             Tooltip.install(data.getNode(), toolTip);
         });
@@ -85,37 +92,31 @@ public class TypePieChartViewController implements Initializable {
 
     /**
      * 生成饼图数据
-     * @return 
+     *
+     * @return
      */
     private List<PieChart.Data> getData() {
-        List<PieChart.Data> list = new ArrayList<PieChart.Data>();
-        TypePieChartDao dao = new TypePieChartDao();
-        CoinTypeDao ctDao = new CoinTypeDao();
-        List<Map<String, Double>> buyList = dao.QueryBuyNum();
-        List<Map<String, Double>> saleList = dao.QuerySaleNum();
-        buyList.forEach((buy) -> {
-            Iterator<String> buyIter = buy.keySet().iterator();
-            if (buyIter.hasNext()) {
-                String buyKey = (String) buyIter.next();
-                double saleNum = 0;
-                for (Map<String, Double> sale : saleList) {
-                    if (sale.get(buyKey) == null) {
-                        continue;
+        List<PieChart.Data> list = new ArrayList<>();
+        List<TradeDataBean> tdList = TypePieChartDao.queryAllTradeData();
+        List<CoinMarketCapListingBean> typeList = TypePieChartDao.queryByTradeData();
+
+        typeList.forEach(coinType -> {
+            Integer id = coinType.getId();
+            String symbol = coinType.getSymbol();
+            BigDecimal price = coinType.getPrice();
+            BigDecimal buyNum = new BigDecimal("0");
+            BigDecimal saleNum = new BigDecimal("0");
+            for (TradeDataBean bean : tdList) {
+                if (bean.getCoin_id().intValue() == id.intValue()) {
+                    if (bean.getSale_or_buy().equals("买")) {
+                        buyNum = buyNum.add(bean.getNum());
+                    } else if (bean.getSale_or_buy().equals("卖")) {
+                        saleNum = saleNum.add(bean.getNum());
                     }
-                    saleNum = (double) sale.get(buyKey);
-                }
-                double num = (double) buy.get(buyKey) - saleNum;
-                if (num > 0) {
-                    List<CoinType> ctList = ctDao.QueryAll();
-                    double price = 0;
-                    for (CoinType ct : ctList) {
-                        if (ct.getShortName().equals(buyKey)) {
-                            price = ct.getPrice();
-                        }
-                    }
-                    list.add(new PieChart.Data(buyKey, num * price));
                 }
             }
+            list.add(new PieChart.Data(symbol, buyNum.subtract(saleNum)
+                    .multiply(price).setScale(8, RoundingMode.HALF_UP).doubleValue()));
         });
 
         return list;

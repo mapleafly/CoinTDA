@@ -15,14 +15,16 @@
  */
 package org.lifxue.cointda.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lifxue.cointda.dao.jdbc.DerbyJdbcDao;
-import org.lifxue.cointda.models.TradeData;
+import org.lifxue.cointda.bean.CoinMarketCapListingBean;
+import org.lifxue.cointda.bean.CurUsedCoinBean;
+import org.lifxue.cointda.bean.TradeDataBean;
+import org.lifxue.cointda.models.TradeDataFXC;
+import org.lifxue.cointda.pool.DBUtilsHelper;
 
 /**
  *
@@ -30,138 +32,213 @@ import org.lifxue.cointda.models.TradeData;
  */
 public class TradeDataDao {
 
-    private static final Logger logger = LogManager.getLogger(TradeDataDao.class.getName());
+    private static final Logger logger = LogManager.getLogger(
+            TradeDataDao.class.getName());
 
     public TradeDataDao() {
 
     }
 
     /**
-     * 插入数据
+     * 插入一条数据
      *
-     * @param tradeData
+     * @param bean
+     * @return 更新的行数
+     */
+    public static Integer insert(TradeDataBean bean) {
+        String sql = "insert into tab_trade_data"
+                + "(coin_id,coin_symbol,sale_or_buy,price,num,total_price,"
+                + "trade_date)"
+                + " values (?,?,?,?,?,?,?)";
+
+        Object[] param = new Object[7];
+        param[0] = bean.getCoin_id();
+        param[1] = bean.getCoin_symbol();
+        param[2] = bean.getSale_or_buy();
+        param[3] = bean.getPrice();
+        param[4] = bean.getNum();
+        param[5] = bean.getTotal_price();
+        param[6] = bean.getTrade_date();
+        BigDecimal dec = DBUtilsHelper.insert(sql, param);
+        
+        return Integer.valueOf(dec.toBigInteger().toString());
+    }
+    
+    /**
+     * 批量插入数据
+     *
+     * @param list
      * @return
      */
-    public int insert(TradeData tradeData) {
-        String coinType = tradeData.getCoinType();
-        String saleOrBuy = tradeData.getSaleOrBuy();
-        double price = tradeData.getPrice();
-        double num = tradeData.getNum();
-        double totalPrice = tradeData.getTotalPrice();
-        String date = tradeData.getDate();
+    public static int[] batchInsert(List<TradeDataBean> list) {
+        String sql = "insert into tab_trade_data"
+                + "(coin_id,coin_symbol,sale_or_buy,price,num,total_price,"
+                + "trade_date)"
+                + " values (?,?,?,?,?,?,?)";
 
-        String sql = "insert into TAB_TRADEDATA(TD_COINTYPE,TD_SALEORBUY,"
-                + "TD_PRICE,TD_NUM,TD_TOTALPRICE,TD_DATE) values ('" + coinType
-                + "','" + saleOrBuy
-                + "'," + price
-                + "," + num
-                + "," + totalPrice
-                + ",'" + date + "')";
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        return dbjd.insert(sql);
+        Object[][] params = new Object[list.size()][];
+        //组织params
+        for (int i = 0; i < list.size(); i++) {
+            TradeDataBean bean = list.get(i);
+            Object[] param = new Object[7];
+            param[0] = bean.getCoin_id();
+            param[1] = bean.getCoin_symbol();
+            param[2] = bean.getSale_or_buy();
+            param[3] = bean.getPrice();
+            param[4] = bean.getNum();
+            param[5] = bean.getTotal_price();
+            param[6] = bean.getTrade_date();
+
+            params[i] = param;
+        }
+
+        return DBUtilsHelper.batch(sql, params);
     }
 
     /**
-     * 修改数据
+     * 修改一条数据
      *
-     * @param tradeData
+     * @param bean
      * @return
      */
-    public boolean update(TradeData tradeData) {
-        int id = tradeData.getId();
-        String coinType = tradeData.getCoinType();
-        String saleOrBuy = tradeData.getSaleOrBuy();
-        double price = tradeData.getPrice();
-        double num = tradeData.getNum();
-        double totalPrice = tradeData.getTotalPrice();
-        String date = tradeData.getDate();
-        String sql = "update TAB_TRADEDATA set TD_COINTYPE='" + coinType
-                + "',TD_SALEORBUY='" + saleOrBuy
-                + "',TD_PRICE=" + price
-                + ",TD_NUM=" + num
-                + ",TD_TOTALPRICE=" + totalPrice
-                + ",TD_DATE='" + date
-                + "' where TD_ID=" + id;
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        return dbjd.update(sql);
+    public static int update(TradeDataBean bean) {
+        String sql = "update tab_trade_data set "
+                + "coin_id=?,coin_symbol=?,sale_or_buy=?,price=?,num=?,"
+                + "total_price=?,trade_date=?"
+                + " where id=?";
+
+        Object[] param = new Object[8];
+        param[0] = bean.getCoin_id();
+        param[1] = bean.getCoin_symbol();
+        param[2] = bean.getSale_or_buy();
+        param[3] = bean.getPrice();
+        param[4] = bean.getNum();
+        param[5] = bean.getTotal_price();
+        param[6] = bean.getTrade_date();
+        param[7] = bean.getId();
+
+        return DBUtilsHelper.update(sql, param);
     }
 
     /**
-     * 删除数据
+     * 删除一条数据
      *
-     * @param tradeData
+     * @param bean
      * @return
      */
-    public boolean delete(TradeData tradeData) {
-        return delete(tradeData.getId());
+    public static int delete(TradeDataBean bean) {
+        String sql = "delete from tab_trade_data"
+                + " where id=?";
+        return DBUtilsHelper.update(sql, bean.getId());
     }
 
     /**
+     * 删除全部数据
+     *
+     * @return
+     */
+    public static boolean truncate() {
+        String sql = "TRUNCATE TABLE tab_trade_data";
+        return DBUtilsHelper.update(sql) == 0;
+    }
+
+    /**
+     * 查询一条数据
      *
      * @param id
-     * @return
+     * @return 返回CoinMarketCapListingBean
      */
-    public boolean delete(int id) {
-        String sql = "delete from TAB_TRADEDATA where TD_ID=" + id;
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        return dbjd.delete(sql);
+    public static TradeDataBean queryBean(Integer id) {
+        String sql = "select * from tab_trade_data where id=?";
+        return DBUtilsHelper.queryBean(TradeDataBean.class, sql, id);
     }
 
     /**
-     * 查询单个
-     *
-     * @param id
-     * @return
+     * 根据简称查询coin信息
+     * @param symbol
+     * @return 
      */
-    public TradeData QueryOne(int id) {
-        String sql = "SELECT * FROM TAB_TRADEDATA where TD_ID=" + id;
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        ResultSet rs = dbjd.executeQuery(sql);
-        TradeData td = new TradeData();
-        try {
-            if (rs.next()) {
-                td.setId(rs.getInt(1));
-                td.setCoinType(rs.getString(2));
-                td.setSaleOrBuy(rs.getString(3));
-                td.setPrice(rs.getDouble(4));
-                td.setNum(rs.getDouble(5));
-                td.setTotalPrice(rs.getDouble(6));
-                td.setDate(rs.getString(7));
-            }
-        } catch (SQLException ex) {
-            logger.error(ex);
-            dbjd.close();
+    public static CoinMarketCapListingBean queryBySymbol(String symbol) {
+        String sql = "select * from tab_CoinMarketCap_listings where symbol=?";
+        return DBUtilsHelper.queryBean(
+                CoinMarketCapListingBean.class, sql, symbol);
+
+    }
+    
+      /**
+     * 查询全部Coin的简称
+     *
+     * @return 返回 简称list
+     */
+    public static List<String> queryAllSymbol() {
+        String sql = "select * from tab_curuse_coin order by cmc_rank";
+        List<CurUsedCoinBean> list = DBUtilsHelper.queryList(
+                CurUsedCoinBean.class, sql);
+        List<String> ctList = new ArrayList<>();
+        for (CurUsedCoinBean bean : list) {
+            ctList.add(bean.getSymbol());
         }
-        return td;
+        return ctList;
     }
 
     /**
-     * 查询全部
+     * 查询全部交易数据
      *
-     * @return
+     * @return 返回 list
      */
-    public List<TradeData> QueryAll() {
-        List<TradeData> list = new ArrayList<TradeData>();
-        String sql = "SELECT * FROM TAB_TRADEDATA ORDER BY TD_ID";
-        DerbyJdbcDao dbjd = DerbyJdbcDao.getInstance();
-        ResultSet rs = dbjd.executeQuery(sql);
-        try {
-            while (rs.next()) {
-                TradeData td = new TradeData();
-                td.setId(rs.getInt(1));
-                td.setCoinType(rs.getString(2));
-                td.setSaleOrBuy(rs.getString(3));
-                td.setPrice(rs.getDouble(4));
-                td.setNum(rs.getDouble(5));
-                td.setTotalPrice(rs.getDouble(6));
-                td.setDate(rs.getString(7));
-                list.add(td);
-            }
-        } catch (SQLException ex) {
-            logger.error(ex);
-            dbjd.close();
+    public static List<TradeDataBean> queryAll() {
+        String sql = "select * from tab_trade_data order by id";
+        return DBUtilsHelper.queryList(TradeDataBean.class, sql);
+    }
+    
+    /**
+     * 查询全部交易数据
+     * @return 返回用于页面显示的list
+     */
+    public static List<TradeDataFXC> queryAllFXC(){
+        List<TradeDataBean> list = queryAll();
+        List<TradeDataFXC> fxcList = new ArrayList<>();
+        for(TradeDataBean bean : list){
+            TradeDataFXC fxc = new TradeDataFXC();
+            fxc.setId(bean.getId());
+            fxc.setCoinId(bean.getCoin_id());
+            fxc.setCoinSymbol(bean.getCoin_symbol());
+            fxc.setSaleOrBuy(bean.getSale_or_buy());
+            fxc.setPrice(bean.getPrice().toString());
+            fxc.setNum(bean.getNum().toString());
+            fxc.setTotalPrice(bean.getTotal_price().toString());
+            fxc.setDate(bean.getTrade_date());
+            fxcList.add(fxc);
         }
-        return list;
+        return fxcList;
     }
 
+     public static void main(String[] args) {
+        TradeDataBean bean = new TradeDataBean();
+        List<TradeDataBean> list = new ArrayList<>();
+        bean.setCoin_id(1);
+        bean.setCoin_symbol("BTC");
+        bean.setSale_or_buy("买");
+        bean.setPrice(new BigDecimal("7455.001"));
+        bean.setNum(new BigDecimal("1.000"));
+        bean.setTotal_price(new BigDecimal("7455.001"));
+        bean.setTrade_date("2019-12-09");
+        for(int i = 0; i < 15; i++){
+            list.add(bean);
+        }
+        logger.info(list.size());
+        //CoinListingDao dao = new CoinListingDao();
+        TradeDataDao.truncate();
+        logger.info("QueryAll().size == " + TradeDataDao.queryAll().size());
+        logger.info(TradeDataDao.batchInsert(list).length);
+        //logger.info(TradeDataDao.insert(bean));
+        logger.info("QueryAll().size == " + TradeDataDao.queryAll().size());
+        //TradeDataBean coin2 = TradeDataDao.queryBean(1);
+        //logger.info(coin2);
+        //TradeDataDao.delete(coin2);
+        logger.info("QueryAll().size == " + TradeDataDao.queryAll().get(0));
+        logger.info("QueryAll().size == " + TradeDataDao.queryAll().get(1));
+        logger.info("QueryAll().size == " + TradeDataDao.queryAll().get(14));
+
+    }
 }
