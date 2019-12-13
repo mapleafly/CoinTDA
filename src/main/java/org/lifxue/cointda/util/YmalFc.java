@@ -26,11 +26,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lifxue.cointda.bean.Cryptocurrency;
+import org.lifxue.cointda.bean.CryptocurrencyBean;
 
 /**
  *
  * @author xuelf
+ * @param <T>
  */
 public class YmalFc<T> {
 
@@ -68,8 +69,8 @@ public class YmalFc<T> {
     }
 
     public static void main(String[] args) {
-        Cryptocurrency contact = new Cryptocurrency();
-        YmalFc<Cryptocurrency> ymalFc = new YmalFc<Cryptocurrency>(Cryptocurrency.class);
+        CryptocurrencyBean contact = new CryptocurrencyBean();
+        YmalFc<CryptocurrencyBean> ymalFc = new YmalFc<>(CryptocurrencyBean.class);
 
          String filePath = System.getProperty("user.dir");
         contact = ymalFc.build(filePath + "/conf/Cryptocurrency.yml");

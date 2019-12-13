@@ -20,7 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lifxue.cointda.bean.CoinMarketCapListingBean;
 import org.lifxue.cointda.bean.TradeDataBean;
-import org.lifxue.cointda.pool.DBUtilsHelper;
+import org.lifxue.cointda.pool.DBHelper;
 
 /**
  *
@@ -33,14 +33,14 @@ public class TypePieChartDao {
 
     public static List<TradeDataBean> queryAllTradeData() {
         String sql = "select * from tab_trade_data";
-        return DBUtilsHelper.queryList(TradeDataBean.class, sql);
+        return DBHelper.queryList(TradeDataBean.class, sql);
     }
     
     public static List<CoinMarketCapListingBean> queryByTradeData(){
           String sql = "select * from tab_CoinMarketCap_listings where id in"
                   + " (select coin_id from tab_trade_data group by coin_id ) "
                   + "order by cmc_rank";
-         return DBUtilsHelper.queryList(CoinMarketCapListingBean.class, sql);
+         return DBHelper.queryList(CoinMarketCapListingBean.class, sql);
     }
 
 }

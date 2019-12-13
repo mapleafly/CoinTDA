@@ -20,7 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lifxue.cointda.bean.CoinMarketCapListingBean;
 import org.lifxue.cointda.crypto.CoinListingCollector;
-import org.lifxue.cointda.pool.DBUtilsHelper;
+import org.lifxue.cointda.pool.DBHelper;
 
 /**
  *
@@ -66,7 +66,7 @@ public class CoinListingDao {
         param[17] = bean.getLastUpdated();
         param[18] = bean.getId();
 
-        return DBUtilsHelper.update(sql, param);
+        return DBHelper.update(sql, param);
     }
 
     /**
@@ -104,7 +104,7 @@ public class CoinListingDao {
         param[17] = bean.getMarketCap();
         param[18] = bean.getLastUpdated();
 
-        return DBUtilsHelper.update(sql, param);
+        return DBHelper.update(sql, param);
     }
 
     /**
@@ -149,7 +149,7 @@ public class CoinListingDao {
             params[i] = param;
         }
 
-        return DBUtilsHelper.batch(sql, params);
+        return DBHelper.batch(sql, params);
     }
 
     /**
@@ -161,7 +161,7 @@ public class CoinListingDao {
     public static int delete(CoinMarketCapListingBean bean) {
         String sql = "delete from tab_CoinMarketCap_listings"
                 + " where id=?";
-        return DBUtilsHelper.update(sql, bean.getId());
+        return DBHelper.update(sql, bean.getId());
     }
 
     /**
@@ -171,7 +171,7 @@ public class CoinListingDao {
      */
     public static boolean truncate() {
         String sql = "TRUNCATE TABLE tab_CoinMarketCap_listings";
-        return DBUtilsHelper.update(sql) == 0;
+        return DBHelper.update(sql) == 0;
     }
 
     /**
@@ -182,7 +182,7 @@ public class CoinListingDao {
      */
     public static CoinMarketCapListingBean queryBean(int id) {
         String sql = "select * from tab_CoinMarketCap_listings where id=?";
-        return DBUtilsHelper.queryBean(CoinMarketCapListingBean.class, sql, id);
+        return DBHelper.queryBean(CoinMarketCapListingBean.class, sql, id);
     }
 
     /**
@@ -192,7 +192,7 @@ public class CoinListingDao {
      */
     public static List<CoinMarketCapListingBean> queryAll() {
         String sql = "select * from tab_CoinMarketCap_listings";
-        return DBUtilsHelper.queryList(CoinMarketCapListingBean.class, sql);
+        return DBHelper.queryList(CoinMarketCapListingBean.class, sql);
     }
 
     public static void main(String[] args) {

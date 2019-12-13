@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @author xuelf
  */
-public class Cryptocurrency {
+public class CryptocurrencyBean {
 
     @JsonProperty
     private String apiKey;

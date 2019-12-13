@@ -20,7 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lifxue.cointda.bean.CoinMarketCapIdBean;
 import org.lifxue.cointda.crypto.CoinIDMapCollector;
-import org.lifxue.cointda.pool.DBUtilsHelper;
+import org.lifxue.cointda.pool.DBHelper;
 
 /**
  *
@@ -54,7 +54,7 @@ public class CoinMarketCapDao {
         param[8] = id.getToken_address();
         param[9] = id.getcId();
 
-        return DBUtilsHelper.update(sql, param);
+        return DBHelper.update(sql, param);
     }
 
     /**
@@ -81,7 +81,7 @@ public class CoinMarketCapDao {
         param[8] = id.getpId();
         param[9] = id.getToken_address();
 
-        return DBUtilsHelper.update(sql, param);
+        return DBHelper.update(sql, param);
     }
 
     /**
@@ -115,13 +115,13 @@ public class CoinMarketCapDao {
             params[i] = param;
         }
 
-        return DBUtilsHelper.batch(sql, params);
+        return DBHelper.batch(sql, params);
     }
 
     public static int delete(CoinMarketCapIdBean id){
         String sql = "delete from TAB_CoinMarketCap_id_map"
                 + " where c_id=?";
-        return DBUtilsHelper.update(sql, id.getcId());
+        return DBHelper.update(sql, id.getcId());
     }
     /**
      * 删除全部数据
@@ -130,7 +130,7 @@ public class CoinMarketCapDao {
      */
     public static boolean truncate() {
         String sql = "TRUNCATE TABLE TAB_CoinMarketCap_id_map";
-        return DBUtilsHelper.update(sql) == 0;
+        return DBHelper.update(sql) == 0;
     }
 
     /**
@@ -141,7 +141,7 @@ public class CoinMarketCapDao {
      */
     public static CoinMarketCapIdBean queryBean(int cid) {
         String sql = "select * from TAB_CoinMarketCap_id_map where c_id=?";
-        return DBUtilsHelper.queryBean(CoinMarketCapIdBean.class, sql, cid);
+        return DBHelper.queryBean(CoinMarketCapIdBean.class, sql, cid);
     }
 
     /**
@@ -151,7 +151,7 @@ public class CoinMarketCapDao {
      */
     public static List<CoinMarketCapIdBean> queryAll() {
         String sql = "select * from TAB_CoinMarketCap_id_map";
-        return DBUtilsHelper.queryList(CoinMarketCapIdBean.class, sql);
+        return DBHelper.queryList(CoinMarketCapIdBean.class, sql);
     }
 
     public static void main(String[] args) {

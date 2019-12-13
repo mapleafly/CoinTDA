@@ -40,7 +40,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lifxue.cointda.bean.CoinMarketCapIdBean;
-import org.lifxue.cointda.bean.Cryptocurrency;
+import org.lifxue.cointda.bean.CryptocurrencyBean;
 import org.lifxue.cointda.util.DateHelper;
 import org.lifxue.cointda.util.YmalFc;
 
@@ -54,9 +54,8 @@ public class CoinIDMapCollector {
     private static String httpHeaders;
 
     public CoinIDMapCollector() {
-        Cryptocurrency contact = new Cryptocurrency();
-        YmalFc<Cryptocurrency> ymalFc = new YmalFc<Cryptocurrency>(Cryptocurrency.class);
-        contact = ymalFc.build();
+        YmalFc<CryptocurrencyBean> ymalFc = new YmalFc<>(CryptocurrencyBean.class);
+        CryptocurrencyBean contact = ymalFc.build();
         apiKey = contact.getApiKey();
         uri = contact.getCoinMarketCapIDMap();
         customHeader = contact.getCustomHeader();
@@ -64,7 +63,7 @@ public class CoinIDMapCollector {
     }
 
     public List<CoinMarketCapIdBean> getCoinMarketCapIds() {
-        List<NameValuePair> paratmers = new ArrayList<NameValuePair>();
+        List<NameValuePair> paratmers = new ArrayList<>();
         //paratmers.add(new BasicNameValuePair("symbol","BTC,USDT,BNB,MDA"));
         //paratmers.add(new BasicNameValuePair("listing_status","inactive "));
         //paratmers.add(new BasicNameValuePair("start","BTC,USDT,BNB,MDA"));
@@ -74,7 +73,7 @@ public class CoinIDMapCollector {
         String result = makeAPICall(uri, paratmers);
         //logger.info(result);
         ObjectMapper mapper = new ObjectMapper();
-        List<CoinMarketCapIdBean> list = new ArrayList<CoinMarketCapIdBean>();
+        List<CoinMarketCapIdBean> list = new ArrayList<>();
         try {
             //map = mapper.readValue(result, CoinMarketCapIdMap.class);
             JsonNode rootNode = mapper.readTree(result);
@@ -139,9 +138,7 @@ public class CoinIDMapCollector {
                 EntityUtils.consume(entity);
             }
 
-        } catch (URISyntaxException ex) {
-            logger.error(ex.toString());
-        } catch (IOException ex) {
+        } catch (URISyntaxException | IOException ex) {
             logger.error(ex.toString());
         }
         return response_content;

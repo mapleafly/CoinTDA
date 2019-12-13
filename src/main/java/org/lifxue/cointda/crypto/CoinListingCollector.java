@@ -37,7 +37,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lifxue.cointda.bean.CoinMarketCapListingBean;
-import org.lifxue.cointda.bean.Cryptocurrency;
+import org.lifxue.cointda.bean.CryptocurrencyBean;
 import org.lifxue.cointda.util.DateHelper;
 import org.lifxue.cointda.util.YmalFc;
 
@@ -55,8 +55,8 @@ public class CoinListingCollector {
     private static String httpHeaders;
 
     public CoinListingCollector() {
-        YmalFc<Cryptocurrency> ymalFc = new YmalFc<>(Cryptocurrency.class);
-        Cryptocurrency contact = ymalFc.build();
+        YmalFc<CryptocurrencyBean> ymalFc = new YmalFc<>(CryptocurrencyBean.class);
+        CryptocurrencyBean contact = ymalFc.build();
         apiKey = contact.getApiKey();
         uri = contact.getLatestlistings();
         customHeader = contact.getCustomHeader();

@@ -20,8 +20,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lifxue.cointda.bean.CoinMarketCapListingBean;
-import org.lifxue.cointda.models.CoinType;
-import org.lifxue.cointda.pool.DBUtilsHelper;
+import org.lifxue.cointda.models.CoinTypeFXC;
+import org.lifxue.cointda.pool.DBHelper;
 
 /**
  *
@@ -41,21 +41,23 @@ public class CoinTypeDao {
      *
      * @return 返回 list
      */
-    public static List<CoinType> queryAll() {
+    public static List<CoinTypeFXC> queryAll() {
         String sql = "select * from tab_CoinMarketCap_listings order by cmc_rank";
-        List<CoinMarketCapListingBean> list = DBUtilsHelper.queryList(
+        List<CoinMarketCapListingBean> list = DBHelper.queryList(
                 CoinMarketCapListingBean.class, sql);
-        List<CoinType> ctList = new ArrayList<>();
-        for (CoinMarketCapListingBean bean : list) {
-            CoinType coin = new CoinType();
+        List<CoinTypeFXC> ctList = new ArrayList<>();
+        list.stream().map((bean) -> {
+            CoinTypeFXC coin = new CoinTypeFXC();
             coin.setId(bean.getId().toString());
             coin.setName(bean.getName());
             coin.setSymbol(bean.getSymbol());
             coin.setRank(bean.getCmc_rank().toString());
             coin.setPrice(bean.getPrice() == null ? "0" : bean.getPrice().toString());
             coin.setDate(bean.getLastUpdated());
+            return coin;
+        }).forEachOrdered((coin) -> {
             ctList.add(coin);
-        }
+        });
         return ctList;
     }
 
@@ -63,22 +65,24 @@ public class CoinTypeDao {
      * 查询当前被选中可使用的coin
      * @return 
      */
-    public static List<CoinType> queryCurAll() {
+    public static List<CoinTypeFXC> queryCurAll() {
         String sql = "select * from tab_CoinMarketCap_listings where id"
                 + " in (select id from tab_curuse_coin) order by cmc_rank";
-        List<CoinMarketCapListingBean> list = DBUtilsHelper.queryList(
+        List<CoinMarketCapListingBean> list = DBHelper.queryList(
                 CoinMarketCapListingBean.class, sql);
-        List<CoinType> ctList = new ArrayList<>();
-        for (CoinMarketCapListingBean bean : list) {
-            CoinType coin = new CoinType();
+        List<CoinTypeFXC> ctList = new ArrayList<>();
+        list.stream().map((bean) -> {
+            CoinTypeFXC coin = new CoinTypeFXC();
             coin.setId(bean.getId().toString());
             coin.setName(bean.getName());
             coin.setSymbol(bean.getSymbol());
             coin.setRank(bean.getCmc_rank().toString());
             coin.setPrice(bean.getPrice() == null ? "0" : bean.getPrice().toString());
             coin.setDate(bean.getLastUpdated());
+            return coin;
+        }).forEachOrdered((coin) -> {
             ctList.add(coin);
-        }
+        });
         return ctList;
     }
 

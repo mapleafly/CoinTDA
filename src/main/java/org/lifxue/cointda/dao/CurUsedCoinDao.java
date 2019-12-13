@@ -17,7 +17,7 @@ package org.lifxue.cointda.dao;
 
 import java.util.List;
 import org.lifxue.cointda.bean.CurUsedCoinBean;
-import org.lifxue.cointda.pool.DBUtilsHelper;
+import org.lifxue.cointda.pool.DBHelper;
 
 /**
  *
@@ -43,7 +43,7 @@ public class CurUsedCoinDao {
             params[i] = param;
         }
 
-        return DBUtilsHelper.batch(sql, params);
+        return DBHelper.batch(sql, params);
     }
 
     /**
@@ -53,7 +53,7 @@ public class CurUsedCoinDao {
      */
     public static boolean truncate() {
         String sql = "TRUNCATE TABLE tab_curuse_coin";
-        return DBUtilsHelper.update(sql) == 0;
+        return DBHelper.update(sql) == 0;
     }
 
    

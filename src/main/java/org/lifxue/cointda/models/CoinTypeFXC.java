@@ -22,7 +22,7 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author xuelf
  */
-public class CoinType {
+public class CoinTypeFXC {
 
     private final SimpleStringProperty id;
     private final SimpleBooleanProperty select;
@@ -32,11 +32,11 @@ public class CoinType {
     private final SimpleStringProperty price;
     private final SimpleStringProperty date;
 
-    public CoinType() {
+    public CoinTypeFXC() {
         this(null, false, null, null, null, "0", null);
     }
 
-    public CoinType(String id, boolean select, String name, String symbol, String rank, String price, String date) {
+    public CoinTypeFXC(String id, boolean select, String name, String symbol, String rank, String price, String date) {
         this.id = new SimpleStringProperty(id);
         this.select = new SimpleBooleanProperty(select);
         this.name = new SimpleStringProperty(name);

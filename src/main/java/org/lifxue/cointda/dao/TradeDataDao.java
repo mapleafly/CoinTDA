@@ -24,7 +24,7 @@ import org.lifxue.cointda.bean.CoinMarketCapListingBean;
 import org.lifxue.cointda.bean.CurUsedCoinBean;
 import org.lifxue.cointda.bean.TradeDataBean;
 import org.lifxue.cointda.models.TradeDataFXC;
-import org.lifxue.cointda.pool.DBUtilsHelper;
+import org.lifxue.cointda.pool.DBHelper;
 
 /**
  *
@@ -59,7 +59,7 @@ public class TradeDataDao {
         param[4] = bean.getNum();
         param[5] = bean.getTotal_price();
         param[6] = bean.getTrade_date();
-        BigDecimal dec = DBUtilsHelper.insert(sql, param);
+        BigDecimal dec = DBHelper.insert(sql, param);
         
         return Integer.valueOf(dec.toBigInteger().toString());
     }
@@ -92,7 +92,7 @@ public class TradeDataDao {
             params[i] = param;
         }
 
-        return DBUtilsHelper.batch(sql, params);
+        return DBHelper.batch(sql, params);
     }
 
     /**
@@ -117,7 +117,7 @@ public class TradeDataDao {
         param[6] = bean.getTrade_date();
         param[7] = bean.getId();
 
-        return DBUtilsHelper.update(sql, param);
+        return DBHelper.update(sql, param);
     }
 
     /**
@@ -129,7 +129,7 @@ public class TradeDataDao {
     public static int delete(TradeDataBean bean) {
         String sql = "delete from tab_trade_data"
                 + " where id=?";
-        return DBUtilsHelper.update(sql, bean.getId());
+        return DBHelper.update(sql, bean.getId());
     }
 
     /**
@@ -139,7 +139,7 @@ public class TradeDataDao {
      */
     public static boolean truncate() {
         String sql = "TRUNCATE TABLE tab_trade_data";
-        return DBUtilsHelper.update(sql) == 0;
+        return DBHelper.update(sql) == 0;
     }
 
     /**
@@ -150,7 +150,7 @@ public class TradeDataDao {
      */
     public static TradeDataBean queryBean(Integer id) {
         String sql = "select * from tab_trade_data where id=?";
-        return DBUtilsHelper.queryBean(TradeDataBean.class, sql, id);
+        return DBHelper.queryBean(TradeDataBean.class, sql, id);
     }
 
     /**
@@ -160,7 +160,7 @@ public class TradeDataDao {
      */
     public static CoinMarketCapListingBean queryBySymbol(String symbol) {
         String sql = "select * from tab_CoinMarketCap_listings where symbol=?";
-        return DBUtilsHelper.queryBean(
+        return DBHelper.queryBean(
                 CoinMarketCapListingBean.class, sql, symbol);
 
     }
@@ -172,12 +172,12 @@ public class TradeDataDao {
      */
     public static List<String> queryAllSymbol() {
         String sql = "select * from tab_curuse_coin order by cmc_rank";
-        List<CurUsedCoinBean> list = DBUtilsHelper.queryList(
+        List<CurUsedCoinBean> list = DBHelper.queryList(
                 CurUsedCoinBean.class, sql);
         List<String> ctList = new ArrayList<>();
-        for (CurUsedCoinBean bean : list) {
+        list.forEach((bean) -> {
             ctList.add(bean.getSymbol());
-        }
+        });
         return ctList;
     }
 
@@ -188,7 +188,7 @@ public class TradeDataDao {
      */
     public static List<TradeDataBean> queryAll() {
         String sql = "select * from tab_trade_data order by id";
-        return DBUtilsHelper.queryList(TradeDataBean.class, sql);
+        return DBHelper.queryList(TradeDataBean.class, sql);
     }
     
     /**
@@ -198,7 +198,7 @@ public class TradeDataDao {
     public static List<TradeDataFXC> queryAllFXC(){
         List<TradeDataBean> list = queryAll();
         List<TradeDataFXC> fxcList = new ArrayList<>();
-        for(TradeDataBean bean : list){
+        list.stream().map((bean) -> {
             TradeDataFXC fxc = new TradeDataFXC();
             fxc.setId(bean.getId());
             fxc.setCoinId(bean.getCoin_id());
@@ -208,8 +208,10 @@ public class TradeDataDao {
             fxc.setNum(bean.getNum().toString());
             fxc.setTotalPrice(bean.getTotal_price().toString());
             fxc.setDate(bean.getTrade_date());
+            return fxc;
+        }).forEachOrdered((fxc) -> {
             fxcList.add(fxc);
-        }
+        });
         return fxcList;
     }
 

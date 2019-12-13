@@ -34,7 +34,7 @@ import org.apache.logging.log4j.Logger;
 import org.lifxue.cointda.bean.CurUsedCoinBean;
 import org.lifxue.cointda.dao.CoinTypeDao;
 import org.lifxue.cointda.dao.CurUsedCoinDao;
-import org.lifxue.cointda.models.CoinType;
+import org.lifxue.cointda.models.CoinTypeFXC;
 
 /**
  * FXML Controller class
@@ -46,31 +46,31 @@ public class SettingPriceViewController implements Initializable {
     private static final Logger logger = LogManager.getLogger(SettingPriceViewController.class.getName());
 
     @FXML
-    private TableView<CoinType> priceTable;
+    private TableView<CoinTypeFXC> priceTable;
 
     @FXML
-    private TableColumn<CoinType, String> idCol;
+    private TableColumn<CoinTypeFXC, String> idCol;
     @FXML
-    private TableColumn<CoinType, Boolean> selectCol;
+    private TableColumn<CoinTypeFXC, Boolean> selectCol;
     @FXML
-    private TableColumn<CoinType, String> nameCol;
+    private TableColumn<CoinTypeFXC, String> nameCol;
     @FXML
-    private TableColumn<CoinType, String> symbolCol;
+    private TableColumn<CoinTypeFXC, String> symbolCol;
     @FXML
-    private TableColumn<CoinType, String> rankCol;
+    private TableColumn<CoinTypeFXC, String> rankCol;
     @FXML
-    private TableColumn<CoinType, String> priceCol;
+    private TableColumn<CoinTypeFXC, String> priceCol;
     @FXML
-    private TableColumn<CoinType, String> dateCol;
+    private TableColumn<CoinTypeFXC, String> dateCol;
 
-    private final ObservableList<CoinType> coinTypeData;
+    private final ObservableList<CoinTypeFXC> coinTypeData;
 
-    public List<CoinType> updateData;
+    public List<CoinTypeFXC> updateData;
 
     public SettingPriceViewController() {
         this.coinTypeData = FXCollections.observableArrayList();
 
-        List<CoinType> list = CoinTypeDao.queryAll();
+        List<CoinTypeFXC> list = CoinTypeDao.queryAll();
         coinTypeData.addAll(list);
         updateData = list;
 
@@ -95,8 +95,8 @@ public class SettingPriceViewController implements Initializable {
         priceCol.setCellValueFactory(cellData -> cellData.getValue().priceProperty());
         dateCol.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
 
-        List<CoinType> list = CoinTypeDao.queryCurAll();
-        for (CoinType coin : list) {
+        List<CoinTypeFXC> list = CoinTypeDao.queryCurAll();
+        for (CoinTypeFXC coin : list) {
             for (int i = 0; i < coinTypeData.size(); i++) {
                 if (coin.getId().equals(coinTypeData.get(i).getId())) {
                     coinTypeData.get(i).setSelect(true);
@@ -107,7 +107,7 @@ public class SettingPriceViewController implements Initializable {
 
 //        priceCol.setCellFactory(cellData -> {
 //            TextField priceTextField = new TextField();
-//            TableCell<CoinType, String> cell = new TableCell<CoinType, String>() {
+//            TableCell<CoinTypeFXC, String> cell = new TableCell<CoinTypeFXC, String>() {
 //                @Override
 //                protected void updateItem(String chuzhi, boolean empty) {
 //                    super.updateItem(chuzhi, empty);
@@ -149,7 +149,7 @@ public class SettingPriceViewController implements Initializable {
 //        dateCol.setCellFactory(cellData -> {
 //            DatePicker datePicker = new DatePicker();
 //            datePicker.setEditable(true);
-//            TableCell<CoinType, String> cell = new TableCell<CoinType, String>() {
+//            TableCell<CoinTypeFXC, String> cell = new TableCell<CoinTypeFXC, String>() {
 //                @Override
 //                protected void updateItem(String chuzhi, boolean empty) {
 //                    super.updateItem(chuzhi, empty);

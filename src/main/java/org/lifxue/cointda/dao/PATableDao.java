@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 import org.lifxue.cointda.bean.CoinMarketCapListingBean;
 import org.lifxue.cointda.bean.TradeDataBean;
 import org.lifxue.cointda.models.TradeDataFXC;
-import org.lifxue.cointda.pool.DBUtilsHelper;
+import org.lifxue.cointda.pool.DBHelper;
 
 /**
  *
@@ -41,12 +41,12 @@ public class PATableDao {
           params[0] = strCoinSymbol;
           params[1] = strStartDate;
           params[2] = strEndDate;
-        List<TradeDataBean> list = DBUtilsHelper.queryList(TradeDataBean.class, sql, params);
+        List<TradeDataBean> list = DBHelper.queryList(TradeDataBean.class, sql, params);
         List<TradeDataFXC> fxcList = new ArrayList<>();
         if(list == null || list.isEmpty()){
             return fxcList;
         }
-        for(TradeDataBean bean : list){
+        list.stream().map((bean) -> {
             TradeDataFXC fxc = new TradeDataFXC();
             fxc.setId(bean.getId());
             fxc.setCoinId(bean.getCoin_id());
@@ -56,8 +56,10 @@ public class PATableDao {
             fxc.setNum(bean.getNum().toString());
             fxc.setTotalPrice(bean.getTotal_price().toString());
             fxc.setDate(bean.getTrade_date());
+            return fxc;
+        }).forEachOrdered((fxc) -> {
             fxcList.add(fxc);
-        }
+        });
         return fxcList;
     }
       
@@ -68,7 +70,7 @@ public class PATableDao {
      */
     public static CoinMarketCapListingBean queryBySymbol(String symbol) {
         String sql = "select * from tab_CoinMarketCap_listings where symbol=?";
-        return DBUtilsHelper.queryBean(
+        return DBHelper.queryBean(
                 CoinMarketCapListingBean.class, sql, symbol);
 
     }
@@ -80,7 +82,7 @@ public class PATableDao {
      */
     public static List<String> queryAllSymbol() {
         String sql = "select distinct coin_symbol from tab_trade_data";
-        return DBUtilsHelper.queryColumn(sql);
+        return DBHelper.queryColumn(sql);
     }
     
      /**
@@ -90,7 +92,7 @@ public class PATableDao {
     public static List<TradeDataFXC> queryAllFXC(){
         List<TradeDataBean> list = TradeDataDao.queryAll();
         List<TradeDataFXC> fxcList = new ArrayList<>();
-        for(TradeDataBean bean : list){
+        list.stream().map((bean) -> {
             TradeDataFXC fxc = new TradeDataFXC();
             fxc.setId(bean.getId());
             fxc.setCoinId(bean.getCoin_id());
@@ -100,8 +102,10 @@ public class PATableDao {
             fxc.setNum(bean.getNum().toString());
             fxc.setTotalPrice(bean.getTotal_price().toString());
             fxc.setDate(bean.getTrade_date());
+            return fxc;
+        }).forEachOrdered((fxc) -> {
             fxcList.add(fxc);
-        }
+        });
         return fxcList;
     }
     

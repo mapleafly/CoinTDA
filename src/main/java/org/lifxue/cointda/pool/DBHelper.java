@@ -37,9 +37,9 @@ import org.apache.logging.log4j.LogManager;
  *
  * @author xuelf
  */
-public class DBUtilsHelper {
+public class DBHelper {
 
-    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(DBUtilsHelper.class.getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(DBHelper.class.getName());
     private static Connection connection = null;
     private static DataSource ds = null;
 
@@ -80,7 +80,7 @@ public class DBUtilsHelper {
      * @return
      */
     public static int update(String sql, Object... params) {
-        QueryRunner run = DBUtilsHelper.getRunner();
+        QueryRunner run = DBHelper.getRunner();
         try {
             return run.update(sql, params);
         } catch (SQLException ex) {
@@ -107,7 +107,7 @@ public class DBUtilsHelper {
      * @return
      */
     public static BigDecimal insert(String sql, Object... params) {
-        QueryRunner run = DBUtilsHelper.getRunner();
+        QueryRunner run = DBHelper.getRunner();
         try {
             if (run.update(sql, params) == 1) {
                 return (BigDecimal) run.query(
@@ -129,7 +129,7 @@ public class DBUtilsHelper {
      * @return
      */
     public static int[] batch(String sql, Object[][] params) {
-        QueryRunner run = DBUtilsHelper.getRunner();
+        QueryRunner run = DBHelper.getRunner();
         try {
             return run.batch(sql, params);
         } catch (SQLException ex) {
@@ -140,7 +140,7 @@ public class DBUtilsHelper {
 
     public static <T> T query(String sql, ResultSetHandler<T> rsh, Object... params) {
         //获取链接
-        QueryRunner runner = DBUtilsHelper.getRunner();
+        QueryRunner runner = DBHelper.getRunner();
         try {
             //返回查询值
             return (T) runner.query(sql, rsh, params);
@@ -151,7 +151,7 @@ public class DBUtilsHelper {
     }
 
     public static <T> T queryColumn(String sql, Object... params) {
-        QueryRunner run = DBUtilsHelper.getRunner();
+        QueryRunner run = DBHelper.getRunner();
         try {
             return (T) run.query(sql, new ColumnListHandler(1), params);
         } catch (SQLException ex) {
@@ -167,14 +167,14 @@ public class DBUtilsHelper {
     }
 
     public static <T> T queryBean(Class<T> clazz, String sql, Object... params) {
-        return (T) DBUtilsHelper.query(sql,
+        return (T) DBHelper.query(sql,
                 new BeanHandler<>(clazz,
                         new BasicRowProcessor(new GenerousBeanProcessor())),
                 params);
     }
 
     public static int createTable(String sql) {
-        QueryRunner run = DBUtilsHelper.getRunner();
+        QueryRunner run = DBHelper.getRunner();
         try {
             return run.execute(sql);
         } catch (SQLException ex) {
@@ -184,7 +184,7 @@ public class DBUtilsHelper {
     }
 
     public static int dropTable(String sql) {
-        QueryRunner run = DBUtilsHelper.getRunner();
+        QueryRunner run = DBHelper.getRunner();
         try {
             return run.execute(sql);
         } catch (SQLException ex) {
@@ -194,18 +194,18 @@ public class DBUtilsHelper {
     }
 
     public static Boolean doesTableExist(String tablename) {
-        Connection con = DBUtilsHelper.getConnection();
-        HashSet<String> set = new HashSet<String>();
+        Connection con = DBHelper.getConnection();
+        HashSet<String> set = new HashSet<>();
         try {
             DatabaseMetaData meta = con.getMetaData();
-            ResultSet res = meta.getTables(null, null, null,
-                    new String[]{"TABLE"});
-            while (res.next()) {
-                set.add(res.getString("TABLE_NAME"));
+            try (ResultSet res = meta.getTables(null, null, null,
+                    new String[]{"TABLE"})) {
+                while (res.next()) {
+                    set.add(res.getString("TABLE_NAME"));
+                }
             }
-            res.close();
             con.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error(e.getMessage());
         }
         //System.out.println(set);  
