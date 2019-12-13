@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,8 +28,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lifxue.cointda.bean.CurUsedCoinBean;
@@ -62,6 +65,9 @@ public class SettingPriceViewController implements Initializable {
     private TableColumn<CoinTypeFXC, String> priceCol;
     @FXML
     private TableColumn<CoinTypeFXC, String> dateCol;
+
+    @FXML
+    private TextField searchField;
 
     private final ObservableList<CoinTypeFXC> coinTypeData;
 
@@ -105,6 +111,12 @@ public class SettingPriceViewController implements Initializable {
             }
         }
 
+//        searchField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+//            logger.info(searchField.getText().trim());
+//            coinTypeData.clear();
+//            coinTypeData.addAll(CoinTypeDao.queryBySymbol(searchField.getText().trim()));
+//
+//        });
 //        priceCol.setCellFactory(cellData -> {
 //            TextField priceTextField = new TextField();
 //            TableCell<CoinTypeFXC, String> cell = new TableCell<CoinTypeFXC, String>() {
@@ -194,19 +206,38 @@ public class SettingPriceViewController implements Initializable {
 
     @FXML
     private void handleSave(ActionEvent event) {
-        List<CurUsedCoinBean> list = new ArrayList<>();
+        List<CurUsedCoinBean> dbCurList = CurUsedCoinDao.queryCurAll();
+        List<CurUsedCoinBean> batchDelList = new ArrayList<>();
+        List<CurUsedCoinBean> batchInsertList = new ArrayList<>();
         for (int i = 0; i < priceTable.getItems().size(); i++) {
+            CurUsedCoinBean bean = new CurUsedCoinBean();
+            bean.setId(Integer.valueOf(priceTable.getItems().get(i).getId()));
+            bean.setSymbol(priceTable.getItems().get(i).getSymbol());
+            bean.setCmc_rank(Integer.valueOf(priceTable.getItems().get(i).getRank()));
+            bean.setLastUpdated(priceTable.getItems().get(i).getDate());
             if (priceTable.getItems().get(i).getSelect()) {
-                CurUsedCoinBean bean = new CurUsedCoinBean();
-                bean.setId(Integer.valueOf(priceTable.getItems().get(i).getId()));
-                bean.setSymbol(priceTable.getItems().get(i).getSymbol());
-                bean.setCmc_rank(Integer.valueOf(priceTable.getItems().get(i).getRank()));
-                bean.setLastUpdated(priceTable.getItems().get(i).getDate());
-                list.add(bean);
+                boolean is = false;
+                for (CurUsedCoinBean dbCur : dbCurList) {
+                    if (dbCur.getId().equals(bean.getId())) {
+                        is = true;
+                        break;
+                    }
+                }
+                if (!is) {
+                    batchInsertList.add(bean);
+                }
+            } else {
+                for (CurUsedCoinBean dbCur : dbCurList) {
+                    if (dbCur.getId().equals(bean.getId())) {
+                        batchDelList.add(bean);
+                    }
+                }
             }
         }
-        if (CurUsedCoinDao.truncate()) {
-            if (CurUsedCoinDao.batchInsert(list).length == list.size()) {
+
+        if (CurUsedCoinDao.batchDelete(batchDelList).length == batchDelList.size()) {
+            if (CurUsedCoinDao.batchInsert(batchInsertList).length == 
+                    batchInsertList.size()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("完成");
                 alert.setHeaderText("完成保存操作");
@@ -215,6 +246,22 @@ public class SettingPriceViewController implements Initializable {
                 alert.showAndWait();
             }
         }
+    }
+
+    @FXML
+    private void handleSearchFieldKeyReleased(KeyEvent event) {
+        coinTypeData.clear();
+        coinTypeData.addAll(CoinTypeDao.queryBySymbol(searchField.getText().trim()));
+        List<CoinTypeFXC> list = CoinTypeDao.queryCurAll();
+        for (CoinTypeFXC coin : list) {
+            for (int i = 0; i < coinTypeData.size(); i++) {
+                if (coin.getId().equals(coinTypeData.get(i).getId())) {
+                    coinTypeData.get(i).setSelect(true);
+                    break;
+                }
+            }
+        }
+
     }
 
 }

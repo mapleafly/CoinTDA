@@ -36,6 +36,33 @@ public class CoinTypeDao {
 
     }
 
+     /**
+     * 查询数据
+     *
+     * @param symbol
+     * @return 返回 list
+     */
+    public static List<CoinTypeFXC> queryBySymbol(String symbol) {
+        String sql = "select * from tab_CoinMarketCap_listings where symbol like '%"+symbol+"%' "
+                + "order by cmc_rank";
+        List<CoinMarketCapListingBean> list = DBHelper.queryList(
+                CoinMarketCapListingBean.class, sql);
+        List<CoinTypeFXC> ctList = new ArrayList<>();
+        list.stream().map((bean) -> {
+            CoinTypeFXC coin = new CoinTypeFXC();
+            coin.setId(bean.getId().toString());
+            coin.setName(bean.getName());
+            coin.setSymbol(bean.getSymbol());
+            coin.setRank(bean.getCmc_rank().toString());
+            coin.setPrice(bean.getPrice() == null ? "0" : bean.getPrice().toString());
+            coin.setDate(bean.getLastUpdated());
+            return coin;
+        }).forEachOrdered((coin) -> {
+            ctList.add(coin);
+        });
+        return ctList;
+    }
+    
     /**
      * 查询全部数据
      *

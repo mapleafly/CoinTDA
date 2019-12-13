@@ -15,8 +15,11 @@
  */
 package org.lifxue.cointda.dao;
 
+import java.util.ArrayList;
 import java.util.List;
+import org.lifxue.cointda.bean.CoinMarketCapListingBean;
 import org.lifxue.cointda.bean.CurUsedCoinBean;
+import org.lifxue.cointda.models.CoinTypeFXC;
 import org.lifxue.cointda.pool.DBHelper;
 
 /**
@@ -46,6 +49,23 @@ public class CurUsedCoinDao {
         return DBHelper.batch(sql, params);
     }
 
+        public static int[] batchDelete(List<CurUsedCoinBean> list) {
+        String sql = "delete from tab_curuse_coin"
+                + " where id=?";
+
+        Object[][] params = new Object[list.size()][];
+        //组织params
+        for (int i = 0; i < list.size(); i++) {
+            CurUsedCoinBean bean = list.get(i);
+            Object[] param = new Object[1];
+            param[0] = bean.getId();
+
+            params[i] = param;
+        }
+
+        return DBHelper.batch(sql, params);
+    }
+        
     /**
      * 删除全部数据
      *
@@ -56,5 +76,12 @@ public class CurUsedCoinDao {
         return DBHelper.update(sql) == 0;
     }
 
-   
+   /**
+     * 查询当前被选中可使用的coin
+     * @return 
+     */
+    public static List<CurUsedCoinBean> queryCurAll() {
+        String sql = "select * from tab_curuse_coin order by cmc_rank";
+        return DBHelper.queryList(CurUsedCoinBean.class, sql);
+    }
 }
