@@ -20,6 +20,9 @@
 3. 开源免费
 4. 小巧简单
 
+## 截图：
+
+
 ## 使用：
 ### 直接使用者：
 1. 下载安装文件[setup.exe](https://github.com/lifxue/CoinTDA/releases/download/V1.0/Setup.exe)到计算机
