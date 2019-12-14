@@ -35,7 +35,7 @@
 
 ## 使用：
 ### 直接使用者：
-1. 下载安装文件[setup.exe](https://github.com/lifxue/CoinTDA/releases/download/V1.0/Setup.exe)到计算机
+1. 下载安装文件[setup.exe](https://github.com/mapleafly/CoinTDA/releases/download/V1.1/Setup.exe)到计算机
 2. 双击运行setup.exe
 3. 按照安装步骤操作，你可以一直“下一步”直到完成安装。
 4. 找到安装目录，windows默认安装目录在C:\Program Files (x86)\CoinTDA
