@@ -60,10 +60,10 @@ public class TradeDataDao {
         param[5] = bean.getTotal_price();
         param[6] = bean.getTrade_date();
         BigDecimal dec = DBHelper.insert(sql, param);
-        
+
         return Integer.valueOf(dec.toBigInteger().toString());
     }
-    
+
     /**
      * 批量插入数据
      *
@@ -155,17 +155,18 @@ public class TradeDataDao {
 
     /**
      * 根据简称查询coin信息
+     *
      * @param symbol
-     * @return 
+     * @return
      */
-    public static CoinMarketCapListingBean queryBySymbol(String symbol) {
+    public static CoinMarketCapListingBean queryCoinBySymbol(String symbol) {
         String sql = "select * from tab_CoinMarketCap_listings where symbol=?";
         return DBHelper.queryBean(
                 CoinMarketCapListingBean.class, sql, symbol);
 
     }
-    
-      /**
+
+    /**
      * 查询全部Coin的简称
      *
      * @return 返回 简称list
@@ -190,12 +191,34 @@ public class TradeDataDao {
         String sql = "select * from tab_trade_data order by id";
         return DBHelper.queryList(TradeDataBean.class, sql);
     }
-    
+
+    public static List<TradeDataFXC> queryAllFXC(String symbol) {
+        String sql = "select * from tab_trade_data where coin_symbol=? order by id";
+        List<TradeDataBean> list = DBHelper.queryList(TradeDataBean.class, sql, symbol);
+        List<TradeDataFXC> fxcList = new ArrayList<>();
+        list.stream().map((bean) -> {
+            TradeDataFXC fxc = new TradeDataFXC();
+            fxc.setId(bean.getId());
+            fxc.setCoinId(bean.getCoin_id());
+            fxc.setCoinSymbol(bean.getCoin_symbol());
+            fxc.setSaleOrBuy(bean.getSale_or_buy());
+            fxc.setPrice(bean.getPrice().toString());
+            fxc.setNum(bean.getNum().toString());
+            fxc.setTotalPrice(bean.getTotal_price().toString());
+            fxc.setDate(bean.getTrade_date());
+            return fxc;
+        }).forEachOrdered((fxc) -> {
+            fxcList.add(fxc);
+        });
+        return fxcList;
+    }
+
     /**
      * 查询全部交易数据
+     *
      * @return 返回用于页面显示的list
      */
-    public static List<TradeDataFXC> queryAllFXC(){
+    public static List<TradeDataFXC> queryAllFXC() {
         List<TradeDataBean> list = queryAll();
         List<TradeDataFXC> fxcList = new ArrayList<>();
         list.stream().map((bean) -> {
@@ -215,7 +238,7 @@ public class TradeDataDao {
         return fxcList;
     }
 
-     public static void main(String[] args) {
+    public static void main(String[] args) {
         TradeDataBean bean = new TradeDataBean();
         List<TradeDataBean> list = new ArrayList<>();
         bean.setCoin_id(1);
@@ -225,7 +248,7 @@ public class TradeDataDao {
         bean.setNum(new BigDecimal("1.000"));
         bean.setTotal_price(new BigDecimal("7455.001"));
         bean.setTrade_date("2019-12-09");
-        for(int i = 0; i < 15; i++){
+        for (int i = 0; i < 15; i++) {
             list.add(bean);
         }
         logger.info(list.size());

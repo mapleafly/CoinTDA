@@ -94,8 +94,6 @@ public class TradeDataEditViewController implements Initializable {
     public TradeDataEditViewController() {
 
         tradeDataList = FXCollections.observableArrayList();
-        List<TradeDataFXC> list = TradeDataDao.queryAllFXC();
-        tradeDataList.addAll(list);
 
         coinList = TradeDataDao.queryAllSymbol();
         if (coinList == null || coinList.isEmpty()) {
@@ -104,6 +102,9 @@ public class TradeDataEditViewController implements Initializable {
             alert.setHeaderText("缺少coin数据");
             alert.setContentText("请首先去设置界面更新数据,选择设置可用coin！");
             alert.showAndWait();
+        } else {
+            List<TradeDataFXC> list = TradeDataDao.queryAllFXC(coinList.get(0));
+            tradeDataList.addAll(list);
         }
     }
 
@@ -128,7 +129,8 @@ public class TradeDataEditViewController implements Initializable {
 
         typeChoiceBox.setItems(FXCollections.observableArrayList(coinList));
         typeChoiceBox.setTooltip(new Tooltip("选择交易品种"));
-
+        typeChoiceBox.getSelectionModel().selectFirst();
+        
         salebuyChoiceBox.setItems(FXCollections.observableArrayList("买", "卖"));
         salebuyChoiceBox.setTooltip(new Tooltip("选择交易种类"));
 
@@ -140,6 +142,15 @@ public class TradeDataEditViewController implements Initializable {
 
         dataTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showTradeDataDetails(newValue));
+
+        typeChoiceBox.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            logger.info("newValue.intValue()==" + newValue.intValue());
+            if (newValue.intValue() >= 0) {
+                String selectedCoin = this.coinList.get(newValue.intValue());
+                tradeDataList.clear();
+                tradeDataList.addAll(TradeDataDao.queryAllFXC(selectedCoin));
+            }
+        });
 
         priceTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d*(\\.\\d*)?")) {
@@ -166,7 +177,7 @@ public class TradeDataEditViewController implements Initializable {
     private void handleAddData(ActionEvent event) {
         if (isInputValid()) {
             TradeDataBean bean = new TradeDataBean();
-            bean.setCoin_id(TradeDataDao.queryBySymbol(typeChoiceBox.getValue()).getId());
+            bean.setCoin_id(TradeDataDao.queryCoinBySymbol(typeChoiceBox.getValue()).getId());
             bean.setCoin_symbol(typeChoiceBox.getValue());
             bean.setSale_or_buy(salebuyChoiceBox.getValue());
             bean.setPrice(new BigDecimal(priceTextField.getText()));
@@ -203,7 +214,7 @@ public class TradeDataEditViewController implements Initializable {
                 if (n == 1) {
                     fxc = beanToFXC(bean);
                     for (int i = 0; i < tradeDataList.size(); i++) {
-                        if (tradeDataList.get(i).getId().intValue() == fxc.getId().intValue()) {
+                        if (tradeDataList.get(i).getId().equals(fxc.getId())) {
                             tradeDataList.remove(i);
                             tradeDataList.add(i, fxc);
                             dataTable.getSelectionModel().select(i);
