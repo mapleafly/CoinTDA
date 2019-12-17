@@ -66,6 +66,10 @@ public class PATableViewController implements Initializable {
     @FXML
     private Label nowPriceTotalLabel;
     @FXML
+    private Label PriceTotalLabel;
+    @FXML
+    private Label nowpaLabel;
+    @FXML
     private TableView<TradeDataFXC> tradeDataTable;
     @FXML
     private TableColumn<TradeDataFXC, Integer> idCol;
@@ -154,6 +158,10 @@ public class PATableViewController implements Initializable {
             paLabel.setTooltip(new Tooltip(mapTotal.get("paPrice")));
             this.numTotalLabel.setText(mapTotal.get("numTotal"));
             numTotalLabel.setTooltip(new Tooltip(mapTotal.get("numTotal")));
+            nowpaLabel.setText(mapTotal.get("nowPrice"));
+            nowpaLabel.setTooltip(new Tooltip(mapTotal.get("nowPrice")));
+            PriceTotalLabel.setText(mapTotal.get("paPriceTotal"));
+            PriceTotalLabel.setTooltip(new Tooltip(mapTotal.get("paPriceTotal")));
         }
     }
 
@@ -176,9 +184,9 @@ public class PATableViewController implements Initializable {
         BigDecimal curPrice = PATableDao.queryBySymbol(strCoinSymbol)
                 .getPrice();
         BigDecimal paPrice = new BigDecimal("0");
+        BigDecimal paPriceTotal = buy.subtract(sale);
         if (numTotal.compareTo(new BigDecimal("0")) == 1) {
-            paPrice = buy.subtract(sale)
-                    .divide(numTotal, 8, RoundingMode.HALF_UP);
+            paPrice = paPriceTotal.divide(numTotal, 8, RoundingMode.HALF_UP);
         }
         map.put("numTotal", numTotal.setScale(8, RoundingMode.HALF_UP).toString());
         map.put("nowPriceTotal",
@@ -186,6 +194,8 @@ public class PATableViewController implements Initializable {
                         .setScale(8, RoundingMode.HALF_UP)
                         .toString()
         );
+        map.put("nowPrice", curPrice.setScale(8, RoundingMode.HALF_UP).toString());
+        map.put("paPriceTotal", paPriceTotal.setScale(8, RoundingMode.HALF_UP).toString());
         map.put("paPrice", paPrice.toString());
         return map;
     }
