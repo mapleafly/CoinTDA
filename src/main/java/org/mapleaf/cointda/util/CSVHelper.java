@@ -15,6 +15,7 @@
  */
 package org.mapleaf.cointda.util;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -40,7 +41,7 @@ public class CSVHelper {
     private static final char DELIMITER = ',';
     private static final Charset CHARSET = Charset.forName("UTF-8");
 
-    public static void writeCsv(String[] header, List<String[]> data, String filePath) {
+    public static void writeCsv(String[] header, List<String[]> data, File filePath) {
         //初始化csvformat
         CSVFormat formator = CSVFormat.DEFAULT
                 .withHeader(header)
@@ -62,8 +63,6 @@ public class CSVHelper {
         } catch (IOException ex) {
             logger.error(ex);
         }
-
-        logger.info("CSV文件创建成功,文件路径:" + filePath);
 
     }
 
