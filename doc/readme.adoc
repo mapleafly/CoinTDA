@@ -48,19 +48,19 @@ CoinTDA是一个虚拟货币交易信息记录和分析工具。本简介帮助�
 
 1.录入交易信息界面 
 
-image::2.jpg[录入界面]
+image::img/2.jpg[录入界面]
 
 2.饼图效果
 
-image::4.jpg[饼图效果]
+image::img/4.jpg[饼图效果]
 
 3.查询、价格分析 
 
-image::5.jpg[价格分析]
+image::img/5.jpg[价格分析]
 
 4.基础数据选择和查询 
 
-image::3.jpg[基础数据]
+image::img/3.jpg[基础数据]
 
 == 安装使用
 
@@ -74,8 +74,9 @@ image::3.jpg[基础数据]
 . 把apikey保存到Cryptocurrency.yml文件
 
     文件中的第二行apiKey: 默认没有值，把申请的apikey放在这一行的冒号后面
-    注意：冒号和你要输入的apikey之间要有一个空格运行cointda.exe
+    注意：冒号和你要输入的apikey之间要有一个空格
 
+. 运行cointda.exe
 . 更新基础数据
 
     安装配置完成后，第一次开始使用，首先执行“更新基础数据”
