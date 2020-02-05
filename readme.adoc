@@ -5,8 +5,8 @@
 :lang: en
 :toc: left
 :numbered:
-:revnumber: 1.0
-:revdate: 2020-01-15
+:revnumber: 1.3
+:revdate: 2020-02-06
 :revremark: 
 :version-label!: 
 :title: CoinTDA简介
@@ -64,7 +64,7 @@ image::img/3.jpg[基础数据]
 
 == 安装使用
 
-. 下载安装文件 https://github.com/mapleafly/CoinTDA/releases/download/V1.2/Setup.exe[setup.exe]到计算机
+. 下载安装文件 https://github.com/mapleafly/CoinTDA/releases/download/v1.3/Setup.exe[setup.exe]到计算机
 . 双击运行setup.exe
 . 按照安装步骤操作，你可以一直“下一步”直到完成安装。
 . 找到安装目录，windows默认安装目录在C:\Program Files (x86)\CoinTDA
