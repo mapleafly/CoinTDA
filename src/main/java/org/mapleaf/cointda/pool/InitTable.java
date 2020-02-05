@@ -44,7 +44,7 @@ public class InitTable {
 //        sql = "drop table TAB_CoinMarketCap_id_map";
 //        DBHelper.dropTable(sql);
 //        sql = "drop table TAB_CoinMarketCap_listings";
-//        DBHelper.dropTable(sql);
+//       DBHelper.dropTable(sql);
         /////////////////////////////////////
         //当前使用的交易品种
         if (!DBHelper.doesTableExist("tab_curuse_coin")) {
@@ -97,15 +97,15 @@ public class InitTable {
                     + "platform_id integer,"
                     + "token_address VARCHAR(100),"
                     + "numMarketPairs integer,"
-                    + "maxSupply DECIMAL(23,8),"
-                    + "circulatingSupply DECIMAL(23,8),"
-                    + "totalSupply DECIMAL(23,8),"
-                    + "price DECIMAL(23,8),"
-                    + "volume_24h DECIMAL(23,8),"
-                    + "percent_change_1h DECIMAL(23,8),"
-                    + "percent_change_24h DECIMAL(23,8),"
-                    + "percent_change_7d DECIMAL(23,8),"
-                    + "marketCap DECIMAL(23,8),"
+                    + "maxSupply DECIMAL(31,12),"
+                    + "circulatingSupply DECIMAL(31,12),"
+                    + "totalSupply DECIMAL(31,12),"
+                    + "price DECIMAL(31,12),"
+                    + "volume_24h DECIMAL(31,12),"
+                    + "percent_change_1h DECIMAL(31,12),"
+                    + "percent_change_24h DECIMAL(31,12),"
+                    + "percent_change_7d DECIMAL(31,12),"
+                    + "marketCap DECIMAL(31,12),"
                     + "lastUpdated VARCHAR(100),"
                     + "primary key (id))";
             DBHelper.createTable(sql);

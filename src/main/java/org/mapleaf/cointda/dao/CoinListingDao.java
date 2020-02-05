@@ -15,6 +15,7 @@
  */
 package org.mapleaf.cointda.dao;
 
+import java.math.RoundingMode;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -135,15 +136,60 @@ public class CoinListingDao {
             param[6] = bean.getPlatform_id();
             param[7] = bean.getToken_address();
             param[8] = bean.getNumMarketPairs();
-            param[9] = bean.getMaxSupply();
-            param[10] = bean.getCirculatingSupply();
-            param[11] = bean.getTotalSupply();
-            param[12] = bean.getPrice();
-            param[13] = bean.getVolume_24h();
-            param[14] = bean.getPercent_change_1h();
-            param[15] = bean.getPercent_change_24h();
-            param[16] = bean.getPercent_change_7d();
-            param[17] = bean.getMarketCap();
+
+            if (bean.getMaxSupply() == null || bean.getMaxSupply().scale() < 13) {
+                param[9] = bean.getMaxSupply();
+            } else {
+                param[9] = bean.getMaxSupply().setScale(12, RoundingMode.HALF_UP);
+            }
+
+            if (bean.getCirculatingSupply() == null || bean.getCirculatingSupply().scale() < 13) {
+                param[10] = bean.getCirculatingSupply();
+            } else {
+                param[10] = bean.getCirculatingSupply().setScale(12, RoundingMode.HALF_UP);
+            }
+
+            if (bean.getTotalSupply() == null || bean.getTotalSupply().scale() < 13) {
+                param[11] = bean.getTotalSupply();
+            } else {
+                param[11] = bean.getTotalSupply().setScale(12, RoundingMode.HALF_UP);
+            }
+
+            if (bean.getPrice() == null || bean.getPrice().scale() < 13) {
+                param[12] = bean.getPrice();
+            } else {
+                param[12] = bean.getPrice().setScale(12, RoundingMode.HALF_UP);
+            }
+
+            if (bean.getVolume_24h() == null || bean.getVolume_24h().scale() < 13) {
+                param[13] = bean.getVolume_24h();
+            } else {
+                param[13] = bean.getVolume_24h().setScale(12, RoundingMode.HALF_UP);
+            }
+
+            if (bean.getPercent_change_1h() == null || bean.getPercent_change_1h().scale() < 13) {
+                param[14] = bean.getPercent_change_1h();
+            } else {
+                param[14] = bean.getPercent_change_1h().setScale(12, RoundingMode.HALF_UP);
+            }
+
+            if (bean.getPercent_change_24h() == null || bean.getPercent_change_24h().scale() < 13) {
+                param[15] = bean.getPercent_change_24h();
+            } else {
+                param[15] = bean.getPercent_change_24h().setScale(12, RoundingMode.HALF_UP);
+            }
+
+            if (bean.getPercent_change_7d() == null || bean.getPercent_change_7d().scale() < 13) {
+                param[16] = bean.getPercent_change_7d();
+            } else {
+                param[16] = bean.getPercent_change_7d().setScale(12, RoundingMode.HALF_UP);
+            }
+
+            if (bean.getMarketCap() == null || bean.getMarketCap().scale() < 13) {
+                param[17] = bean.getMarketCap();
+            } else {
+                param[17] = bean.getMarketCap().setScale(12, RoundingMode.HALF_UP);
+            }
             param[18] = bean.getLastUpdated();
 
             params[i] = param;

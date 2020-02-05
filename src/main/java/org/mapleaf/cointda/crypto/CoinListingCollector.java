@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -102,7 +103,7 @@ public class CoinListingCollector {
                                 objNode.get("date_added").asText());
                         //logger.info(date);
                         id.setDate_added(date);
-                    }else{
+                    } else {
                         id.setDate_added(DateHelper.toString(LocalDate.now()));
                     }
                     JsonNode platform = objNode.path("platform");
@@ -127,7 +128,7 @@ public class CoinListingCollector {
                     if (!usd.isNull()) {
                         if (!usd.get("price").isNull()) {
                             id.setPrice(new BigDecimal(usd.get("price").asText()));
-                        }else {
+                        } else {
                             id.setPrice(new BigDecimal("0"));
                         }
                         if (!usd.get("volume_24h").isNull()) {
@@ -149,7 +150,7 @@ public class CoinListingCollector {
                             String date = DateHelper.utcToLocal(
                                     usd.get("last_updated").asText());
                             id.setLastUpdated(date);
-                        }else{
+                        } else {
                             id.setLastUpdated(DateHelper.toString(LocalDate.now()));
                         }
 
@@ -192,6 +193,101 @@ public class CoinListingCollector {
     public static void main(String[] args) {
         CoinListingCollector c = new CoinListingCollector();
         List<CoinMarketCapListingBean> list = c.getCoinMarketListing();
-        logger.info(list);
+        for (CoinMarketCapListingBean bean : list) {
+            logger.info(bean.getSymbol());
+            logger.info(bean.getCmc_rank());
+            if (bean.getVolume_24h() == null || bean.getVolume_24h().scale() < 9) {
+                logger.info(bean.getVolume_24h());
+            } else {
+                logger.info(bean.getVolume_24h().setScale(8, RoundingMode.HALF_UP));
+            }
+            if (bean.getMarketCap() == null || bean.getMarketCap().scale() < 9) {
+                logger.info(bean.getMarketCap());
+            } else {
+                logger.info(bean.getMarketCap().setScale(8, RoundingMode.HALF_UP));
+            }
+            if (bean.getMaxSupply() == null || bean.getMaxSupply().scale() < 9) {
+                logger.info(bean.getMaxSupply());
+            } else {
+                logger.info(bean.getMaxSupply().setScale(8, RoundingMode.HALF_UP));
+            }
+            if (bean.getPrice() == null || bean.getPrice().scale() < 9) {
+                logger.info(bean.getPrice());
+            } else {
+                logger.info(bean.getPrice().setScale(8, RoundingMode.HALF_UP));
+            }
+            logger.info("----------");
+            //BigDecimal Percent_change_24h = bean.getPercent_change_24h();
+            BigDecimal getPrice = bean.getPrice();
+            if (getPrice == null) {
+                continue;
+            }
+            if (getPrice.toString().length() >= 23) {
+                logger.info("getPrice`s length >= 23");
+            }
+
+            BigDecimal getTotalSupply = bean.getTotalSupply();
+            if (getTotalSupply == null) {
+                continue;
+            }
+            if (getTotalSupply.toString().length() >= 23) {
+                logger.info("getTotalSupply`s length >= 23");
+            }
+
+            BigDecimal getPercent_change_7d = bean.getPercent_change_7d();
+            if (getPercent_change_7d == null) {
+                continue;
+            }
+            if (getPercent_change_7d.toString().length() >= 23) {
+                logger.info("getPercent_change_7d`s length >= 23");
+            }
+            BigDecimal getCirculatingSupply = bean.getCirculatingSupply();
+            if (getCirculatingSupply == null) {
+                continue;
+            }
+            if (getCirculatingSupply.toString().length() >= 23) {
+                logger.info("getCirculatingSupply`s length >= 23");
+            }
+
+            BigDecimal getMaxSupply = bean.getMaxSupply();
+            if (getMaxSupply == null) {
+                continue;
+            }
+            if (getMaxSupply.toString().length() >= 23) {
+                logger.info("getMaxSupply`s length >= 23");
+            }
+
+            BigDecimal Volume_24h = bean.getVolume_24h();
+            if (Volume_24h == null) {
+                continue;
+            }
+            if (Volume_24h.toString().length() >= 23) {
+                logger.info("Volume_24h`s length >= 23");
+            }
+            String v = Volume_24h.toString();
+            int i = v.indexOf(".");
+            if (i != -1 && v.substring(0, v.indexOf(".")).length() > 15) {
+                logger.info("整数部分大于15位");
+            }
+
+            BigDecimal MarketCap = bean.getMarketCap();
+            if (MarketCap == null) {
+                continue;
+            }
+            if (MarketCap.toString().length() >= 23) {
+                logger.info("MarketCap`s length >= 23");
+            }
+
+            if(bean.getCmc_rank().intValue() == 1133){
+                logger.info(bean);
+            }
+
+            if(bean.getCmc_rank().intValue() == 1134){
+                logger.info(bean);
+                //break;
+            }
+
+        }
+        //logger.info(list);
     }
 }
