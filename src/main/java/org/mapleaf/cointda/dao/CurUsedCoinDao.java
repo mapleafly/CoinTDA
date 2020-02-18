@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.mapleaf.cointda.bean.CoinMarketCapListingBean;
 import org.mapleaf.cointda.bean.CurUsedCoinBean;
-import org.mapleaf.cointda.models.CoinTypeFXC;
+import org.mapleaf.cointda.bean.property.CoinTypeFXC;
 import org.mapleaf.cointda.pool.DBHelper;
 
 /**

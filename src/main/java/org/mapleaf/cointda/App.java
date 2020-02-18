@@ -15,19 +15,27 @@
  */
 package org.mapleaf.cointda;
 
+import com.dlsc.workbenchfx.Workbench;
+import com.dlsc.workbenchfx.view.controls.ToolbarItem;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.WindowEvent;
-import org.mapleaf.cointda.view.RootLayoutController;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mapleaf.cointda.modules.baseData.BaseData;
+import org.mapleaf.cointda.modules.export.ExportData;
+import org.mapleaf.cointda.modules.patable.PATableModule;
+import org.mapleaf.cointda.modules.piechart.TypePieChartModule;
+import org.mapleaf.cointda.modules.selectcoin.SelectCoinModule;
+import org.mapleaf.cointda.modules.trade.TradeDataEditModule;
 import org.mapleaf.cointda.pool.InitTable;
 
 /**
@@ -37,56 +45,106 @@ public class App extends Application {
 
     private static final Logger logger = LogManager.getLogger(App.class.getName());
 
-    private Stage primaryStage;
-    private BorderPane rootLayout;
+    private Workbench workbench;
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
-        this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("CoinTDA");
-        this.primaryStage.getIcons().add(new Image(App.class.getResource("images/cointda.png").toString()));
+    public void start(Stage primaryStage) {
 
-        initRootLayout();
+        Scene myScene = new Scene(initWorkbench());
 
+        primaryStage.setTitle("CoinTDA");
+        primaryStage.getIcons().add(new Image(
+                App.class.getResource("images/cointda.jpg").toString()));
+        primaryStage.setScene(myScene);
+        primaryStage.setWidth(1000);
+        primaryStage.setHeight(700);
+        primaryStage.show();
+        primaryStage.centerOnScreen();
+
+        initNightMode();
+        // open calendar module by default
+        //workbench.openModule(calendarModule);
         //初始化数据库
         InitTable.createTable();
-        //监听到窗口关闭
-        primaryStage.setOnCloseRequest((WindowEvent event) -> {
-            primaryStage.close();
-        });
+    }
+
+    private Workbench initWorkbench() {
+        //导出交易数据
+        ToolbarItem showExportDataButton = new ToolbarItem("导出交易数据",
+                new MaterialDesignIconView(MaterialDesignIcon.EXPORT));
+        showExportDataButton.setOnClick(event -> workbench.showConfirmationDialog(
+                "导出交易数据",
+                "你确定要导出交易数据吗？",
+                buttonType -> {
+                    if (buttonType == ButtonType.YES) {
+                        ExportData exportData = new ExportData(workbench);
+                        exportData.handleExportData();
+                    }
+                }));
+
+        //更新基础数据
+        ToolbarItem showBaseDataButton = new ToolbarItem("更新基础数据",
+                new MaterialDesignIconView(MaterialDesignIcon.UPDATE));
+        showBaseDataButton.setOnClick(event -> workbench.showConfirmationDialog(
+                "更新基础数据",
+                "你确定要更新基础数据吗？",
+                buttonType -> {
+                    if (buttonType == ButtonType.YES) {
+                        BaseData baseData = new BaseData();
+                        baseData.handleUpdate();
+                    }
+                }));
+
+        // Navigation Drawer
+        MenuItem item3 = new MenuItem("首选项", new MaterialDesignIconView(MaterialDesignIcon.SETTINGS));
+        item3.setOnAction(event -> workbench.hideNavigationDrawer());
+
+        workbench = Workbench.builder(
+                new TradeDataEditModule(),
+                new PATableModule(),
+                new TypePieChartModule(),
+                new SelectCoinModule()
+        )
+                .modulesPerPage(6)
+                .toolbarRight(
+                        showExportDataButton,
+                        showBaseDataButton
+                )
+                .navigationDrawerItems(item3)
+                .build();
+
+        return workbench;
+    }
+
+    private void initNightMode() {
+        // initially set stylesheet
+        //setNightMode(preferences.isNightMode());
+
+        // change stylesheet depending on whether nightmode is on or not
+        //preferences.nightModeProperty().addListener(
+        //        (observable, oldValue, newValue) -> setNightMode(newValue)
+        //);
+        setNightMode(false);
 
     }
 
-    /**
-     * Initializes the root layout.
-     */
-    public void initRootLayout() {
-        try {
-            // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(App.class.getResource("view/RootLayout.fxml"));
-            rootLayout = (BorderPane) loader.load();
-
-            // Show the scene containing the root layout.
-            Scene scene = new Scene(rootLayout);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-            // Give the controller access to the main app.
-            RootLayoutController controller = loader.getController();
-            controller.setPane(rootLayout);
-        } catch (IOException e) {
-            logger.error(e);
+    private void setNightMode(boolean on) {
+        String customTheme = App.class.getResource("themes/customTheme.css")
+                .toExternalForm();
+        String darkTheme = App.class.getResource("themes/darkTheme.css")
+                .toExternalForm();
+        ObservableList<String> stylesheets = workbench.getStylesheets();
+        if (on) {
+            stylesheets.remove(customTheme);
+            stylesheets.add(darkTheme);
+        } else {
+            stylesheets.remove(darkTheme);
+            stylesheets.add(customTheme);
         }
     }
 
-    /**
-     * Returns the main stage.
-     *
-     * @return
-     */
-    public Stage getPrimaryStage() {
-        return primaryStage;
+    public Workbench getWorkbench() {
+        return workbench;
     }
 
     public static void main(String[] args) {

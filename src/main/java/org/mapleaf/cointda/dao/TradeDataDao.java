@@ -23,7 +23,7 @@ import org.apache.logging.log4j.Logger;
 import org.mapleaf.cointda.bean.CoinMarketCapListingBean;
 import org.mapleaf.cointda.bean.CurUsedCoinBean;
 import org.mapleaf.cointda.bean.TradeDataBean;
-import org.mapleaf.cointda.models.TradeDataFXC;
+import org.mapleaf.cointda.bean.property.TradeDataFXC;
 import org.mapleaf.cointda.pool.DBHelper;
 
 /**

@@ -19,8 +19,8 @@
             <PatternLayout pattern="${appenderPatternLayout}"/>
         </File>
         <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
-        <RollingFile name="RollingFileInfo" fileName="${sys:user.home}/logs/info.log"
-                     filePattern="${sys:user.home}/logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="RollingFileInfo" fileName="logs/info.log"
+                     filePattern="logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
             <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->        
             <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
@@ -29,8 +29,8 @@
                 <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
         </RollingFile>
-        <RollingFile name="RollingFileWarn" fileName="${sys:user.home}/logs/warn.log"
-                     filePattern="${sys:user.home}/logs/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="RollingFileWarn" fileName="logs/warn.log"
+                     filePattern="logs/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
             <Policies>
@@ -40,8 +40,8 @@
             <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了20 -->
             <DefaultRolloverStrategy max="20"/>
         </RollingFile>
-        <RollingFile name="RollingFileError" fileName="${sys:user.home}/logs/error.log"
-                     filePattern="${sys:user.home}/logs/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="RollingFileError" fileName="logs/error.log"
+                     filePattern="logs/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
             <Policies>
@@ -55,16 +55,18 @@
         <root level="DEBUG">
             <appender-ref ref="Console"/>
             <appender-ref ref="File"/>
-            <!--
+            
             <appender-ref ref="RollingFileInfo"/>
             <appender-ref ref="RollingFileWarn"/>
             <appender-ref ref="RollingFileError"/>
-            -->
+            
         </root>
 
         <!-- 第三方日志系统 -->
         <!--过滤掉spring和mybatis的一些无用的DEBUG信息-->
+        <!--
         <logger name="org.springframework" level="INFO"></logger>
         <logger name="org.mybatis" level="INFO"></logger>
+        -->
     </loggers>
 </configuration>
