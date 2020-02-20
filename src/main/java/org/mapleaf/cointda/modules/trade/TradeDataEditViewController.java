@@ -143,8 +143,9 @@ public class TradeDataEditViewController implements Initializable {
         dataTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showTradeDataDetails(newValue));
 
-        typeChoiceBox.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-            logger.info("newValue.intValue()==" + newValue.intValue());
+        typeChoiceBox.getSelectionModel().selectedIndexProperty()
+                .addListener((ObservableValue<? extends Number> observable, 
+                        Number oldValue, Number newValue) -> {
             if (newValue.intValue() >= 0) {
                 String selectedCoin = this.coinList.get(newValue.intValue());
                 tradeDataList.clear();
@@ -152,19 +153,24 @@ public class TradeDataEditViewController implements Initializable {
             }
         });
 
-        priceTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+        priceTextField.textProperty()
+                .addListener((ObservableValue<? extends String> observable, 
+                        String oldValue, String newValue) -> {
             if (!newValue.matches("\\d*(\\.\\d*)?")) {
                 priceTextField.setText(oldValue);
             }
         });
-        numTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+        numTextField.textProperty()
+                .addListener((ObservableValue<? extends String> observable, 
+                        String oldValue, String newValue) -> {
             if (!newValue.matches("\\d*(\\.\\d*)?")) {
                 numTextField.setText(oldValue);
             }
         });
         totalTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            public void changed(ObservableValue<? extends String> observable, 
+                    String oldValue, String newValue) {
                 if (!newValue.matches("\\d*(\\.\\d*)?")) {
                     totalTextField.setText(oldValue);
                 }

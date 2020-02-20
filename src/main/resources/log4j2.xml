@@ -54,7 +54,7 @@
     <loggers>
         <root level="DEBUG">
             <appender-ref ref="Console"/>
-            <appender-ref ref="File"/>
+            <!--<appender-ref ref="File"/>-->
             
             <appender-ref ref="RollingFileInfo"/>
             <appender-ref ref="RollingFileWarn"/>
