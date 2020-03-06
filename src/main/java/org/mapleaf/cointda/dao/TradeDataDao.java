@@ -172,14 +172,8 @@ public class TradeDataDao {
      * @return 返回 简称list
      */
     public static List<String> queryAllSymbol() {
-        String sql = "select * from tab_curuse_coin order by cmc_rank";
-        List<CurUsedCoinBean> list = DBHelper.queryList(
-                CurUsedCoinBean.class, sql);
-        List<String> ctList = new ArrayList<>();
-        list.forEach((bean) -> {
-            ctList.add(bean.getSymbol());
-        });
-        return ctList;
+        String sql = "select symbol from tab_curuse_coin order by cmc_rank";
+        return DBHelper.queryColumn(sql);
     }
 
     /**

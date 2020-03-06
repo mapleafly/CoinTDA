@@ -32,18 +32,17 @@ public class PATableDao {
 
     private static final Logger logger = LogManager.getLogger(PATableDao.class.getName());
 
-     
-    public static List<TradeDataFXC> queryBy(String strCoinSymbol, 
-            String strStartDate, String strEndDate){
-          String sql = "select * from tab_trade_data where coin_symbol=? "
-                  + "and trade_date>=? and trade_date<=? order by id";
-          Object[] params = new Object[3];
-          params[0] = strCoinSymbol;
-          params[1] = strStartDate;
-          params[2] = strEndDate;
+    public static List<TradeDataFXC> queryBy(String strCoinSymbol,
+            String strStartDate, String strEndDate) {
+        String sql = "select * from tab_trade_data where coin_symbol=? "
+                + "and trade_date>=? and trade_date<=? order by id";
+        Object[] params = new Object[3];
+        params[0] = strCoinSymbol;
+        params[1] = strStartDate;
+        params[2] = strEndDate;
         List<TradeDataBean> list = DBHelper.queryList(TradeDataBean.class, sql, params);
         List<TradeDataFXC> fxcList = new ArrayList<>();
-        if(list == null || list.isEmpty()){
+        if (list == null || list.isEmpty()) {
             return fxcList;
         }
         list.stream().map((bean) -> {
@@ -62,11 +61,12 @@ public class PATableDao {
         });
         return fxcList;
     }
-      
+
     /**
      * 根据简称查询coin信息
+     *
      * @param symbol
-     * @return 
+     * @return
      */
     public static CoinMarketCapListingBean queryBySymbol(String symbol) {
         String sql = "select * from tab_CoinMarketCap_listings where symbol=?";
@@ -74,22 +74,23 @@ public class PATableDao {
                 CoinMarketCapListingBean.class, sql, symbol);
 
     }
-    
-     /**
+
+    /**
      * 查询全部数据
      *
      * @return 返回 list
      */
     public static List<String> queryAllSymbol() {
-        String sql = "select distinct coin_symbol from tab_trade_data";
+        String sql = "select symbol from tab_curuse_coin order by cmc_rank";
         return DBHelper.queryColumn(sql);
     }
-    
-     /**
+
+    /**
      * 查询全部数据
+     *
      * @return 返回用于页面显示的list
      */
-    public static List<TradeDataFXC> queryAllFXC(){
+    public static List<TradeDataFXC> queryAllFXC() {
         List<TradeDataBean> list = TradeDataDao.queryAll();
         List<TradeDataFXC> fxcList = new ArrayList<>();
         list.stream().map((bean) -> {
@@ -108,9 +109,9 @@ public class PATableDao {
         });
         return fxcList;
     }
-    
-    public static void main(String[] s){
-        PATableDao.queryAllSymbol().forEach(action ->logger.info(action));
+
+    public static void main(String[] s) {
+        PATableDao.queryAllSymbol().forEach(action -> logger.info(action));
     }
-   
+
 }

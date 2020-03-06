@@ -133,7 +133,8 @@ public class PATableViewController implements Initializable {
 
         startDatePicker.setConverter(DateHelper.CONVERTER);
         startDatePicker.setTooltip(new Tooltip("选择初始时间"));
-        startDatePicker.setValue(LocalDate.now());
+        //startDatePicker.setValue(LocalDate.now());
+        startDatePicker.setValue(LocalDate.of(2009, 1, 3));
         endDatePicker.setConverter(DateHelper.CONVERTER);
         endDatePicker.setTooltip(new Tooltip("选择结束时间"));
         endDatePicker.setValue(LocalDate.now());
