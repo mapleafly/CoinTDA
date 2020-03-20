@@ -43,9 +43,13 @@ public class PATableModule extends WorkbenchModule {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(PATableModule.class.getResource("PATableView.fxml"));
             view = (AnchorPane) loader.load();
+
+            PATableViewController controller = loader.getController();
+            controller.setWorkbench(getWorkbench());
         } catch (IOException e) {
             logger.error(e.toString());
         }
         return view;
     }
+
 }

@@ -15,6 +15,7 @@
  */
 package org.mapleaf.cointda.modules.patable;
 
+import com.dlsc.workbenchfx.Workbench;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
@@ -28,7 +29,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -93,6 +93,7 @@ public class PATableViewController implements Initializable {
      */
     private final ObservableList<TradeDataFXC> tradeDataList;
     private final List<String> coinSymbolList;
+    private Workbench workbench;
 
     public PATableViewController() {
         tradeDataList = FXCollections.observableArrayList();
@@ -100,13 +101,6 @@ public class PATableViewController implements Initializable {
         tradeDataList.addAll(list);
 
         coinSymbolList = PATableDao.queryAllSymbol();
-        if (coinSymbolList == null || coinSymbolList.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("提示");
-            alert.setHeaderText("缺少数据");
-            alert.setContentText("请首先去添加交易数据！");
-            alert.showAndWait();
-        }
     }
 
     /**
@@ -133,10 +127,12 @@ public class PATableViewController implements Initializable {
 
         startDatePicker.setConverter(DateHelper.CONVERTER);
         startDatePicker.setTooltip(new Tooltip("选择初始时间"));
+        startDatePicker.setEditable(false);
         //startDatePicker.setValue(LocalDate.now());
         startDatePicker.setValue(LocalDate.of(2009, 1, 3));
         endDatePicker.setConverter(DateHelper.CONVERTER);
         endDatePicker.setTooltip(new Tooltip("选择结束时间"));
+        endDatePicker.setEditable(false);
         endDatePicker.setValue(LocalDate.now());
     }
 
@@ -225,15 +221,21 @@ public class PATableViewController implements Initializable {
             return true;
         } else {
             // Show the error message.
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("无效的字段");
-            alert.setHeaderText("请修改无效的字段");
-            alert.setContentText(errorMessage);
-
-            alert.showAndWait();
-
+             workbench.showErrorDialog(
+                    "警告",
+                    "无效的字段！",
+                    errorMessage,
+                    buttonType -> {
+                    }
+            );
             return false;
         }
     }
 
+       
+    public void setWorkbench(Workbench workbench){
+        this.workbench = workbench;
+    }
+
+   
 }

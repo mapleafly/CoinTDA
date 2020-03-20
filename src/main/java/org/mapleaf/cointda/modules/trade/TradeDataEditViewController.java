@@ -15,6 +15,7 @@
  */
 package org.mapleaf.cointda.modules.trade;
 
+import com.dlsc.workbenchfx.Workbench;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
@@ -28,7 +29,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
@@ -90,19 +90,14 @@ public class TradeDataEditViewController implements Initializable {
      */
     private final ObservableList<TradeDataFXC> tradeDataList;
     private final List<String> coinList;
+    private Workbench workbench;
 
     public TradeDataEditViewController() {
 
         tradeDataList = FXCollections.observableArrayList();
 
         coinList = TradeDataDao.queryAllSymbol();
-        if (coinList == null || coinList.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("提示");
-            alert.setHeaderText("缺少coin数据");
-            alert.setContentText("请首先去设置界面更新数据,选择设置可用coin！");
-            alert.showAndWait();
-        } else {
+        if (coinList != null && !coinList.isEmpty()) {
             List<TradeDataFXC> list = TradeDataDao.queryAllFXC(coinList.get(0));
             tradeDataList.addAll(list);
         }
@@ -130,7 +125,7 @@ public class TradeDataEditViewController implements Initializable {
         typeChoiceBox.setItems(FXCollections.observableArrayList(coinList));
         typeChoiceBox.setTooltip(new Tooltip("选择交易品种"));
         typeChoiceBox.getSelectionModel().selectFirst();
-        
+
         salebuyChoiceBox.setItems(FXCollections.observableArrayList("买", "卖"));
         salebuyChoiceBox.setTooltip(new Tooltip("选择交易种类"));
 
@@ -144,32 +139,32 @@ public class TradeDataEditViewController implements Initializable {
                 (observable, oldValue, newValue) -> showTradeDataDetails(newValue));
 
         typeChoiceBox.getSelectionModel().selectedIndexProperty()
-                .addListener((ObservableValue<? extends Number> observable, 
+                .addListener((ObservableValue<? extends Number> observable,
                         Number oldValue, Number newValue) -> {
-            if (newValue.intValue() >= 0) {
-                String selectedCoin = this.coinList.get(newValue.intValue());
-                tradeDataList.clear();
-                tradeDataList.addAll(TradeDataDao.queryAllFXC(selectedCoin));
-            }
-        });
+                    if (newValue.intValue() >= 0) {
+                        String selectedCoin = this.coinList.get(newValue.intValue());
+                        tradeDataList.clear();
+                        tradeDataList.addAll(TradeDataDao.queryAllFXC(selectedCoin));
+                    }
+                });
 
         priceTextField.textProperty()
-                .addListener((ObservableValue<? extends String> observable, 
+                .addListener((ObservableValue<? extends String> observable,
                         String oldValue, String newValue) -> {
-            if (!newValue.matches("\\d*(\\.\\d*)?")) {
-                priceTextField.setText(oldValue);
-            }
-        });
+                    if (!newValue.matches("\\d*(\\.\\d*)?")) {
+                        priceTextField.setText(oldValue);
+                    }
+                });
         numTextField.textProperty()
-                .addListener((ObservableValue<? extends String> observable, 
+                .addListener((ObservableValue<? extends String> observable,
                         String oldValue, String newValue) -> {
-            if (!newValue.matches("\\d*(\\.\\d*)?")) {
-                numTextField.setText(oldValue);
-            }
-        });
+                    if (!newValue.matches("\\d*(\\.\\d*)?")) {
+                        numTextField.setText(oldValue);
+                    }
+                });
         totalTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, 
+            public void changed(ObservableValue<? extends String> observable,
                     String oldValue, String newValue) {
                 if (!newValue.matches("\\d*(\\.\\d*)?")) {
                     totalTextField.setText(oldValue);
@@ -228,19 +223,23 @@ public class TradeDataEditViewController implements Initializable {
                         }
                     }
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("错误提示");
-                    alert.setHeaderText("数据库更新错误");
-                    alert.setContentText("选中数据没有被数据库更新!");
-                    alert.showAndWait();
+                    workbench.showErrorDialog(
+                            "错误",
+                            "数据库更新错误！",
+                            "选中数据没有被数据库更新!",
+                            buttonType -> {
+                            }
+                    );
                 }
             } else {
                 // Nothing selected.
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("提示");
-                alert.setHeaderText("没有选中数据!");
-                alert.setContentText("请从表格中选择一行数据。");
-                alert.showAndWait();
+                workbench.showErrorDialog(
+                        "提示",
+                        "没有选中数据",
+                        "请从表格中选择一行数据!",
+                        buttonType -> {
+                        }
+                );
             }
         }
     }
@@ -253,19 +252,23 @@ public class TradeDataEditViewController implements Initializable {
             if (TradeDataDao.delete(fxcToBean(fxc)) == 1) {
                 dataTable.getItems().remove(selectedIndex);
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("错误提示");
-                alert.setHeaderText("数据库删除错误");
-                alert.setContentText("选中数据没有被从数据库删除!");
-                alert.showAndWait();
+                workbench.showErrorDialog(
+                        "错误",
+                        "数据库删除错误",
+                        "选中数据没有被从数据库删除!",
+                        buttonType -> {
+                        }
+                );
             }
         } else {
             // Nothing selected.
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("提示");
-            alert.setHeaderText("没有选中数据!");
-            alert.setContentText("请从表格中选择一行数据。");
-            alert.showAndWait();
+            workbench.showErrorDialog(
+                    "提示",
+                    "没有选中数据",
+                    "请从表格中选择一行数据!",
+                    buttonType -> {
+                    }
+            );
         }
     }
 
@@ -395,14 +398,22 @@ public class TradeDataEditViewController implements Initializable {
             return true;
         } else {
             // Show the error message.
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("无效的字段");
-            alert.setHeaderText("请修改无效的字段");
-            alert.setContentText(errorMessage);
-
-            alert.showAndWait();
+            workbench.showErrorDialog(
+                    "提示",
+                    "无效的字段",
+                    errorMessage,
+                    buttonType -> {
+                    }
+            );
 
             return false;
         }
+    }
+
+    /**
+     * @param workbench the workbench to set
+     */
+    public void setWorkbench(Workbench workbench) {
+        this.workbench = workbench;
     }
 }

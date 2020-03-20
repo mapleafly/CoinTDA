@@ -46,7 +46,7 @@ public class App extends Application {
     private static final Logger logger = LogManager.getLogger(App.class.getName());
 
     private Workbench workbench;
-
+    
     @Override
     public void start(Stage primaryStage) {
 

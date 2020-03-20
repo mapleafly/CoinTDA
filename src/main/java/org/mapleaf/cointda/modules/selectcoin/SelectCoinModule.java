@@ -43,6 +43,10 @@ public class SelectCoinModule extends WorkbenchModule {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(SelectCoinModule.class.getResource("SelectCoinView.fxml"));
             view = (AnchorPane) loader.load();
+
+            SelectCoinViewController controller = loader.getController();
+            controller.setWorkbench(getWorkbench());
+
         } catch (IOException e) {
             logger.error(e.toString());
         }

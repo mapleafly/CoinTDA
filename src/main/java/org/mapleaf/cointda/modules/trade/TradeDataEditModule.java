@@ -43,6 +43,9 @@ public class TradeDataEditModule  extends WorkbenchModule {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(TradeDataEditModule.class.getResource("TradeDataEditView.fxml"));
             view = (AnchorPane) loader.load();
+            
+            TradeDataEditViewController controller = loader.getController();
+            controller.setWorkbench(getWorkbench());
         } catch (IOException e) {
             logger.error(e.toString());
         }
