@@ -35,7 +35,7 @@ public class PATableDao {
     public static List<TradeDataFXC> queryBy(String strCoinSymbol,
             String strStartDate, String strEndDate) {
         String sql = "select * from tab_trade_data where coin_symbol=? "
-                + "and trade_date>=? and trade_date<=? order by id";
+                + "and trade_date>=? and trade_date<=? order by id DESC";
         Object[] params = new Object[3];
         params[0] = strCoinSymbol;
         params[1] = strStartDate;
@@ -84,6 +84,8 @@ public class PATableDao {
         String sql = "select symbol from tab_curuse_coin order by cmc_rank";
         return DBHelper.queryColumn(sql);
     }
+    
+    
 
     /**
      * 查询全部数据
@@ -91,7 +93,8 @@ public class PATableDao {
      * @return 返回用于页面显示的list
      */
     public static List<TradeDataFXC> queryAllFXC() {
-        List<TradeDataBean> list = TradeDataDao.queryAll();
+        String sql = "select * from tab_trade_data order by trade_date DESC";
+        List<TradeDataBean> list = DBHelper.queryList(TradeDataBean.class, sql);
         List<TradeDataFXC> fxcList = new ArrayList<>();
         list.stream().map((bean) -> {
             TradeDataFXC fxc = new TradeDataFXC();

@@ -194,7 +194,7 @@ public class TradeDataEditViewController implements Initializable {
             Integer id = TradeDataDao.insert(bean);
             if (id != -1) {
                 bean.setId(id);
-                tradeDataList.add(beanToFXC(bean));
+                tradeDataList.add(0, beanToFXC(bean));
                 priceTextField.setText("");
                 numTextField.setText("");
                 totalTextField.setText("");

@@ -15,7 +15,7 @@
  */
 package org.mapleaf.cointda.modules.baseData;
 
-import javafx.scene.control.Alert;
+import com.dlsc.workbenchfx.Workbench;
 import org.mapleaf.cointda.crypto.CoinListingCollector;
 import org.mapleaf.cointda.dao.CoinListingDao;
 
@@ -24,8 +24,14 @@ import org.mapleaf.cointda.dao.CoinListingDao;
  * @author lif
  */
 public class BaseData {
-    
-      /**
+
+    private final Workbench workbench;
+
+    public BaseData(Workbench workbench) {
+        this.workbench = workbench;
+    }
+
+    /**
      * 更新基础数据 从coinmarketcap.com获取coin id 价格等数据
      *
      * @param event
@@ -40,20 +46,23 @@ public class BaseData {
         }
         return ok;
     }
-    
-      public void handleUpdate() {
+
+    public void handleUpdate() {
         if (update()) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("消息");
-            alert.setHeaderText("更新基础数据成功");
-            alert.setContentText("更新基础数据成功！");
-            alert.showAndWait();
+            workbench.showInformationDialog(
+                    "消息",
+                    "更新基础数据成功！",
+                    buttonType -> {
+                    }
+            );
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("错误");
-            alert.setHeaderText("更新基础数据失败");
-            alert.setContentText("请首先确认网络状况和网站key！");
-            alert.showAndWait();
+            workbench.showErrorDialog(
+                    "错误",
+                    "更新基础数据失败！",
+                    "请首先确认网络状况和网站key！",
+                    buttonType -> {
+                    }
+            );
         }
     }
 }

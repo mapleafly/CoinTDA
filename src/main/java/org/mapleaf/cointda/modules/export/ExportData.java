@@ -19,8 +19,9 @@ import com.dlsc.workbenchfx.Workbench;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mapleaf.cointda.bean.TradeDataBean;
 import org.mapleaf.cointda.dao.TradeDataDao;
 import org.mapleaf.cointda.util.CSVHelper;
@@ -30,10 +31,10 @@ import org.mapleaf.cointda.util.CSVHelper;
  * @author lif
  */
 public class ExportData {
-    
+private static final Logger logger = LogManager.getLogger(ExportData.class.getName());
     private final Workbench workbench;
-    
-    public ExportData(Workbench workbench){
+
+    public ExportData(Workbench workbench) {
         this.workbench = workbench;
     }
 
@@ -42,11 +43,13 @@ public class ExportData {
         List<String[]> data = new ArrayList<>();
         String[] headers = {"id", "coid_id", "简称", "买卖", "单价", "数量", "总价", "交易时间"};
         if (list == null) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("消息");
-            alert.setHeaderText("导出数据失败");
-            alert.setContentText("没有交易数据！");
-            alert.showAndWait();
+            workbench.showErrorDialog(
+                    "错误",
+                    "导出数据失败！",
+                    "没有交易数据！",
+                    buttonType -> {
+                    }
+            );
             return;
         }
         list.stream().map((bean) -> {
@@ -68,6 +71,8 @@ public class ExportData {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("txt files (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(workbench.getScene().getWindow());
-        CSVHelper.writeCsv(headers, data, file);
+        if (file != null) {
+            CSVHelper.writeCsv(headers, data, file);
+        }
     }
 }

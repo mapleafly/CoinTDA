@@ -21,7 +21,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mapleaf.cointda.bean.CoinMarketCapListingBean;
-import org.mapleaf.cointda.bean.CurUsedCoinBean;
 import org.mapleaf.cointda.bean.TradeDataBean;
 import org.mapleaf.cointda.bean.property.TradeDataFXC;
 import org.mapleaf.cointda.pool.DBHelper;
@@ -185,35 +184,10 @@ public class TradeDataDao {
         String sql = "select * from tab_trade_data order by id";
         return DBHelper.queryList(TradeDataBean.class, sql);
     }
-
+    
     public static List<TradeDataFXC> queryAllFXC(String symbol) {
-        String sql = "select * from tab_trade_data where coin_symbol=? order by id";
+        String sql = "select * from tab_trade_data where coin_symbol=? order by id DESC";
         List<TradeDataBean> list = DBHelper.queryList(TradeDataBean.class, sql, symbol);
-        List<TradeDataFXC> fxcList = new ArrayList<>();
-        list.stream().map((bean) -> {
-            TradeDataFXC fxc = new TradeDataFXC();
-            fxc.setId(bean.getId());
-            fxc.setCoinId(bean.getCoin_id());
-            fxc.setCoinSymbol(bean.getCoin_symbol());
-            fxc.setSaleOrBuy(bean.getSale_or_buy());
-            fxc.setPrice(bean.getPrice().toString());
-            fxc.setNum(bean.getNum().toString());
-            fxc.setTotalPrice(bean.getTotal_price().toString());
-            fxc.setDate(bean.getTrade_date());
-            return fxc;
-        }).forEachOrdered((fxc) -> {
-            fxcList.add(fxc);
-        });
-        return fxcList;
-    }
-
-    /**
-     * 查询全部交易数据
-     *
-     * @return 返回用于页面显示的list
-     */
-    public static List<TradeDataFXC> queryAllFXC() {
-        List<TradeDataBean> list = queryAll();
         List<TradeDataFXC> fxcList = new ArrayList<>();
         list.stream().map((bean) -> {
             TradeDataFXC fxc = new TradeDataFXC();
@@ -248,16 +222,11 @@ public class TradeDataDao {
         logger.info(list.size());
         //CoinListingDao dao = new CoinListingDao();
         TradeDataDao.truncate();
-        logger.info("QueryAll().size == " + TradeDataDao.queryAll().size());
         logger.info(TradeDataDao.batchInsert(list).length);
         //logger.info(TradeDataDao.insert(bean));
-        logger.info("QueryAll().size == " + TradeDataDao.queryAll().size());
         //TradeDataBean coin2 = TradeDataDao.queryBean(1);
         //logger.info(coin2);
         //TradeDataDao.delete(coin2);
-        logger.info("QueryAll().size == " + TradeDataDao.queryAll().get(0));
-        logger.info("QueryAll().size == " + TradeDataDao.queryAll().get(1));
-        logger.info("QueryAll().size == " + TradeDataDao.queryAll().get(14));
 
     }
 }

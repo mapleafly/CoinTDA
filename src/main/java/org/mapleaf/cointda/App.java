@@ -90,7 +90,7 @@ public class App extends Application {
                 "你确定要更新基础数据吗？",
                 buttonType -> {
                     if (buttonType == ButtonType.YES) {
-                        BaseData baseData = new BaseData();
+                        BaseData baseData = new BaseData(workbench);
                         baseData.handleUpdate();
                     }
                 }));
