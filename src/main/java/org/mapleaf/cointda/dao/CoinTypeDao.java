@@ -54,7 +54,7 @@ public class CoinTypeDao {
             coin.setName(bean.getName());
             coin.setSymbol(bean.getSymbol());
             coin.setRank(bean.getCmc_rank().toString());
-            coin.setPrice(bean.getPrice() == null ? "0" : bean.getPrice().toString());
+            coin.setPrice(bean.getPrice() == null ? "0" : bean.getPrice());
             coin.setDate(bean.getLastUpdated());
             return coin;
         }).forEachOrdered((coin) -> {
@@ -79,7 +79,7 @@ public class CoinTypeDao {
             coin.setName(bean.getName());
             coin.setSymbol(bean.getSymbol());
             coin.setRank(bean.getCmc_rank().toString());
-            coin.setPrice(bean.getPrice() == null ? "0" : bean.getPrice().toString());
+            coin.setPrice(bean.getPrice() == null ? "0" : bean.getPrice());
             coin.setDate(bean.getLastUpdated());
             return coin;
         }).forEachOrdered((coin) -> {
@@ -104,7 +104,7 @@ public class CoinTypeDao {
             coin.setName(bean.getName());
             coin.setSymbol(bean.getSymbol());
             coin.setRank(bean.getCmc_rank().toString());
-            coin.setPrice(bean.getPrice() == null ? "0" : bean.getPrice().toString());
+            coin.setPrice(bean.getPrice() == null ? "0" : bean.getPrice());
             coin.setDate(bean.getLastUpdated());
             return coin;
         }).forEachOrdered((coin) -> {

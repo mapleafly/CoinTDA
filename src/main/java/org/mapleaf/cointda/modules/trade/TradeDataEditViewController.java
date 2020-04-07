@@ -181,9 +181,9 @@ public class TradeDataEditViewController implements Initializable {
             bean.setCoin_id(TradeDataDao.queryCoinBySymbol(typeChoiceBox.getValue()).getId());
             bean.setCoin_symbol(typeChoiceBox.getValue());
             bean.setSale_or_buy(salebuyChoiceBox.getValue());
-            bean.setPrice(new BigDecimal(priceTextField.getText()));
-            bean.setNum(new BigDecimal(numTextField.getText()));
-            bean.setTotal_price(new BigDecimal(totalTextField.getText()));
+            bean.setPrice(priceTextField.getText());
+            bean.setNum(numTextField.getText());
+            bean.setTotal_price(totalTextField.getText());
             bean.setTrade_date(DateHelper.toString(this.dateDatePicker.getValue()));
 
             Integer id = TradeDataDao.insert(bean);
@@ -207,9 +207,9 @@ public class TradeDataEditViewController implements Initializable {
                 TradeDataBean bean = fxcToBean(fxc);
                 bean.setCoin_symbol(typeChoiceBox.getValue());
                 bean.setSale_or_buy(salebuyChoiceBox.getValue());
-                bean.setPrice(new BigDecimal(priceTextField.getText()));
-                bean.setNum(new BigDecimal(numTextField.getText()));
-                bean.setTotal_price(new BigDecimal(totalTextField.getText()));
+                bean.setPrice(priceTextField.getText());
+                bean.setNum(numTextField.getText());
+                bean.setTotal_price(totalTextField.getText());
                 bean.setTrade_date(DateHelper.toString(this.dateDatePicker.getValue()));
                 int n = TradeDataDao.update(bean);
                 if (n == 1) {
@@ -300,9 +300,9 @@ public class TradeDataEditViewController implements Initializable {
         fxc.setCoinId(bean.getCoin_id());
         fxc.setCoinSymbol(bean.getCoin_symbol());
         fxc.setSaleOrBuy(bean.getSale_or_buy());
-        fxc.setPrice(bean.getPrice().toString());
-        fxc.setNum(bean.getNum().toString());
-        fxc.setTotalPrice(bean.getTotal_price().toString());
+        fxc.setPrice(bean.getPrice());
+        fxc.setNum(bean.getNum());
+        fxc.setTotalPrice(bean.getTotal_price());
         fxc.setDate(bean.getTrade_date());
         return fxc;
     }
@@ -313,9 +313,9 @@ public class TradeDataEditViewController implements Initializable {
         bean.setCoin_id(fxc.getCoinId());
         bean.setCoin_symbol(fxc.getCoinSymbol());
         bean.setSale_or_buy(fxc.getSaleOrBuy());
-        bean.setPrice(new BigDecimal(fxc.getPrice()));
-        bean.setNum(new BigDecimal(fxc.getNum()));
-        bean.setTotal_price(new BigDecimal(fxc.getTotalPrice()));
+        bean.setPrice(fxc.getPrice());
+        bean.setNum(fxc.getNum());
+        bean.setTotal_price(fxc.getTotalPrice());
         bean.setTrade_date(fxc.getDate());
 
         return bean;

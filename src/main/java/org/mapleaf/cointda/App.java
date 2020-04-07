@@ -31,7 +31,8 @@ import javafx.scene.image.Image;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mapleaf.cointda.modules.baseData.BaseData;
-import org.mapleaf.cointda.modules.export.ExportData;
+import org.mapleaf.cointda.modules.export.ExportTradeData;
+import org.mapleaf.cointda.modules.imports.ImportTradeData;
 import org.mapleaf.cointda.modules.patable.PATableModule;
 import org.mapleaf.cointda.modules.piechart.TypePieChartModule;
 import org.mapleaf.cointda.modules.selectcoin.SelectCoinModule;
@@ -46,7 +47,7 @@ public class App extends Application {
     private static final Logger logger = LogManager.getLogger(App.class.getName());
 
     private Workbench workbench;
-    
+
     @Override
     public void start(Stage primaryStage) {
 
@@ -69,18 +70,21 @@ public class App extends Application {
     }
 
     private Workbench initWorkbench() {
+        //导入交易数据
+        ToolbarItem showimportDataButton = new ToolbarItem("导入...",
+                new MaterialDesignIconView(MaterialDesignIcon.IMPORT));
+        showimportDataButton.setOnClick(event -> {
+            ImportTradeData importData = new ImportTradeData(workbench);
+            importData.handleImportData();
+        });
+
         //导出交易数据
-        ToolbarItem showExportDataButton = new ToolbarItem("导出交易数据",
+        ToolbarItem showExportDataButton = new ToolbarItem("导出...",
                 new MaterialDesignIconView(MaterialDesignIcon.EXPORT));
-        showExportDataButton.setOnClick(event -> workbench.showConfirmationDialog(
-                "导出交易数据",
-                "你确定要导出交易数据吗？",
-                buttonType -> {
-                    if (buttonType == ButtonType.YES) {
-                        ExportData exportData = new ExportData(workbench);
-                        exportData.handleExportData();
-                    }
-                }));
+        showExportDataButton.setOnClick(event -> {
+            ExportTradeData exportData = new ExportTradeData(workbench);
+            exportData.handleExportData();
+        });
 
         //更新基础数据
         ToolbarItem showBaseDataButton = new ToolbarItem("更新基础数据",
@@ -107,6 +111,7 @@ public class App extends Application {
         )
                 .modulesPerPage(6)
                 .toolbarRight(
+                        showimportDataButton,
                         showExportDataButton,
                         showBaseDataButton
                 )

@@ -95,7 +95,7 @@ public class CSVHelper {
         data.add(new String[]{"小红", "aaa", "南充"});
         data.add(new String[]{"小强", "20", "成都"});
         //writeCsv(headers, data, "E:/text.csv");
-        List<String[]> list = readCsv("E:/text.csv");
+        List<String[]> list = readCsv("E:/4-7.csv");
         list.stream().map((str) -> {
             String line = "";
             for (String str1 : str) {

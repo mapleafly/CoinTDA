@@ -178,21 +178,22 @@ public class PATableViewController implements Initializable {
                 }
             }
         }
-        BigDecimal curPrice = PATableDao.queryBySymbol(strCoinSymbol)
-                .getPrice();
+        BigDecimal curPrice = new BigDecimal(
+                PATableDao.queryBySymbol(strCoinSymbol).getPrice()
+        );
         BigDecimal paPrice = new BigDecimal("0");
         BigDecimal paPriceTotal = buy.subtract(sale);
         if (numTotal.compareTo(new BigDecimal("0")) == 1) {
-            paPrice = paPriceTotal.divide(numTotal, 8, RoundingMode.HALF_UP);
+            paPrice = paPriceTotal.divide(numTotal, 12, RoundingMode.HALF_UP);
         }
-        map.put("numTotal", numTotal.setScale(8, RoundingMode.HALF_UP).toString());
+        map.put("numTotal", numTotal.setScale(12, RoundingMode.HALF_UP).toString());
         map.put("nowPriceTotal",
                 numTotal.multiply(curPrice)
-                        .setScale(8, RoundingMode.HALF_UP)
+                        .setScale(12, RoundingMode.HALF_UP)
                         .toString()
         );
-        map.put("nowPrice", curPrice.setScale(8, RoundingMode.HALF_UP).toString());
-        map.put("paPriceTotal", paPriceTotal.setScale(8, RoundingMode.HALF_UP).toString());
+        map.put("nowPrice", curPrice.setScale(12, RoundingMode.HALF_UP).toString());
+        map.put("paPriceTotal", paPriceTotal.setScale(12, RoundingMode.HALF_UP).toString());
         map.put("paPrice", paPrice.toString());
         return map;
     }
@@ -221,7 +222,7 @@ public class PATableViewController implements Initializable {
             return true;
         } else {
             // Show the error message.
-             workbench.showErrorDialog(
+            workbench.showErrorDialog(
                     "警告",
                     "无效的字段！",
                     errorMessage,
@@ -232,10 +233,8 @@ public class PATableViewController implements Initializable {
         }
     }
 
-       
-    public void setWorkbench(Workbench workbench){
+    public void setWorkbench(Workbench workbench) {
         this.workbench = workbench;
     }
 
-   
 }

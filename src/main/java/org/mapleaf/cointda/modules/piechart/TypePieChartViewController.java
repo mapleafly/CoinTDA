@@ -103,15 +103,21 @@ public class TypePieChartViewController implements Initializable {
         typeList.forEach(coinType -> {
             Integer id = coinType.getId();
             String symbol = coinType.getSymbol();
-            BigDecimal price = coinType.getPrice();
+            BigDecimal price;
+            if(coinType.getPrice() == null || coinType.getPrice().isBlank()){
+                price = new BigDecimal("0");
+            }else{
+                price = new BigDecimal(coinType.getPrice());
+            }
+            
             BigDecimal buyNum = new BigDecimal("0");
             BigDecimal saleNum = new BigDecimal("0");
             for (TradeDataBean bean : tdList) {
                 if (bean.getCoin_id().intValue() == id.intValue()) {
                     if (bean.getSale_or_buy().equals("买")) {
-                        buyNum = buyNum.add(bean.getNum());
+                        buyNum = buyNum.add(new BigDecimal(bean.getNum()));
                     } else if (bean.getSale_or_buy().equals("卖")) {
-                        saleNum = saleNum.add(bean.getNum());
+                        saleNum = saleNum.add(new BigDecimal(bean.getNum()));
                     }
                 }
             }

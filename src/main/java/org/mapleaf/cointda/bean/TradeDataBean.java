@@ -15,7 +15,6 @@
  */
 package org.mapleaf.cointda.bean;
 
-import java.math.BigDecimal;
 
 /**
  *
@@ -32,11 +31,11 @@ public class TradeDataBean {
     //买或者卖
     private String sale_or_buy;
     //买入或卖出价格
-    private BigDecimal price;
+    private String price;
     //买入或卖出数量
-    private BigDecimal num;
+    private String num;
     //买入或卖出总价
-    private BigDecimal total_price;
+    private String total_price;
     //交易时间
     private String trade_date;
 
@@ -99,42 +98,42 @@ public class TradeDataBean {
     /**
      * @return the price
      */
-    public BigDecimal getPrice() {
+    public String getPrice() {
         return price;
     }
 
     /**
      * @param price the price to set
      */
-    public void setPrice(BigDecimal price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
     /**
      * @return the num
      */
-    public BigDecimal getNum() {
+    public String getNum() {
         return num;
     }
 
     /**
      * @param num the num to set
      */
-    public void setNum(BigDecimal num) {
+    public void setNum(String num) {
         this.num = num;
     }
 
     /**
      * @return the total_price
      */
-    public BigDecimal getTotal_price() {
+    public String getTotal_price() {
         return total_price;
     }
 
     /**
      * @param total_price the total_price to set
      */
-    public void setTotal_price(BigDecimal total_price) {
+    public void setTotal_price(String total_price) {
         this.total_price = total_price;
     }
 

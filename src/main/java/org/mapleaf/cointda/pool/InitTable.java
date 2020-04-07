@@ -37,14 +37,12 @@ public class InitTable {
         String sql;
 
         ////////////////////////////////
-//        sql = "drop table tab_curuse_coin";
-//        DBHelper.dropTable(sql);
-//        sql = "drop table tab_trade_data";
-//        DBHelper.dropTable(sql);
-//        sql = "drop table TAB_CoinMarketCap_id_map";
-//        DBHelper.dropTable(sql);
-//        sql = "drop table TAB_CoinMarketCap_listings";
-//       DBHelper.dropTable(sql);
+        sql = "drop table tab_curuse_coin";
+        DBHelper.dropTable(sql);
+        sql = "drop table tab_trade_data";
+        DBHelper.dropTable(sql);
+        sql = "drop table TAB_CoinMarketCap_listings";
+        DBHelper.dropTable(sql);
         /////////////////////////////////////
         //当前使用的交易品种
         if (!DBHelper.doesTableExist("tab_curuse_coin")) {
@@ -63,14 +61,14 @@ public class InitTable {
                     + "coin_id int NOT NULL,"
                     + "coin_symbol VARCHAR(20) NOT NULL,"
                     + "sale_or_buy VARCHAR(10) NOT NULL,"
-                    + "price  DECIMAL(23,8) NOT NULL,"
-                    + "num  DECIMAL(23,8) NOT NULL,"
-                    + "total_price  DECIMAL(23,8) NOT NULL,"
+                    + "price  VARCHAR(100) NOT NULL,"
+                    + "num  VARCHAR(100) NOT NULL,"
+                    + "total_price  VARCHAR(100) NOT NULL,"
                     + "trade_date VARCHAR(100) NOT NULL,"
                     + "primary key (id))";
             DBHelper.createTable(sql);
         }
- 
+
         //最新品种价格表
         if (!DBHelper.doesTableExist("tab_CoinMarketCap_listings")) {
             sql = "CREATE TABLE tab_CoinMarketCap_listings  ("
@@ -83,20 +81,20 @@ public class InitTable {
                     + "platform_id integer,"
                     + "token_address VARCHAR(100),"
                     + "numMarketPairs integer,"
-                    + "maxSupply DECIMAL(31,12),"
-                    + "circulatingSupply DECIMAL(31,12),"
-                    + "totalSupply DECIMAL(31,12),"
-                    + "price DECIMAL(31,12),"
-                    + "volume_24h DECIMAL(31,12),"
-                    + "percent_change_1h DECIMAL(31,12),"
-                    + "percent_change_24h DECIMAL(31,12),"
-                    + "percent_change_7d DECIMAL(31,12),"
-                    + "marketCap DECIMAL(31,12),"
+                    + "maxSupply VARCHAR(100),"
+                    + "circulatingSupply VARCHAR(100),"
+                    + "totalSupply VARCHAR(100),"
+                    + "price VARCHAR(100),"
+                    + "volume_24h VARCHAR(100),"
+                    + "percent_change_1h VARCHAR(100),"
+                    + "percent_change_24h VARCHAR(100),"
+                    + "percent_change_7d VARCHAR(100),"
+                    + "marketCap VARCHAR(100),"
                     + "lastUpdated VARCHAR(100),"
                     + "primary key (id))";
             DBHelper.createTable(sql);
         }
-    
+
     }
 
     /**

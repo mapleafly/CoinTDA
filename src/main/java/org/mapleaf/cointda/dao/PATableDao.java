@@ -51,9 +51,9 @@ public class PATableDao {
             fxc.setCoinId(bean.getCoin_id());
             fxc.setCoinSymbol(bean.getCoin_symbol());
             fxc.setSaleOrBuy(bean.getSale_or_buy());
-            fxc.setPrice(bean.getPrice().toString());
-            fxc.setNum(bean.getNum().toString());
-            fxc.setTotalPrice(bean.getTotal_price().toString());
+            fxc.setPrice(bean.getPrice());
+            fxc.setNum(bean.getNum());
+            fxc.setTotalPrice(bean.getTotal_price());
             fxc.setDate(bean.getTrade_date());
             return fxc;
         }).forEachOrdered((fxc) -> {
@@ -102,9 +102,9 @@ public class PATableDao {
             fxc.setCoinId(bean.getCoin_id());
             fxc.setCoinSymbol(bean.getCoin_symbol());
             fxc.setSaleOrBuy(bean.getSale_or_buy());
-            fxc.setPrice(bean.getPrice().toString());
-            fxc.setNum(bean.getNum().toString());
-            fxc.setTotalPrice(bean.getTotal_price().toString());
+            fxc.setPrice(bean.getPrice());
+            fxc.setNum(bean.getNum());
+            fxc.setTotalPrice(bean.getTotal_price());
             fxc.setDate(bean.getTrade_date());
             return fxc;
         }).forEachOrdered((fxc) -> {

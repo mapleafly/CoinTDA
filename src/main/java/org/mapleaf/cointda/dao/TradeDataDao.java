@@ -63,13 +63,13 @@ public class TradeDataDao {
         return Integer.valueOf(dec.toBigInteger().toString());
     }
 
-    /**
+     /**
      * 批量插入数据
      *
      * @param list
      * @return
      */
-    public static int[] batchInsert(List<TradeDataBean> list) {
+    public static int[] batchInsert(List<String[]> list) {
         String sql = "insert into tab_trade_data"
                 + "(coin_id,coin_symbol,sale_or_buy,price,num,total_price,"
                 + "trade_date)"
@@ -78,15 +78,15 @@ public class TradeDataDao {
         Object[][] params = new Object[list.size()][];
         //组织params
         for (int i = 0; i < list.size(); i++) {
-            TradeDataBean bean = list.get(i);
+            String[] bean = list.get(i);
             Object[] param = new Object[7];
-            param[0] = bean.getCoin_id();
-            param[1] = bean.getCoin_symbol();
-            param[2] = bean.getSale_or_buy();
-            param[3] = bean.getPrice();
-            param[4] = bean.getNum();
-            param[5] = bean.getTotal_price();
-            param[6] = bean.getTrade_date();
+            param[0] = bean[1];
+            param[1] = bean[2];
+            param[2] = bean[3];
+            param[3] = bean[4];
+            param[4] = bean[5];
+            param[5] = bean[6];
+            param[6] = bean[7];
 
             params[i] = param;
         }
@@ -195,9 +195,9 @@ public class TradeDataDao {
             fxc.setCoinId(bean.getCoin_id());
             fxc.setCoinSymbol(bean.getCoin_symbol());
             fxc.setSaleOrBuy(bean.getSale_or_buy());
-            fxc.setPrice(bean.getPrice().toString());
-            fxc.setNum(bean.getNum().toString());
-            fxc.setTotalPrice(bean.getTotal_price().toString());
+            fxc.setPrice(bean.getPrice());
+            fxc.setNum(bean.getNum());
+            fxc.setTotalPrice(bean.getTotal_price());
             fxc.setDate(bean.getTrade_date());
             return fxc;
         }).forEachOrdered((fxc) -> {
@@ -212,9 +212,9 @@ public class TradeDataDao {
         bean.setCoin_id(1);
         bean.setCoin_symbol("BTC");
         bean.setSale_or_buy("买");
-        bean.setPrice(new BigDecimal("7455.001"));
-        bean.setNum(new BigDecimal("1.000"));
-        bean.setTotal_price(new BigDecimal("7455.001"));
+        bean.setPrice("7455.001");
+        bean.setNum("1.000");
+        bean.setTotal_price("7455.001");
         bean.setTrade_date("2019-12-09");
         for (int i = 0; i < 15; i++) {
             list.add(bean);
@@ -222,7 +222,7 @@ public class TradeDataDao {
         logger.info(list.size());
         //CoinListingDao dao = new CoinListingDao();
         TradeDataDao.truncate();
-        logger.info(TradeDataDao.batchInsert(list).length);
+        //logger.info(TradeDataDao.batchInsert(list).length);
         //logger.info(TradeDataDao.insert(bean));
         //TradeDataBean coin2 = TradeDataDao.queryBean(1);
         //logger.info(coin2);

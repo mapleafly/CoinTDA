@@ -15,7 +15,6 @@
  */
 package org.mapleaf.cointda.bean;
 
-import java.math.BigDecimal;
 
 /**
  *
@@ -42,23 +41,23 @@ public class CoinMarketCapListingBean {
     //全部市场的相关交易对
     private Integer numMarketPairs;
     //最终的数量
-    private BigDecimal maxSupply;
+    private String maxSupply;
     //当前正在流通的硬币的大概数量
-    private BigDecimal circulatingSupply;
+    private String circulatingSupply;
     //当前大约存在的硬币总数（减去已被可验证燃烧的所有硬币）
-    private BigDecimal totalSupply;
+    private String totalSupply;
     //整个市场的最新平均交易价格
-    private BigDecimal price;
+    private String price;
     //24小时交易量
-    private BigDecimal volume_24h;
+    private String volume_24h;
     //每种货币1小时的交易价格百分比变化
-    private BigDecimal percent_change_1h;
+    private String percent_change_1h;
     //每种货币的24小时交易价格百分比变化
-    private BigDecimal percent_change_24h;
+    private String percent_change_24h;
     //每种货币7天交易价格的百分比变化
-    private BigDecimal percent_change_7d;
+    private String percent_change_7d;
     //CoinMarketCap计算的市值
-    private BigDecimal marketCap;
+    private String marketCap;
     //最后更新时间
     private String lastUpdated;
 
@@ -93,112 +92,112 @@ public class CoinMarketCapListingBean {
     /**
      * @return the maxSupply
      */
-    public BigDecimal getMaxSupply() {
+    public String getMaxSupply() {
         return maxSupply;
     }
 
     /**
      * @param maxSupply the maxSupply to set
      */
-    public void setMaxSupply(BigDecimal maxSupply) {
+    public void setMaxSupply(String maxSupply) {
         this.maxSupply = maxSupply;
     }
 
     /**
      * @return the circulatingSupply
      */
-    public BigDecimal getCirculatingSupply() {
+    public String getCirculatingSupply() {
         return circulatingSupply;
     }
 
     /**
      * @param circulatingSupply the circulatingSupply to set
      */
-    public void setCirculatingSupply(BigDecimal circulatingSupply) {
+    public void setCirculatingSupply(String circulatingSupply) {
         this.circulatingSupply = circulatingSupply;
     }
 
     /**
      * @return the totalSupply
      */
-    public BigDecimal getTotalSupply() {
+    public String getTotalSupply() {
         return totalSupply;
     }
 
     /**
      * @param totalSupply the totalSupply to set
      */
-    public void setTotalSupply(BigDecimal totalSupply) {
+    public void setTotalSupply(String totalSupply) {
         this.totalSupply = totalSupply;
     }
 
     /**
      * @return the price
      */
-    public BigDecimal getPrice() {
+    public String getPrice() {
         return price;
     }
 
     /**
      * @param price the price to set
      */
-    public void setPrice(BigDecimal price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
     /**
      * @return the percent_change_1h
      */
-    public BigDecimal getPercent_change_1h() {
+    public String getPercent_change_1h() {
         return percent_change_1h;
     }
 
     /**
      * @param percent_change_1h the percent_change_1h to set
      */
-    public void setPercent_change_1h(BigDecimal percent_change_1h) {
+    public void setPercent_change_1h(String percent_change_1h) {
         this.percent_change_1h = percent_change_1h;
     }
 
     /**
      * @return the percent_change_24h
      */
-    public BigDecimal getPercent_change_24h() {
+    public String getPercent_change_24h() {
         return percent_change_24h;
     }
 
     /**
      * @param percent_change_24h the percent_change_24h to set
      */
-    public void setPercent_change_24h(BigDecimal percent_change_24h) {
+    public void setPercent_change_24h(String percent_change_24h) {
         this.percent_change_24h = percent_change_24h;
     }
 
     /**
      * @return the percent_change_7d
      */
-    public BigDecimal getPercent_change_7d() {
+    public String getPercent_change_7d() {
         return percent_change_7d;
     }
 
     /**
      * @param percent_change_7d the percent_change_7d to set
      */
-    public void setPercent_change_7d(BigDecimal percent_change_7d) {
+    public void setPercent_change_7d(String percent_change_7d) {
         this.percent_change_7d = percent_change_7d;
     }
 
     /**
      * @return the marketCap
      */
-    public BigDecimal getMarketCap() {
+    public String getMarketCap() {
         return marketCap;
     }
 
     /**
      * @param marketCap the marketCap to set
      */
-    public void setMarketCap(BigDecimal marketCap) {
+    public void setMarketCap(String marketCap) {
         this.marketCap = marketCap;
     }
 
@@ -219,14 +218,14 @@ public class CoinMarketCapListingBean {
     /**
      * @return the volume_24h
      */
-    public BigDecimal getVolume_24h() {
+    public String getVolume_24h() {
         return volume_24h;
     }
 
     /**
      * @param volume_24h the volume_24h to set
      */
-    public void setVolume_24h(BigDecimal volume_24h) {
+    public void setVolume_24h(String volume_24h) {
         this.volume_24h = volume_24h;
     }
 

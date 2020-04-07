@@ -30,11 +30,12 @@ import org.mapleaf.cointda.util.CSVHelper;
  *
  * @author lif
  */
-public class ExportData {
-private static final Logger logger = LogManager.getLogger(ExportData.class.getName());
+public class ExportTradeData {
+
+    private static final Logger logger = LogManager.getLogger(ExportTradeData.class.getName());
     private final Workbench workbench;
 
-    public ExportData(Workbench workbench) {
+    public ExportTradeData(Workbench workbench) {
         this.workbench = workbench;
     }
 
@@ -58,9 +59,9 @@ private static final Logger logger = LogManager.getLogger(ExportData.class.getNa
             str[1] = bean.getCoin_id().toString();
             str[2] = bean.getCoin_symbol();
             str[3] = bean.getSale_or_buy();
-            str[4] = bean.getPrice().toString();
-            str[5] = bean.getNum().toString();
-            str[6] = bean.getTotal_price().toString();
+            str[4] = bean.getPrice();
+            str[5] = bean.getNum();
+            str[6] = bean.getTotal_price();
             str[7] = bean.getTrade_date();
             return str;
         }).forEachOrdered((str) -> {

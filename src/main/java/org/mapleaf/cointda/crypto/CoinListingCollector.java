@@ -115,36 +115,36 @@ public class CoinListingCollector {
                         id.setNumMarketPairs(objNode.get("num_market_pairs").asInt());
                     }
                     if (!objNode.get("max_supply").isNull()) {
-                        id.setMaxSupply(new BigDecimal(objNode.get("max_supply").asText()));
+                        id.setMaxSupply(objNode.get("max_supply").asText());
                     }
                     if (!objNode.get("circulating_supply").isNull()) {
-                        id.setCirculatingSupply(new BigDecimal(objNode.get("circulating_supply").asText()));
+                        id.setCirculatingSupply(objNode.get("circulating_supply").asText());
                     }
                     if (!objNode.get("total_supply").isNull()) {
-                        id.setTotalSupply(new BigDecimal(objNode.get("total_supply").asText()));
+                        id.setTotalSupply(objNode.get("total_supply").asText());
                     }
                     JsonNode quote = objNode.path("quote");
                     JsonNode usd = quote.path("USD");
                     if (!usd.isNull()) {
                         if (!usd.get("price").isNull()) {
-                            id.setPrice(new BigDecimal(usd.get("price").asText()));
+                            id.setPrice(usd.get("price").asText());
                         } else {
-                            id.setPrice(new BigDecimal("0"));
+                            id.setPrice("0");
                         }
                         if (!usd.get("volume_24h").isNull()) {
-                            id.setVolume_24h(new BigDecimal(usd.get("volume_24h").asText()));
+                            id.setVolume_24h(usd.get("volume_24h").asText());
                         }
                         if (!usd.get("percent_change_1h").isNull()) {
-                            id.setPercent_change_1h(new BigDecimal(usd.get("percent_change_1h").asText()));
+                            id.setPercent_change_1h(usd.get("percent_change_1h").asText());
                         }
                         if (!usd.get("percent_change_24h").isNull()) {
-                            id.setPercent_change_24h(new BigDecimal(usd.get("percent_change_24h").asText()));
+                            id.setPercent_change_24h(usd.get("percent_change_24h").asText());
                         }
                         if (!usd.get("percent_change_7d").isNull()) {
-                            id.setPercent_change_7d(new BigDecimal(usd.get("percent_change_7d").asText()));
+                            id.setPercent_change_7d(usd.get("percent_change_7d").asText());
                         }
                         if (!usd.get("market_cap").isNull()) {
-                            id.setMarketCap(new BigDecimal(usd.get("market_cap").asText()));
+                            id.setMarketCap(usd.get("market_cap").asText());
                         }
                         if (!usd.get("last_updated").isNull()) {
                             String date = DateHelper.utcToLocal(
@@ -194,99 +194,7 @@ public class CoinListingCollector {
         CoinListingCollector c = new CoinListingCollector();
         List<CoinMarketCapListingBean> list = c.getCoinMarketListing();
         for (CoinMarketCapListingBean bean : list) {
-            logger.info(bean.getSymbol());
-            logger.info(bean.getCmc_rank());
-            if (bean.getVolume_24h() == null || bean.getVolume_24h().scale() < 9) {
-                logger.info(bean.getVolume_24h());
-            } else {
-                logger.info(bean.getVolume_24h().setScale(8, RoundingMode.HALF_UP));
-            }
-            if (bean.getMarketCap() == null || bean.getMarketCap().scale() < 9) {
-                logger.info(bean.getMarketCap());
-            } else {
-                logger.info(bean.getMarketCap().setScale(8, RoundingMode.HALF_UP));
-            }
-            if (bean.getMaxSupply() == null || bean.getMaxSupply().scale() < 9) {
-                logger.info(bean.getMaxSupply());
-            } else {
-                logger.info(bean.getMaxSupply().setScale(8, RoundingMode.HALF_UP));
-            }
-            if (bean.getPrice() == null || bean.getPrice().scale() < 9) {
-                logger.info(bean.getPrice());
-            } else {
-                logger.info(bean.getPrice().setScale(8, RoundingMode.HALF_UP));
-            }
-            logger.info("----------");
-            //BigDecimal Percent_change_24h = bean.getPercent_change_24h();
-            BigDecimal getPrice = bean.getPrice();
-            if (getPrice == null) {
-                continue;
-            }
-            if (getPrice.toString().length() >= 23) {
-                logger.info("getPrice`s length >= 23");
-            }
-
-            BigDecimal getTotalSupply = bean.getTotalSupply();
-            if (getTotalSupply == null) {
-                continue;
-            }
-            if (getTotalSupply.toString().length() >= 23) {
-                logger.info("getTotalSupply`s length >= 23");
-            }
-
-            BigDecimal getPercent_change_7d = bean.getPercent_change_7d();
-            if (getPercent_change_7d == null) {
-                continue;
-            }
-            if (getPercent_change_7d.toString().length() >= 23) {
-                logger.info("getPercent_change_7d`s length >= 23");
-            }
-            BigDecimal getCirculatingSupply = bean.getCirculatingSupply();
-            if (getCirculatingSupply == null) {
-                continue;
-            }
-            if (getCirculatingSupply.toString().length() >= 23) {
-                logger.info("getCirculatingSupply`s length >= 23");
-            }
-
-            BigDecimal getMaxSupply = bean.getMaxSupply();
-            if (getMaxSupply == null) {
-                continue;
-            }
-            if (getMaxSupply.toString().length() >= 23) {
-                logger.info("getMaxSupply`s length >= 23");
-            }
-
-            BigDecimal Volume_24h = bean.getVolume_24h();
-            if (Volume_24h == null) {
-                continue;
-            }
-            if (Volume_24h.toString().length() >= 23) {
-                logger.info("Volume_24h`s length >= 23");
-            }
-            String v = Volume_24h.toString();
-            int i = v.indexOf(".");
-            if (i != -1 && v.substring(0, v.indexOf(".")).length() > 15) {
-                logger.info("整数部分大于15位");
-            }
-
-            BigDecimal MarketCap = bean.getMarketCap();
-            if (MarketCap == null) {
-                continue;
-            }
-            if (MarketCap.toString().length() >= 23) {
-                logger.info("MarketCap`s length >= 23");
-            }
-
-            if(bean.getCmc_rank().intValue() == 1133){
-                logger.info(bean);
-            }
-
-            if(bean.getCmc_rank().intValue() == 1134){
-                logger.info(bean);
-                //break;
-            }
-
+            logger.info(bean);
         }
         //logger.info(list);
     }
