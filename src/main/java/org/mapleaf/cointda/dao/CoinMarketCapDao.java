@@ -32,27 +32,27 @@ public class CoinMarketCapDao {
 
     /**
      * 修改一条数据
-     * @param id
+     * @param bean
      * @return 
      */
-    public static int update(CoinMarketCapIdBean id) {
+    public static int update(CoinMarketCapIdBean bean) {
         String sql = "update TAB_CoinMarketCap_id_map set "
                 + "name=?,symbol=?,slug=?,is_active=?,rank=?,"
                 + "first_historical_data=?,last_historical_data=?,"
-                + "p_id=?,token_address=?"
-                + " where c_id=?";
+                + "platform_id=?,token_address=?"
+                + " where id=?";
 
         Object[] param = new Object[10];
-        param[0] = id.getName();
-        param[1] = id.getSymbol();
-        param[2] = id.getSlug();
-        param[3] = id.getIs_active();
-        param[4] = id.getRank();
-        param[5] = id.getFirst_historical_data();
-        param[6] = id.getLast_historical_data();
-        param[7] = id.getpId();
-        param[8] = id.getToken_address();
-        param[9] = id.getcId();
+        param[0] = bean.getName();
+        param[1] = bean.getSymbol();
+        param[2] = bean.getSlug();
+        param[3] = bean.getIs_active();
+        param[4] = bean.getRank();
+        param[5] = bean.getFirst_historical_data();
+        param[6] = bean.getLast_historical_data();
+        param[7] = bean.getPlatform_id();
+        param[8] = bean.getToken_address();
+        param[9] = bean.getId();
 
         return DBHelper.update(sql, param);
     }
@@ -60,26 +60,27 @@ public class CoinMarketCapDao {
     /**
      * 插入一条数据
      *
-     * @param id
+     * @param bean
      * @return
      */
-    public static int insert(CoinMarketCapIdBean id) {
+    public static int insert(CoinMarketCapIdBean bean) {
         String sql = "insert into TAB_CoinMarketCap_id_map"
-                + "(c_id,name,symbol,slug,is_active,rank,"
-                + "first_historical_data,last_historical_data,p_id,token_address)"
+                + "(id,name,symbol,slug,is_active,rank,"
+                + "first_historical_data,last_historical_data,"
+                + "platform_id,token_address)"
                 + " values (?,?,?,?,?,?,?,?,?,?)";
 
         Object[] param = new Object[10];
-        param[0] = id.getcId();
-        param[1] = id.getName();
-        param[2] = id.getSymbol();
-        param[3] = id.getSlug();
-        param[4] = id.getIs_active();
-        param[5] = id.getRank();
-        param[6] = id.getFirst_historical_data();
-        param[7] = id.getLast_historical_data();
-        param[8] = id.getpId();
-        param[9] = id.getToken_address();
+        param[0] = bean.getId();
+        param[1] = bean.getName();
+        param[2] = bean.getSymbol();
+        param[3] = bean.getSlug();
+        param[4] = bean.getIs_active();
+        param[5] = bean.getRank();
+        param[6] = bean.getFirst_historical_data();
+        param[7] = bean.getLast_historical_data();
+        param[8] = bean.getPlatform_id();
+        param[9] = bean.getToken_address();
 
         return DBHelper.update(sql, param);
     }
@@ -92,25 +93,26 @@ public class CoinMarketCapDao {
      */
     public static int[] batchInsert(List<CoinMarketCapIdBean> list) {
         String sql = "insert into TAB_CoinMarketCap_id_map"
-                + "(c_id,name,symbol,slug,is_active,rank,"
-                + "first_historical_data,last_historical_data,p_id,token_address)"
+                + "(id,name,symbol,slug,is_active,rank,"
+                + "first_historical_data,last_historical_data,"
+                + "platform_id,token_address)"
                 + " values (?,?,?,?,?,?,?,?,?,?)";
 
         Object[][] params = new Object[list.size()][];
         //组织params
         for (int i = 0; i < list.size(); i++) {
-            CoinMarketCapIdBean id = list.get(i);
+            CoinMarketCapIdBean bean = list.get(i);
             Object[] param = new Object[10];
-            param[0] = id.getcId();
-            param[1] = id.getName();
-            param[2] = id.getSymbol();
-            param[3] = id.getSlug();
-            param[4] = id.getIs_active();
-            param[5] = id.getRank();
-            param[6] = id.getFirst_historical_data();
-            param[7] = id.getLast_historical_data();
-            param[8] = id.getpId();
-            param[9] = id.getToken_address();
+            param[0] = bean.getId();
+            param[1] = bean.getName();
+            param[2] = bean.getSymbol();
+            param[3] = bean.getSlug();
+            param[4] = bean.getIs_active();
+            param[5] = bean.getRank();
+            param[6] = bean.getFirst_historical_data();
+            param[7] = bean.getLast_historical_data();
+            param[8] = bean.getPlatform_id();
+            param[9] = bean.getToken_address();
 
             params[i] = param;
         }
@@ -118,10 +120,10 @@ public class CoinMarketCapDao {
         return DBHelper.batch(sql, params);
     }
 
-    public static int delete(CoinMarketCapIdBean id){
+    public static int delete(CoinMarketCapIdBean bean){
         String sql = "delete from TAB_CoinMarketCap_id_map"
-                + " where c_id=?";
-        return DBHelper.update(sql, id.getcId());
+                + " where id=?";
+        return DBHelper.update(sql, bean.getId());
     }
     /**
      * 删除全部数据
@@ -136,12 +138,12 @@ public class CoinMarketCapDao {
     /**
      * 查询一条数据
      *
-     * @param cid
+     * @param id
      * @return 返回CoinMarketCapIdBean
      */
-    public static CoinMarketCapIdBean queryBean(int cid) {
-        String sql = "select * from TAB_CoinMarketCap_id_map where c_id=?";
-        return DBHelper.queryBean(CoinMarketCapIdBean.class, sql, cid);
+    public static CoinMarketCapIdBean queryBean(int id) {
+        String sql = "select * from TAB_CoinMarketCap_id_map where id=?";
+        return DBHelper.queryBean(CoinMarketCapIdBean.class, sql, id);
     }
 
     /**

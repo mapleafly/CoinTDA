@@ -28,13 +28,16 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Font;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapleaf.cointda.bean.CoinMarketCapListingBean;
+import org.mapleaf.cointda.bean.CoinQuotesLatestBean;
 import org.mapleaf.cointda.bean.TradeDataBean;
 import org.mapleaf.cointda.dao.TypePieChartDao;
+import org.mapleaf.cointda.enums.BooleanEnum;
+import org.mapleaf.cointda.util.PrefsHelper;
 
 /**
  * FXML Controller class
@@ -48,6 +51,8 @@ public class TypePieChartViewController implements Initializable {
 
     @FXML
     private PieChart pieChart;
+    @FXML
+    private Label totalPrice;
 
     /**
      *
@@ -73,7 +78,7 @@ public class TypePieChartViewController implements Initializable {
             n += data.getPieValue();
         }
         final double total = n;
-
+        totalPrice.setText("当前总价值约:" + String.valueOf(Math.round(total)));
         pieChart.getData().forEach(data -> {
             //建立货币格式化引用 
             NumberFormat currency = NumberFormat.getCurrencyInstance(Locale.US);
@@ -98,33 +103,63 @@ public class TypePieChartViewController implements Initializable {
     private List<PieChart.Data> getData() {
         List<PieChart.Data> list = new ArrayList<>();
         List<TradeDataBean> tdList = TypePieChartDao.queryAllTradeData();
-        List<CoinMarketCapListingBean> typeList = TypePieChartDao.queryByTradeData();
-
-        typeList.forEach(coinType -> {
+        List<CoinQuotesLatestBean> typeList = TypePieChartDao.queryByTradeData();
+        BigDecimal usdtNum = new BigDecimal("0");
+        //计算USDT之外的coin现价
+        double otherAllPrice = 0;
+        for (CoinQuotesLatestBean coinType : typeList) {
             Integer id = coinType.getId();
             String symbol = coinType.getSymbol();
             BigDecimal price;
-            if(coinType.getPrice() == null || coinType.getPrice().isBlank()){
+            if (coinType.getPrice() == null || coinType.getPrice().isBlank()) {
                 price = new BigDecimal("0");
-            }else{
+            } else {
                 price = new BigDecimal(coinType.getPrice());
             }
-            
+
             BigDecimal buyNum = new BigDecimal("0");
             BigDecimal saleNum = new BigDecimal("0");
             for (TradeDataBean bean : tdList) {
-                if (bean.getCoin_id().intValue() == id.intValue()) {
-                    if (bean.getSale_or_buy().equals("买")) {
-                        buyNum = buyNum.add(new BigDecimal(bean.getNum()));
-                    } else if (bean.getSale_or_buy().equals("卖")) {
-                        saleNum = saleNum.add(new BigDecimal(bean.getNum()));
+                if (bean.getBase_id().intValue() == id.intValue()) {
+                    if (coinType.getSymbol().equals("USDT")) {
+                        if (bean.getSale_or_buy().equals("买")) {
+                            usdtNum = usdtNum.subtract(new BigDecimal(bean.getQuote_num()));
+                        } else if (bean.getSale_or_buy().equals("卖")) {
+                            usdtNum = usdtNum.add(new BigDecimal(bean.getQuote_num()));
+                        }
+                    } else {
+                        if (bean.getSale_or_buy().equals("买")) {
+                            buyNum = buyNum.add(new BigDecimal(bean.getBase_num()));
+                            usdtNum = usdtNum.subtract(new BigDecimal(bean.getQuote_num()));
+                        } else if (bean.getSale_or_buy().equals("卖")) {
+                            saleNum = saleNum.add(new BigDecimal(bean.getBase_num()));
+                            usdtNum = usdtNum.add(new BigDecimal(bean.getQuote_num()));
+                        }
                     }
+
                 }
             }
-            list.add(new PieChart.Data(symbol, buyNum.subtract(saleNum)
-                    .multiply(price).setScale(8, RoundingMode.HALF_UP).doubleValue()));
-        });
+            double allPrice = buyNum.subtract(saleNum)
+                    .multiply(price).setScale(12, RoundingMode.HALF_UP).doubleValue();
+            //忽略总价小的coin
+            String notSmallCoinValue = PrefsHelper.getPreferencesValue(PrefsHelper.NOTSMALLCOIN, BooleanEnum.NO.toString());
+            BooleanEnum notSmallCoinEnum = BooleanEnum.valueOf(notSmallCoinValue);
+            if (notSmallCoinEnum.equals(BooleanEnum.YES)) {
+                String notSmallCoinNumValue = PrefsHelper.getPreferencesValue(PrefsHelper.NOTSMALLCOINNUM, "100");
+                if (allPrice > Integer.valueOf(notSmallCoinNumValue)) {
+                    list.add(new PieChart.Data(symbol, allPrice));
+                }else{
+                    otherAllPrice += allPrice;
+                }
+            } else {
+                list.add(new PieChart.Data(symbol, allPrice));
+            }
 
+        }
+        //低于设定价格的种类合计到其他里面
+        list.add(new PieChart.Data("其他", otherAllPrice));
+        //计算USDT数量
+        list.add(new PieChart.Data("USDT", usdtNum.doubleValue()));
         return list;
     }
 

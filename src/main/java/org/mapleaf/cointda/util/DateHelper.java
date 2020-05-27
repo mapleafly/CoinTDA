@@ -99,4 +99,8 @@ public class DateHelper {
         }
 
     }
+    
+    public static Long differentDays(LocalDate newDate, LocalDate oldDate){
+        return newDate.toEpochDay() - oldDate.toEpochDay();
+    }
 }

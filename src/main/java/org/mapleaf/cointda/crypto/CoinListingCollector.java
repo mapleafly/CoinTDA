@@ -19,8 +19,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -75,7 +73,7 @@ public class CoinListingCollector {
         //paratmers.add(new BasicNameValuePair("cryptocurrency_type","all"));//all"or "coins"or "tokens"
 
         String result = makeAPICall(uri, paratmers);
-        //logger.info(result);
+        logger.info(result);
         ObjectMapper mapper = new ObjectMapper();
         List<CoinMarketCapListingBean> list = new ArrayList<>();
         try {
@@ -98,7 +96,7 @@ public class CoinListingCollector {
                     if (!objNode.get("cmc_rank").isNull()) {
                         id.setCmc_rank(objNode.get("cmc_rank").asInt());
                     }
-                    if (!objNode.get("date_added").isNull()) {
+                    if (objNode.has("date_added") && !objNode.get("date_added").isNull()) {
                         String date = DateHelper.utcToLocal(
                                 objNode.get("date_added").asText());
                         //logger.info(date);
@@ -193,9 +191,8 @@ public class CoinListingCollector {
     public static void main(String[] args) {
         CoinListingCollector c = new CoinListingCollector();
         List<CoinMarketCapListingBean> list = c.getCoinMarketListing();
-        for (CoinMarketCapListingBean bean : list) {
-            logger.info(bean);
-        }
-        //logger.info(list);
+//        list.forEach((bean) -> {
+//            logger.info(bean);
+//        }); 
     }
 }

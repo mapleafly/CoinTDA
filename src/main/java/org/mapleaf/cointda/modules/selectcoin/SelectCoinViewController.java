@@ -18,7 +18,9 @@ package org.mapleaf.cointda.modules.selectcoin;
 import com.dlsc.workbenchfx.Workbench;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,9 +35,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapleaf.cointda.bean.CurUsedCoinBean;
 import org.mapleaf.cointda.dao.CoinTypeDao;
-import org.mapleaf.cointda.dao.CurUsedCoinDao;
 import org.mapleaf.cointda.bean.property.CoinTypeFXC;
 
 /**
@@ -61,24 +61,18 @@ public class SelectCoinViewController implements Initializable {
     @FXML
     private TableColumn<CoinTypeFXC, String> rankCol;
     @FXML
-    private TableColumn<CoinTypeFXC, String> priceCol;
-    @FXML
     private TableColumn<CoinTypeFXC, String> dateCol;
 
     @FXML
     private TextField searchField;
 
     private final ObservableList<CoinTypeFXC> coinTypeData;
-    public List<CoinTypeFXC> updateData;
     private Workbench workbench;
 
     public SelectCoinViewController() {
         this.coinTypeData = FXCollections.observableArrayList();
-
         List<CoinTypeFXC> list = CoinTypeDao.queryAll();
         coinTypeData.addAll(list);
-        updateData = list;
-
     }
 
     /**
@@ -97,61 +91,38 @@ public class SelectCoinViewController implements Initializable {
         nameCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         symbolCol.setCellValueFactory(cellData -> cellData.getValue().symbolProperty());
         rankCol.setCellValueFactory(cellData -> cellData.getValue().rankProperty());
-        priceCol.setCellValueFactory(cellData -> cellData.getValue().priceProperty());
         dateCol.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
-
-        List<CoinTypeFXC> list = CoinTypeDao.queryCurAll();
-        for (CoinTypeFXC coin : list) {
-            for (int i = 0; i < coinTypeData.size(); i++) {
-                if (coin.getId().equals(coinTypeData.get(i).getId())) {
-                    coinTypeData.get(i).setSelect(true);
-                    break;
-                }
-            }
-        }
     }
 
     @FXML
     private void handleSave(ActionEvent event) {
-        List<CurUsedCoinBean> dbCurList = CurUsedCoinDao.queryCurAll();
-        List<CurUsedCoinBean> batchDelList = new ArrayList<>();
-        List<CurUsedCoinBean> batchInsertList = new ArrayList<>();
+        List<Integer> dbCurId = CoinTypeDao.queryCurID();
+        Map<Integer, Integer> tableSelectedMap = new HashMap<>();
+        List<Integer> items = new ArrayList<>();
         for (int i = 0; i < priceTable.getItems().size(); i++) {
-            CurUsedCoinBean bean = new CurUsedCoinBean();
-            bean.setId(Integer.valueOf(priceTable.getItems().get(i).getId()));
-            bean.setSymbol(priceTable.getItems().get(i).getSymbol());
-            bean.setCmc_rank(Integer.valueOf(priceTable.getItems().get(i).getRank()));
-            bean.setLastUpdated(priceTable.getItems().get(i).getDate());
+            items.add(Integer.valueOf(priceTable.getItems().get(i).getId()));
             if (priceTable.getItems().get(i).getSelect()) {
-                boolean is = false;
-                for (CurUsedCoinBean dbCur : dbCurList) {
-                    if (dbCur.getId().equals(bean.getId())) {
-                        is = true;
-                        break;
-                    }
-                }
-                if (!is) {
-                    batchInsertList.add(bean);
-                }
-            } else {
-                for (CurUsedCoinBean dbCur : dbCurList) {
-                    if (dbCur.getId().equals(bean.getId())) {
-                        batchDelList.add(bean);
-                    }
-                }
+                tableSelectedMap.put(
+                        Integer.valueOf(priceTable.getItems().get(i).getId()), 1);
             }
         }
-
-        if (CurUsedCoinDao.batchDelete(batchDelList).length == batchDelList.size()) {
-            if (CurUsedCoinDao.batchInsert(batchInsertList).length
-                    == batchInsertList.size()) {
-                workbench.showInformationDialog(
-                        "信息",
-                        "完成保存操作！",
-                        buttonType -> {
-                        }
-                );
+        //交集-dbCurId留下items中也存在的项
+        dbCurId.retainAll(items);
+        
+        dbCurId.forEach((id) -> {
+            if (tableSelectedMap.containsKey(id)) {
+                tableSelectedMap.remove(id);
+            } else {
+                tableSelectedMap.put(id, 0);
             }
+        });
+        if (CoinTypeDao.batchUpdate(tableSelectedMap) == tableSelectedMap.size()) {
+            workbench.showInformationDialog(
+                    "信息",
+                    "完成可用品种保存操作！",
+                    buttonType -> {
+                    }
+            );
         }
     }
 
@@ -159,7 +130,7 @@ public class SelectCoinViewController implements Initializable {
     private void handleSearchFieldKeyReleased(KeyEvent event) {
         coinTypeData.clear();
         coinTypeData.addAll(CoinTypeDao.queryBySymbol(searchField.getText().trim()));
-        List<CoinTypeFXC> list = CoinTypeDao.queryCurAll();
+        List<CoinTypeFXC> list = CoinTypeDao.queryCurFXC();
         for (CoinTypeFXC coin : list) {
             for (int i = 0; i < coinTypeData.size(); i++) {
                 if (coin.getId().equals(coinTypeData.get(i).getId())) {

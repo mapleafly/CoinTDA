@@ -19,6 +19,7 @@ import com.dlsc.workbenchfx.Workbench;
 import com.dlsc.workbenchfx.view.controls.ToolbarItem;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import java.time.LocalDate;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -30,14 +31,20 @@ import javafx.scene.image.Image;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapleaf.cointda.modules.baseData.BaseData;
+import org.mapleaf.cointda.enums.BooleanEnum;
+import org.mapleaf.cointda.modules.baseData.CoinInfo;
+import org.mapleaf.cointda.modules.cash.CashViewModule;
 import org.mapleaf.cointda.modules.export.ExportTradeData;
 import org.mapleaf.cointda.modules.imports.ImportTradeData;
 import org.mapleaf.cointda.modules.patable.PATableModule;
 import org.mapleaf.cointda.modules.piechart.TypePieChartModule;
+import org.mapleaf.cointda.modules.prefs.PreferencesViewModule;
 import org.mapleaf.cointda.modules.selectcoin.SelectCoinModule;
 import org.mapleaf.cointda.modules.trade.TradeDataEditModule;
 import org.mapleaf.cointda.pool.InitTable;
+import org.mapleaf.cointda.themes.InterfaceTheme;
+import org.mapleaf.cointda.util.DateHelper;
+import org.mapleaf.cointda.util.PrefsHelper;
 
 /**
  * JavaFX App
@@ -62,60 +69,117 @@ public class App extends Application {
         primaryStage.show();
         primaryStage.centerOnScreen();
 
-        initNightMode();
-        // open calendar module by default
-        //workbench.openModule(calendarModule);
-        //初始化数据库
+        //设置主题
+        InterfaceTheme theme = new InterfaceTheme(workbench);
+        theme.initNightMode();
+        // open a module by default
+        //workbench.openModule(oneModule);
+        //初始化数据库表
         InitTable.createTable();
+
+        //插入CoinIDMap数据
+        BooleanEnum coinIDMapEnum = BooleanEnum.valueOf(
+                PrefsHelper.getPreferencesValue(
+                        PrefsHelper.COINIDMAP, BooleanEnum.YES.toString()
+                )
+        );
+        if (coinIDMapEnum.equals(BooleanEnum.YES)) {
+            String oldDate = PrefsHelper.getPreferencesValue(
+                    PrefsHelper.COINIDMAP_DATE, "2009-10-10");
+            //计算天数
+            Long numDay = DateHelper.differentDays(LocalDate.now(), DateHelper.fromString(oldDate));
+            if (numDay >= 30) {
+                CoinInfo info = new CoinInfo(workbench);
+                info.handleUpdateCoinIDMap();
+            }
+        }
+        //更新价格
+        BooleanEnum apEnum = BooleanEnum.valueOf(
+                PrefsHelper.getPreferencesValue(
+                        PrefsHelper.UPDATEPRICE, BooleanEnum.NO.toString()
+                )
+        );
+        if (apEnum.equals(BooleanEnum.YES)) {
+            CoinInfo info = new CoinInfo(workbench);
+            info.handleUpdateCurPrice();
+        }
+
     }
 
     private Workbench initWorkbench() {
-        //导入交易数据
-        ToolbarItem showimportDataButton = new ToolbarItem("导入...",
+        // layoutParts
+        //导入CSV菜单项
+        MenuItem importItem = new MenuItem("导入CSV",
                 new MaterialDesignIconView(MaterialDesignIcon.IMPORT));
-        showimportDataButton.setOnClick(event -> {
+        //导出CSV菜单项
+        MenuItem exportItem = new MenuItem("导出CSV",
+                new MaterialDesignIconView(MaterialDesignIcon.EXPORT));
+        //更新现价菜单项
+        MenuItem updatePriceItem = new MenuItem("更新现价",
+                new MaterialDesignIconView(MaterialDesignIcon.BANK));
+        //更新MarketCap货币信息菜单项
+        MenuItem coinMapItem = new MenuItem("更新货币数据",
+                new MaterialDesignIconView(MaterialDesignIcon.DOWNLOAD));
+
+        //文件菜单
+        ToolbarItem fileItem = new ToolbarItem("文件",
+                new MaterialDesignIconView(MaterialDesignIcon.FILE_WORD),
+                importItem,
+                exportItem
+        );
+        //update菜单
+        ToolbarItem updateItem = new ToolbarItem("更新",
+                new MaterialDesignIconView(MaterialDesignIcon.UPDATE),
+                coinMapItem,
+                updatePriceItem
+        );
+
+        //setupEventHandlers
+        //导入交易数据
+        importItem.setOnAction(event -> {
             ImportTradeData importData = new ImportTradeData(workbench);
             importData.handleImportData();
         });
-
         //导出交易数据
-        ToolbarItem showExportDataButton = new ToolbarItem("导出...",
-                new MaterialDesignIconView(MaterialDesignIcon.EXPORT));
-        showExportDataButton.setOnClick(event -> {
+        exportItem.setOnAction(event -> {
             ExportTradeData exportData = new ExportTradeData(workbench);
             exportData.handleExportData();
         });
-
-        //更新基础数据
-        ToolbarItem showBaseDataButton = new ToolbarItem("更新基础数据",
-                new MaterialDesignIconView(MaterialDesignIcon.UPDATE));
-        showBaseDataButton.setOnClick(event -> workbench.showConfirmationDialog(
-                "更新基础数据",
-                "你确定要更新基础数据吗？",
+        //更新现价
+        updatePriceItem.setOnAction(event -> workbench.showConfirmationDialog("更新当前价格",
+                "你确定要更新当前价格数据吗？",
                 buttonType -> {
                     if (buttonType == ButtonType.YES) {
-                        BaseData baseData = new BaseData(workbench);
-                        baseData.handleUpdate();
+                        CoinInfo coinInfo = new CoinInfo(workbench);
+                        coinInfo.handleUpdateCurPrice();
                     }
                 }));
 
-        // Navigation Drawer
-        MenuItem item3 = new MenuItem("首选项", new MaterialDesignIconView(MaterialDesignIcon.SETTINGS));
-        item3.setOnAction(event -> workbench.hideNavigationDrawer());
+        //更新货币数据
+        coinMapItem.setOnAction(event -> workbench.showConfirmationDialog("更新货币数据",
+                "你确定要更新货币数据吗？",
+                buttonType -> {
+                    if (buttonType == ButtonType.YES) {
+                        CoinInfo coinInfo = new CoinInfo(workbench);
+                        coinInfo.handleUpdateCoinIDMap();
+                    }
+                }));
 
         workbench = Workbench.builder(
+                new CashViewModule(),
                 new TradeDataEditModule(),
                 new PATableModule(),
                 new TypePieChartModule(),
-                new SelectCoinModule()
+                new SelectCoinModule(),
+                new PreferencesViewModule()
         )
                 .modulesPerPage(6)
-                .toolbarRight(
-                        showimportDataButton,
-                        showExportDataButton,
-                        showBaseDataButton
+                .toolbarLeft(
+                        fileItem,
+                        updateItem
                 )
-                .navigationDrawerItems(item3)
+                //.toolbarRight( )
+                //.navigationDrawerItems(item3)
                 .build();
 
         return workbench;

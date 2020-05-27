@@ -33,7 +33,6 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.message.BasicNameValuePair;
@@ -65,10 +64,10 @@ public class CoinIDMapCollector {
     public List<CoinMarketCapIdBean> getCoinMarketCapIds() {
         List<NameValuePair> paratmers = new ArrayList<>();
         //paratmers.add(new BasicNameValuePair("symbol","BTC,USDT,BNB,MDA"));
-        //paratmers.add(new BasicNameValuePair("listing_status","inactive "));
+        paratmers.add(new BasicNameValuePair("listing_status","active"));
         //paratmers.add(new BasicNameValuePair("start","BTC,USDT,BNB,MDA"));
-        paratmers.add(new BasicNameValuePair("limit","50"));
-        //paratmers.add(new BasicNameValuePair("sort","id"));
+        paratmers.add(new BasicNameValuePair("limit","5000"));
+        paratmers.add(new BasicNameValuePair("sort","cmc_rank"));
         //paratmers.add(new BasicNameValuePair("aux","platform,first_historical_data,last_historical_data,is_active"));
         String result = makeAPICall(uri, paratmers);
         //logger.info(result);
@@ -82,31 +81,32 @@ public class CoinIDMapCollector {
             // 遍历 data 内的 array  
             if (data.isArray()) {
                 for (JsonNode objNode : data) {
+                    //logger.info(objNode);
                     CoinMarketCapIdBean id = new CoinMarketCapIdBean();
-                    id.setcId(objNode.get("id").asInt());
+                    id.setId(objNode.get("id").asInt());
                     id.setName(objNode.get("name").asText());
                     id.setSymbol(objNode.get("symbol").asText());
                     id.setSlug(objNode.get("slug").asText());
-                    id.setIs_active(objNode.get("is_active").asInt());
+                    //id.setIs_active(objNode.get("is_active").asInt());
                     id.setRank(objNode.get("rank").asInt());
-                    if (!objNode.get("first_historical_data").isNull()) {
+                    if (objNode.has("first_historical_data") && !objNode.get("first_historical_data").isNull()) {
                         String date = DateHelper.utcToLocal(
                                 objNode.get("first_historical_data").asText());
                         id.setFirst_historical_data(date);
                     }else{
-                        id.setFirst_historical_data(DateHelper.toString(LocalDate.now()));
+                        id.setFirst_historical_data(null);
                     }
-                    if (!objNode.get("last_historical_data").isNull()) {
+                    if (objNode.has("last_historical_data") && !objNode.get("last_historical_data").isNull()) {
                         String date = DateHelper.utcToLocal(
                                 objNode.get("last_historical_data").asText());
                         id.setLast_historical_data(date);
                     }else{
-                        id.setLast_historical_data(DateHelper.toString(LocalDate.now()));
+                        id.setLast_historical_data(null);
                     }
 
                     JsonNode p = objNode.path("platform");
                     if (!p.isNull()) {
-                        id.setpId(p.get("id").asInt());
+                        id.setPlatform_id(p.get("id").asInt());
                         id.setToken_address(p.get("token_address").asText());
                     }
                     list.add(id);
@@ -147,6 +147,6 @@ public class CoinIDMapCollector {
     public static void main(String[] args) {
         CoinIDMapCollector c = new CoinIDMapCollector();
         List<CoinMarketCapIdBean> list = c.getCoinMarketCapIds();
-        logger.info(list.size());
+        logger.info(list);
     }
 }

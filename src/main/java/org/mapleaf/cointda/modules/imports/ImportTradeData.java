@@ -18,18 +18,16 @@ package org.mapleaf.cointda.modules.imports;
 import com.dlsc.workbenchfx.Workbench;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapleaf.cointda.bean.CoinMarketCapListingBean;
-import org.mapleaf.cointda.bean.CurUsedCoinBean;
-import org.mapleaf.cointda.bean.TradeDataBean;
-import org.mapleaf.cointda.dao.CoinListingDao;
-import org.mapleaf.cointda.dao.CurUsedCoinDao;
+import org.mapleaf.cointda.dao.CoinTypeDao;
 import org.mapleaf.cointda.dao.TradeDataDao;
+import org.mapleaf.cointda.modules.baseData.CoinInfo;
 import org.mapleaf.cointda.modules.export.ExportTradeData;
 import org.mapleaf.cointda.util.CSVHelper;
 
@@ -54,7 +52,7 @@ public class ImportTradeData {
         File file = fileChooser.showOpenDialog(workbench.getScene().getWindow());
         if (file != null) {
             List<String[]> list = CSVHelper.readCsv(file.toString());
-            if (list.isEmpty() || list == null) {
+            if (list == null || list.isEmpty()) {
                 workbench.showErrorDialog(
                         "错误",
                         "导入数据失败！",
@@ -64,7 +62,7 @@ public class ImportTradeData {
                 );
                 return;
             } else {
-                //更新可使用库
+                //更新可使用品种数据
                 List<Integer> coinid = new ArrayList<>();
                 for (String[] str : list) {
                     coinid.add(Integer.parseInt(str[1]));
@@ -72,37 +70,19 @@ public class ImportTradeData {
                 //去重
                 LinkedHashSet<Integer> hashSet = new LinkedHashSet<>(coinid);
                 List<Integer> listWithoutDuplicates = new ArrayList<>(hashSet);
-
-                List<CurUsedCoinBean> curUsedList = CurUsedCoinDao.queryCurAll();
-                List<Integer> usedid = new ArrayList<>();
-                for (CurUsedCoinBean bean : curUsedList) {
-                    usedid.add(bean.getId());
-                }
+                List<Integer> usedid = CoinTypeDao.queryCurID();
                 // 差集 (list1 - list2)
-                List<Integer> reduce1 = listWithoutDuplicates.stream()
-                        .filter(item -> !usedid.contains(item))
-                        .collect(Collectors.toList());
-                //System.out.println("---差集 reduce1 (list1 - list2)---");
-                //reduce1.parallelStream().forEach(System.out::println);
-                List<CoinMarketCapListingBean> allCoin = CoinListingDao.queryAll();
-                List<CurUsedCoinBean> addUsedList = new ArrayList<>();
-                for (CoinMarketCapListingBean bean : allCoin) {
-                    for (int id : reduce1) {
-                        if (bean.getId() == id) {
-                            CurUsedCoinBean b = new CurUsedCoinBean();
-                            b.setId(id);
-                            b.setSymbol(bean.getSymbol());
-                            b.setCmc_rank(bean.getCmc_rank());
-                            b.setLastUpdated(bean.getLastUpdated());
-                            addUsedList.add(b);
-                        }
-                    }
-
+                listWithoutDuplicates.removeAll(usedid);
+                //将csv文件中的可用类型和数据库中的可用类型做差集后，将差集更新进数据库中
+                if (listWithoutDuplicates.size() > 0) {
+                    CoinTypeDao.batchUpdate(listWithoutDuplicates);
                 }
-                CurUsedCoinDao.batchInsert(addUsedList);
 
                 //导入到数据库
                 int[] is = TradeDataDao.batchInsert(list);
+                CoinInfo info = new CoinInfo(workbench);
+                //导入数据后自动更新价格
+                info.updateCurPrice();
                 int t = 0, f = 0;
                 for (int i : is) {
                     if (i == 1) {

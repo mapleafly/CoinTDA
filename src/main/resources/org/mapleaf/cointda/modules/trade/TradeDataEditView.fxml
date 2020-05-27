@@ -15,21 +15,21 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.mapleaf.cointda.modules.trade.TradeDataEditViewController">
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.mapleaf.cointda.modules.trade.TradeDataEditViewController">
    <children>
       <SplitPane dividerPositions="0.7" orientation="VERTICAL" prefHeight="700.0" prefWidth="850.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="462.0" prefWidth="848.0">
                <children>
-                  <TableView fx:id="dataTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="dataTable" prefHeight="200.0" prefWidth="848.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                         <TableColumn fx:id="idCol" prefWidth="75.0" text="id" visible="false" />
                         <TableColumn fx:id="coinIdCol" prefWidth="75.0" text="coin_id" visible="false" />
-                      <TableColumn fx:id="symbolCol" prefWidth="116.0" text="名称" />
+                      <TableColumn fx:id="symbolPairsCol" prefWidth="116.0" text="交易对" />
                         <TableColumn fx:id="salebuyCol" prefWidth="166.0" text="买/卖" />
                       <TableColumn fx:id="priceCol" prefWidth="75.0" text="单价" />
-                        <TableColumn fx:id="numCol" prefWidth="75.0" text="数量" />
-                        <TableColumn fx:id="totalCol" prefWidth="75.0" text="总价" />
+                        <TableColumn fx:id="baseNumCol" prefWidth="75.0" text="Base" />
+                        <TableColumn fx:id="quoteNumCol" prefWidth="75.0" text="Quote" />
                         <TableColumn fx:id="dateCol" prefWidth="75.0" text="交易时间" />
                     </columns>
                      <columnResizePolicy>
@@ -38,9 +38,9 @@
                   </TableView>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="210.0" prefWidth="848.0">
                <children>
-                  <GridPane alignment="CENTER" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <GridPane alignment="CENTER" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -51,26 +51,59 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label alignment="CENTER" text="名称" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Label text="买/卖" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <Label text="交易时间" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                        <Label text="单价" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Label text="数量" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <Label text="总价" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                        <DatePicker fx:id="dateDatePicker" prefHeight="23.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                        <ChoiceBox fx:id="typeChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <ChoiceBox fx:id="salebuyChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <TextField fx:id="priceTextField" maxWidth="150.0" minWidth="150.0" onKeyReleased="#handlePriceTextFieldKeyReleased" prefHeight="23.0" prefWidth="164.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <TextField fx:id="numTextField" maxWidth="150.0" onKeyReleased="#handleNumTextFieldKeyReleased" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <TextField fx:id="totalTextField" maxWidth="150.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Label alignment="CENTER" text="基准货币" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Label alignment="CENTER" text="计价货币" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Label text="买/卖" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Label text="交易时间" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                        <Label text="单价" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <GridPane.margin>
+                              <Insets top="5.0" />
+                           </GridPane.margin></Label>
+                        <Label text="数量" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                           <GridPane.margin>
+                              <Insets top="5.0" />
+                           </GridPane.margin></Label>
+                        <Label text="总价" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                           <GridPane.margin>
+                              <Insets top="5.0" />
+                           </GridPane.margin></Label>
+                        <ChoiceBox fx:id="baseChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <GridPane.margin>
+                              <Insets top="5.0" />
+                           </GridPane.margin></ChoiceBox>
+                        <ChoiceBox fx:id="quoteChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                           <GridPane.margin>
+                              <Insets top="5.0" />
+                           </GridPane.margin></ChoiceBox>
+                        <ChoiceBox fx:id="salebuyChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                           <GridPane.margin>
+                              <Insets top="5.0" />
+                           </GridPane.margin></ChoiceBox>
+                        <DatePicker fx:id="dateDatePicker" prefHeight="23.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                           <GridPane.margin>
+                              <Insets top="5.0" />
+                           </GridPane.margin></DatePicker>
+                        <TextField fx:id="priceTextField" maxWidth="150.0" minWidth="150.0" onKeyReleased="#handlePriceTextFieldKeyReleased" prefHeight="23.0" prefWidth="164.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <GridPane.margin>
+                              <Insets top="5.0" />
+                           </GridPane.margin></TextField>
+                        <TextField fx:id="numTextField" maxWidth="150.0" onKeyReleased="#handleNumTextFieldKeyReleased" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                           <GridPane.margin>
+                              <Insets top="5.0" />
+                           </GridPane.margin></TextField>
+                        <TextField fx:id="totalTextField" maxWidth="150.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                           <GridPane.margin>
+                              <Insets top="5.0" />
+                           </GridPane.margin></TextField>
                      </children>
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                   </GridPane>
-                  <HBox alignment="BOTTOM_LEFT" layoutX="587.0" layoutY="163.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="40.0">
+                  <HBox alignment="BOTTOM_LEFT" layoutX="587.0" layoutY="163.0" spacing="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="40.0">
                      <children>
                         <Button mnemonicParsing="false" onAction="#handleAddData" prefHeight="30.0" prefWidth="80.0" text="增加" />
                         <Button mnemonicParsing="false" onAction="#handleEdtitData" prefHeight="30.0" prefWidth="80.0" text="修改" />

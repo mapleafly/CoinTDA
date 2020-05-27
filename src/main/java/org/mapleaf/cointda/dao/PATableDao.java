@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapleaf.cointda.bean.CoinMarketCapListingBean;
+import org.mapleaf.cointda.bean.CoinQuotesLatestBean;
 import org.mapleaf.cointda.bean.TradeDataBean;
 import org.mapleaf.cointda.bean.property.TradeDataFXC;
 import org.mapleaf.cointda.pool.DBHelper;
@@ -34,7 +34,7 @@ public class PATableDao {
 
     public static List<TradeDataFXC> queryBy(String strCoinSymbol,
             String strStartDate, String strEndDate) {
-        String sql = "select * from tab_trade_data where coin_symbol=? "
+        String sql = "select * from tab_tradeinfo where base_symbol=? "
                 + "and trade_date>=? and trade_date<=? order by id DESC";
         Object[] params = new Object[3];
         params[0] = strCoinSymbol;
@@ -48,12 +48,12 @@ public class PATableDao {
         list.stream().map((bean) -> {
             TradeDataFXC fxc = new TradeDataFXC();
             fxc.setId(bean.getId());
-            fxc.setCoinId(bean.getCoin_id());
-            fxc.setCoinSymbol(bean.getCoin_symbol());
+            fxc.setCoinId(bean.getBase_id());
+            fxc.setSymbolPairs(bean.getBase_symbol() + "/" + bean.getQuote_symbol());
             fxc.setSaleOrBuy(bean.getSale_or_buy());
             fxc.setPrice(bean.getPrice());
-            fxc.setNum(bean.getNum());
-            fxc.setTotalPrice(bean.getTotal_price());
+            fxc.setBaseNum(bean.getBase_num());
+            fxc.setQuoteNum(bean.getQuote_num());
             fxc.setDate(bean.getTrade_date());
             return fxc;
         }).forEachOrdered((fxc) -> {
@@ -63,29 +63,17 @@ public class PATableDao {
     }
 
     /**
-     * 根据简称查询coin信息
+     * 根据简称查询当前coin价格信息
      *
      * @param symbol
      * @return
      */
-    public static CoinMarketCapListingBean queryBySymbol(String symbol) {
-        String sql = "select * from tab_CoinMarketCap_listings where symbol=?";
+    public static CoinQuotesLatestBean queryBySymbol(String symbol) {
+        String sql = "select * from tab_quotesLatest where symbol=?";
         return DBHelper.queryBean(
-                CoinMarketCapListingBean.class, sql, symbol);
+                CoinQuotesLatestBean.class, sql, symbol);
 
     }
-
-    /**
-     * 查询全部数据
-     *
-     * @return 返回 list
-     */
-    public static List<String> queryAllSymbol() {
-        String sql = "select symbol from tab_curuse_coin order by cmc_rank";
-        return DBHelper.queryColumn(sql);
-    }
-    
-    
 
     /**
      * 查询全部数据
@@ -93,18 +81,18 @@ public class PATableDao {
      * @return 返回用于页面显示的list
      */
     public static List<TradeDataFXC> queryAllFXC() {
-        String sql = "select * from tab_trade_data order by trade_date DESC";
+        String sql = "select * from tab_tradeinfo order by trade_date DESC";
         List<TradeDataBean> list = DBHelper.queryList(TradeDataBean.class, sql);
         List<TradeDataFXC> fxcList = new ArrayList<>();
         list.stream().map((bean) -> {
             TradeDataFXC fxc = new TradeDataFXC();
             fxc.setId(bean.getId());
-            fxc.setCoinId(bean.getCoin_id());
-            fxc.setCoinSymbol(bean.getCoin_symbol());
+            fxc.setCoinId(bean.getBase_id());
+            fxc.setSymbolPairs(bean.getBase_symbol() + "/" + bean.getQuote_symbol());
             fxc.setSaleOrBuy(bean.getSale_or_buy());
             fxc.setPrice(bean.getPrice());
-            fxc.setNum(bean.getNum());
-            fxc.setTotalPrice(bean.getTotal_price());
+            fxc.setBaseNum(bean.getBase_num());
+            fxc.setQuoteNum(bean.getQuote_num());
             fxc.setDate(bean.getTrade_date());
             return fxc;
         }).forEachOrdered((fxc) -> {
@@ -114,7 +102,7 @@ public class PATableDao {
     }
 
     public static void main(String[] s) {
-        PATableDao.queryAllSymbol().forEach(action -> logger.info(action));
+        
     }
 
 }

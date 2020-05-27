@@ -110,11 +110,11 @@
                                             <columns>
                                                 <TableColumn fx:id="idCol" prefWidth="75.0" text="id" visible="false" />
                                                 <TableColumn fx:id="coinIdCol" prefWidth="75.0" text="coinId" visible="false" />
-                                                <TableColumn fx:id="coinSymbolCol" prefWidth="75.0" text="名称" />
+                                                <TableColumn fx:id="symbolPairsCol" prefWidth="75.0" text="交易对" />
                                                 <TableColumn fx:id="buyOrSaleCol" prefWidth="75.0" text="买/卖" />
                                                 <TableColumn fx:id="priceCol" prefWidth="75.0" text="单价" />
-                                                <TableColumn fx:id="numCol" prefWidth="75.0" text="数量" />
-                                                <TableColumn fx:id="totalCol" prefWidth="75.0" text="总价" />
+                                                <TableColumn fx:id="baseNumCol" prefWidth="75.0" text="Base" />
+                                                <TableColumn fx:id="quoteNumCol" prefWidth="75.0" text="Quote" />
                                                 <TableColumn fx:id="dateCol" prefWidth="75.0" text="交易时间" />
                                             </columns>
                                             <columnResizePolicy>

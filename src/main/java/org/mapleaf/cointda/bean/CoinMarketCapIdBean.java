@@ -15,13 +15,15 @@
  */
 package org.mapleaf.cointda.bean;
 
+import java.util.Objects;
+
 /**
  *
  * @author xuelf
  */
 public class CoinMarketCapIdBean {
 
-    private Integer cId;
+    private Integer id;
     private String name;
     private String symbol;
     private String slug;
@@ -29,25 +31,25 @@ public class CoinMarketCapIdBean {
     private Integer rank;
     private String first_historical_data;
     private String last_historical_data;
-    private Integer pId;
+    private Integer platform_id;
     private String token_address;
 
     public CoinMarketCapIdBean() {
-
+        is_active = 0;
     }
 
     /**
-     * @return the cId
+     * @return the id
      */
-    public Integer getcId() {
-        return cId;
+    public Integer getId() {
+        return id;
     }
 
     /**
-     * @param cId the cId to set
+     * @param id the id to set
      */
-    public void setcId(Integer cId) {
-        this.cId = cId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     /**
@@ -149,17 +151,17 @@ public class CoinMarketCapIdBean {
     }
 
     /**
-     * @return the pId
+     * @return the platform_id
      */
-    public Integer getpId() {
-        return pId;
+    public Integer getPlatform_id() {
+        return platform_id;
     }
 
     /**
-     * @param pId the pId to set
+     * @param platform_id the platform_id to set
      */
-    public void setpId(Integer pId) {
-        this.pId = pId;
+    public void setPlatform_id(Integer platform_id) {
+        this.platform_id = platform_id;
     }
 
     /**
@@ -178,7 +180,7 @@ public class CoinMarketCapIdBean {
 
     @Override
     public String toString() {
-        return "CoinMarketCapId [id:" + getcId()
+        return "CoinMarketCapId [id:" + getId()
                 + ",name:" + getName()
                 + ",symbol:" + getSymbol()
                 + ",slug:" + getSlug()
@@ -186,9 +188,31 @@ public class CoinMarketCapIdBean {
                 + ",rank:" + getRank()
                 + ",first_historical_data:" + getFirst_historical_data()
                 + ",last_historical_data:" + getLast_historical_data()
-                + ",platform_id:" + getpId()
+                + ",platform_id:" + getPlatform_id()
                 + ",token_address:" + getToken_address()
                 + "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        //先判断o是否为本对象，如果是就肯定是同一对象了，this 指向当前的对象
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof CoinMarketCapIdBean) {
+            CoinMarketCapIdBean bean = (CoinMarketCapIdBean) o;
+            //查看两个对象的id和is_active属性值是否相等,返回结果
+            return Objects.equals(id, bean.id) && Objects.equals(is_active, bean.is_active);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        //hash = 89 * hash + Objects.hashCode(this.id);
+        hash = 89 * hash + Objects.hashCode(this.id) + Objects.hashCode(this.is_active);
+        return hash;
     }
 
 }

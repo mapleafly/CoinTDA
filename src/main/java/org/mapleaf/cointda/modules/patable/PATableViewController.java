@@ -40,6 +40,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mapleaf.cointda.dao.PATableDao;
 import org.mapleaf.cointda.bean.property.TradeDataFXC;
+import org.mapleaf.cointda.dao.CoinTypeDao;
 import org.mapleaf.cointda.util.DateHelper;
 
 /**
@@ -76,15 +77,15 @@ public class PATableViewController implements Initializable {
     @FXML
     private TableColumn<TradeDataFXC, Integer> coinIdCol;
     @FXML
-    private TableColumn<TradeDataFXC, String> coinSymbolCol;
+    private TableColumn<TradeDataFXC, String> symbolPairsCol;
     @FXML
     private TableColumn<TradeDataFXC, String> buyOrSaleCol;
     @FXML
     private TableColumn<TradeDataFXC, String> priceCol;
     @FXML
-    private TableColumn<TradeDataFXC, String> numCol;
+    private TableColumn<TradeDataFXC, String> baseNumCol;
     @FXML
-    private TableColumn<TradeDataFXC, String> totalCol;
+    private TableColumn<TradeDataFXC, String> quoteNumCol;
     @FXML
     private TableColumn<TradeDataFXC, String> dateCol;
 
@@ -100,7 +101,7 @@ public class PATableViewController implements Initializable {
         List<TradeDataFXC> list = PATableDao.queryAllFXC();
         tradeDataList.addAll(list);
 
-        coinSymbolList = PATableDao.queryAllSymbol();
+        coinSymbolList = CoinTypeDao.queryCurSymbol();
     }
 
     /**
@@ -115,11 +116,11 @@ public class PATableViewController implements Initializable {
 
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         coinIdCol.setCellValueFactory(new PropertyValueFactory<>("coinId"));
-        coinSymbolCol.setCellValueFactory(cellData -> cellData.getValue().coinSymbolProperty());
+        symbolPairsCol.setCellValueFactory(cellData -> cellData.getValue().symbolPairsProperty());
         buyOrSaleCol.setCellValueFactory(cellData -> cellData.getValue().saleOrBuyProperty());
         priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-        numCol.setCellValueFactory(new PropertyValueFactory<>("num"));
-        totalCol.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
+        baseNumCol.setCellValueFactory(new PropertyValueFactory<>("baseNum"));
+        quoteNumCol.setCellValueFactory(new PropertyValueFactory<>("quoteNum"));
         dateCol.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
 
         typeChoiceBox.setItems(FXCollections.observableArrayList(coinSymbolList));
@@ -170,11 +171,11 @@ public class PATableViewController implements Initializable {
         if (tradeDataList != null) {
             for (TradeDataFXC td : tradeDataList) {
                 if (td.getSaleOrBuy().equals("买")) {
-                    numTotal = numTotal.add(new BigDecimal(td.getNum()));
-                    buy = buy.add(new BigDecimal(td.getTotalPrice()));
+                    numTotal = numTotal.add(new BigDecimal(td.getBaseNum()));
+                    buy = buy.add(new BigDecimal(td.getQuoteNum()));
                 } else if (td.getSaleOrBuy().equals("卖")) {
-                    numTotal = numTotal.subtract(new BigDecimal(td.getNum()));
-                    sale = sale.add(new BigDecimal(td.getTotalPrice()));
+                    numTotal = numTotal.subtract(new BigDecimal(td.getBaseNum()));
+                    sale = sale.add(new BigDecimal(td.getQuoteNum()));
                 }
             }
         }

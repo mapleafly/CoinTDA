@@ -28,30 +28,31 @@ public class TradeDataFXC {
     private SimpleIntegerProperty id;
     //coin id
     private SimpleIntegerProperty coinId;
-    private final SimpleStringProperty coinSymbol;
+    //symbol交易对
+    private final SimpleStringProperty symbolPairs;
     //买==b, 卖==s
     private final SimpleStringProperty saleOrBuy;
     private final SimpleStringProperty price;
-    //数量
-    private final SimpleStringProperty num;
-    //总价
-    private final SimpleStringProperty totalPrice;
+    //base数量
+    private final SimpleStringProperty baseNum;
+    //quote数量
+    private final SimpleStringProperty quoteNum;
     private final SimpleStringProperty date;
 
     public TradeDataFXC() {
         this(-1, -1, null, null, "-1", "-1", "-1", null);
     }
 
-    public TradeDataFXC(Integer id, Integer coinId, String coinSymbol,
-            String saleOrBuy, String price, String num, String totalPrice,
+    public TradeDataFXC(Integer id, Integer coinId, String symbolPairs,
+            String saleOrBuy, String price, String baseNum, String quoteNum,
             String date) {
         this.id = new SimpleIntegerProperty(id);
         this.coinId = new SimpleIntegerProperty(coinId);
-        this.coinSymbol = new SimpleStringProperty(coinSymbol);
+        this.symbolPairs = new SimpleStringProperty(symbolPairs);
         this.saleOrBuy = new SimpleStringProperty(saleOrBuy);
         this.price = new SimpleStringProperty(price);
-        this.num = new SimpleStringProperty(num);
-        this.totalPrice = new SimpleStringProperty(totalPrice);
+        this.baseNum = new SimpleStringProperty(baseNum);
+        this.quoteNum = new SimpleStringProperty(quoteNum);
         this.date = new SimpleStringProperty(date);
     }
 
@@ -94,19 +95,19 @@ public class TradeDataFXC {
     /**
      * @return the coinSymbol
      */
-    public String getCoinSymbol() {
-        return coinSymbol.get();
+    public String getSymbolPairs() {
+        return symbolPairs.get();
     }
 
-    public SimpleStringProperty coinSymbolProperty() {
-        return coinSymbol;
+    public SimpleStringProperty symbolPairsProperty() {
+        return symbolPairs;
     }
 
     /**
-     * @param coinSymbol the coinSymbol to set
+     * @param symbolPairs
      */
-    public void setCoinSymbol(String coinSymbol) {
-        this.coinSymbol.set(coinSymbol);
+    public void setSymbolPairs(String symbolPairs) {
+        this.symbolPairs.set(symbolPairs);
     }
 
     /**
@@ -148,37 +149,37 @@ public class TradeDataFXC {
     /**
      * @return the num
      */
-    public String getNum() {
-        return num.get();
+    public String getBaseNum() {
+        return baseNum.get();
     }
 
-    public SimpleStringProperty numProperty() {
-        return num;
+    public SimpleStringProperty baseNumProperty() {
+        return baseNum;
     }
 
     /**
-     * @param num the num to set
+     * @param baseNum
      */
-    public void setNum(String num) {
-        this.num.set(num);
+    public void setBaseNum(String baseNum) {
+        this.baseNum.set(baseNum);
     }
 
     /**
      * @return the totalPrice
      */
-    public String getTotalPrice() {
-        return totalPrice.get();
+    public String getQuoteNum() {
+        return quoteNum.get();
     }
 
-    public SimpleStringProperty totalPriceProperty() {
-        return totalPrice;
+    public SimpleStringProperty quoteNumProperty() {
+        return quoteNum;
     }
 
     /**
-     * @param totalPrice the totalPrice to set
+     * @param quoteNum
      */
-    public void setTotalPrice(String totalPrice) {
-        this.totalPrice.set(totalPrice);
+    public void setQuoteNum(String quoteNum) {
+        this.quoteNum.set(quoteNum);
     }
 
     /**

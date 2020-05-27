@@ -29,20 +29,20 @@ public class CoinTypeFXC {
     private final SimpleStringProperty name;
     private final SimpleStringProperty symbol;
     private final SimpleStringProperty rank;
-    private final SimpleStringProperty price;
+    //private final SimpleStringProperty price;
     private final SimpleStringProperty date;
 
     public CoinTypeFXC() {
-        this(null, false, null, null, null, "0", null);
+        this(null, false, null, null, null, null);
     }
 
-    public CoinTypeFXC(String id, boolean select, String name, String symbol, String rank, String price, String date) {
+    public CoinTypeFXC(String id, boolean select, String name, String symbol, String rank, String date) {
         this.id = new SimpleStringProperty(id);
         this.select = new SimpleBooleanProperty(select);
         this.name = new SimpleStringProperty(name);
         this.symbol = new SimpleStringProperty(symbol);
         this.rank = new SimpleStringProperty(rank);
-        this.price = new SimpleStringProperty(price);
+        //this.price = new SimpleStringProperty(price);
         this.date = new SimpleStringProperty(date);
     }
 
@@ -137,24 +137,6 @@ public class CoinTypeFXC {
     }
 
     /**
-     * @return the price
-     */
-    public String getPrice() {
-        return price.get();
-    }
-
-    public SimpleStringProperty priceProperty() {
-        return price;
-    }
-
-    /**
-     * @param price the price to set
-     */
-    public void setPrice(String price) {
-        this.price.set(price);
-    }
-
-    /**
      * @return the date
      */
     public String getDate() {
@@ -179,7 +161,6 @@ public class CoinTypeFXC {
                 + ",name:" + getName()
                 + ",symbol:" + getSymbol()
                 + ",rank:" + getRank()
-                + ",price:" + this.getPrice()
                 + ",last updated:" + this.getDate()
                 + "]";
     }

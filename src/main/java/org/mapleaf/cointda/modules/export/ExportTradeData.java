@@ -41,9 +41,8 @@ public class ExportTradeData {
 
     public void handleExportData() {
         List<TradeDataBean> list = TradeDataDao.queryAll();
-        List<String[]> data = new ArrayList<>();
-        String[] headers = {"id", "coid_id", "简称", "买卖", "单价", "数量", "总价", "交易时间"};
-        if (list == null) {
+        String[] headers = {"id", "coid_id", "base_symbol", "quote_id", "quote_symbol", "sale_or_buy", "price", "base_num", "quote_num", "trade_date"};
+        if (list == null || list.isEmpty()) {
             workbench.showErrorDialog(
                     "错误",
                     "导出数据失败！",
@@ -53,16 +52,19 @@ public class ExportTradeData {
             );
             return;
         }
+        List<String[]> data = new ArrayList<>();
         list.stream().map((bean) -> {
-            String[] str = new String[8];
+            String[] str = new String[10];
             str[0] = bean.getId().toString();
-            str[1] = bean.getCoin_id().toString();
-            str[2] = bean.getCoin_symbol();
-            str[3] = bean.getSale_or_buy();
-            str[4] = bean.getPrice();
-            str[5] = bean.getNum();
-            str[6] = bean.getTotal_price();
-            str[7] = bean.getTrade_date();
+            str[1] = bean.getBase_id().toString();
+            str[2] = bean.getBase_symbol();
+            str[3] = bean.getQuote_id().toString();
+            str[4] = bean.getQuote_symbol();
+            str[5] = bean.getSale_or_buy();
+            str[6] = bean.getPrice();
+            str[7] = bean.getBase_num();
+            str[8] = bean.getQuote_num();
+            str[9] = bean.getTrade_date();
             return str;
         }).forEachOrdered((str) -> {
             data.add(str);

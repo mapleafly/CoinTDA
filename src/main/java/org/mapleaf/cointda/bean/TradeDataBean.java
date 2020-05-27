@@ -24,18 +24,22 @@ public class TradeDataBean {
     
     //自增id
     private Integer id;
-    //coin id
-    private Integer coin_id;
-    // coin 简称
-    private String coin_symbol;
+    //base coin id
+    private Integer base_id;
+    // base coin 简称
+    private String base_symbol;
+    //quote coin id
+    private Integer quote_id;
+    // quote coin 简称
+    private String quote_symbol;
     //买或者卖
     private String sale_or_buy;
     //买入或卖出价格
     private String price;
-    //买入或卖出数量
-    private String num;
-    //买入或卖出总价
-    private String total_price;
+    //基准货币买入或卖出数量
+    private String base_num;
+    //计价货币数量
+    private String quote_num;
     //交易时间
     private String trade_date;
 
@@ -52,33 +56,61 @@ public class TradeDataBean {
     public void setId(Integer id) {
         this.id = id;
     }
-
+  
     /**
-     * @return the coin_id
+     * @return the base_id
      */
-    public Integer getCoin_id() {
-        return coin_id;
+    public Integer getBase_id() {
+        return base_id;
     }
 
     /**
-     * @param coin_id the coin_id to set
+     * @param base_id the base_id to set
      */
-    public void setCoin_id(Integer coin_id) {
-        this.coin_id = coin_id;
+    public void setBase_id(Integer base_id) {
+        this.base_id = base_id;
     }
 
     /**
-     * @return the coin_symbol
+     * @return the base_symbol
      */
-    public String getCoin_symbol() {
-        return coin_symbol;
+    public String getBase_symbol() {
+        return base_symbol;
     }
 
     /**
-     * @param coin_symbol the coin_symbol to set
+     * @param base_symbol the base_symbol to set
      */
-    public void setCoin_symbol(String coin_symbol) {
-        this.coin_symbol = coin_symbol;
+    public void setBase_symbol(String base_symbol) {
+        this.base_symbol = base_symbol;
+    }
+
+    /**
+     * @return the quote_id
+     */
+    public Integer getQuote_id() {
+        return quote_id;
+    }
+
+    /**
+     * @param quote_id the quote_id to set
+     */
+    public void setQuote_id(Integer quote_id) {
+        this.quote_id = quote_id;
+    }
+
+    /**
+     * @return the quote_symbol
+     */
+    public String getQuote_symbol() {
+        return quote_symbol;
+    }
+
+    /**
+     * @param quote_symbol the quote_symbol to set
+     */
+    public void setQuote_symbol(String quote_symbol) {
+        this.quote_symbol = quote_symbol;
     }
 
     /**
@@ -109,34 +141,34 @@ public class TradeDataBean {
         this.price = price;
     }
 
-    /**
-     * @return the num
+        /**
+     * @return the base_num
      */
-    public String getNum() {
-        return num;
+    public String getBase_num() {
+        return base_num;
     }
 
     /**
-     * @param num the num to set
+     * @param base_num the base_num to set
      */
-    public void setNum(String num) {
-        this.num = num;
+    public void setBase_num(String base_num) {
+        this.base_num = base_num;
     }
 
     /**
-     * @return the total_price
+     * @return the quote_num
      */
-    public String getTotal_price() {
-        return total_price;
+    public String getQuote_num() {
+        return quote_num;
     }
 
     /**
-     * @param total_price the total_price to set
+     * @param quote_num the quote_num to set
      */
-    public void setTotal_price(String total_price) {
-        this.total_price = total_price;
+    public void setQuote_num(String quote_num) {
+        this.quote_num = quote_num;
     }
-
+    
     /**
      * @return the trade_date
      */
@@ -154,13 +186,17 @@ public class TradeDataBean {
     @Override
     public String toString(){
          return "Trade_Data [id:" + getId()
-                + ",coin_id:" + this.getCoin_id()
-                + ",coin_symbol:" + this.getCoin_symbol()
+                + ",baseCoin_id:" + this.getBase_id()
+                + ",baseCoin_symbol:" + this.getBase_symbol()
+                + ",quoteCoin_id:" + this.getQuote_id()
+                + ",quoteCoin_symbol:" + this.getQuote_symbol()
                 + ",sale_or_buy:" + this.getSale_or_buy()
                 + ",price:" + this.getPrice()
-                + ",num:" + this.getNum()
-                + ",total_price:" + this.getTotal_price()
+                + ",base_num:" + this.getBase_num()
+                + ",quote_num:" + this.getQuote_num()
                 + ",trade_date:" + this.getTrade_date()
                 + "]";
     }
+
+
 }

@@ -17,12 +17,11 @@
                <children>
                   <TableView fx:id="priceTable" editable="true" layoutX="98.0" layoutY="103.0" prefHeight="625.0" prefWidth="848.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                        <TableColumn fx:id="idCol" prefWidth="75.0" text="id" visible="false" />
                         <TableColumn fx:id="selectCol" prefWidth="423.0" text="选择" />
+                        <TableColumn fx:id="idCol" prefWidth="75.0" text="id" />
                         <TableColumn fx:id="nameCol" prefWidth="423.0" text="名称" />
                         <TableColumn fx:id="symbolCol" prefWidth="122.0" text="简称" />
                         <TableColumn fx:id="rankCol" prefWidth="216.0" text="排名" />
-                      <TableColumn fx:id="priceCol" prefWidth="423.0" text="价格" />
                         <TableColumn fx:id="dateCol" prefWidth="75.0" text="更新日期" />
                     </columns>
                      <columnResizePolicy>

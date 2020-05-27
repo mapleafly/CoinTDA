@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapleaf.cointda.bean.CoinMarketCapListingBean;
+import org.mapleaf.cointda.bean.CoinMarketCapIdBean;
 import org.mapleaf.cointda.bean.TradeDataBean;
 import org.mapleaf.cointda.bean.property.TradeDataFXC;
 import org.mapleaf.cointda.pool.DBHelper;
@@ -42,44 +42,46 @@ public class TradeDataDao {
      * 插入一条数据
      *
      * @param bean
-     * @return 更新的行数
+     * @return 返回插入行的id
      */
     public static Integer insert(TradeDataBean bean) {
-        String sql = "insert into tab_trade_data"
-                + "(coin_id,coin_symbol,sale_or_buy,price,num,total_price,"
-                + "trade_date)"
-                + " values (?,?,?,?,?,?,?)";
+        String sql = "insert into tab_tradeinfo"
+                + "(base_id,base_symbol,quote_id,quote_symbol,"
+                + "sale_or_buy,price,base_num,quote_num,trade_date) "
+                + "values (?,?,?,?,?,?,?,?,?)";
 
-        Object[] param = new Object[7];
-        param[0] = bean.getCoin_id();
-        param[1] = bean.getCoin_symbol();
-        param[2] = bean.getSale_or_buy();
-        param[3] = bean.getPrice();
-        param[4] = bean.getNum();
-        param[5] = bean.getTotal_price();
-        param[6] = bean.getTrade_date();
+        Object[] param = new Object[9];
+        param[0] = bean.getBase_id();
+        param[1] = bean.getBase_symbol();
+        param[2] = bean.getQuote_id();
+        param[3] = bean.getQuote_symbol();
+        param[4] = bean.getSale_or_buy();
+        param[5] = bean.getPrice();
+        param[6] = bean.getBase_num();
+        param[7] = bean.getQuote_num();
+        param[8] = bean.getTrade_date();
         BigDecimal dec = DBHelper.insert(sql, param);
 
         return Integer.valueOf(dec.toBigInteger().toString());
     }
 
-     /**
+    /**
      * 批量插入数据
      *
      * @param list
      * @return
      */
     public static int[] batchInsert(List<String[]> list) {
-        String sql = "insert into tab_trade_data"
-                + "(coin_id,coin_symbol,sale_or_buy,price,num,total_price,"
-                + "trade_date)"
-                + " values (?,?,?,?,?,?,?)";
+        String sql = "insert into tab_tradeinfo"
+                + "(base_id,base_symbol,quote_id,quote_symbol,"
+                + "sale_or_buy,price,base_num,quote_num,trade_date) "
+                + "values (?,?,?,?,?,?,?,?,?)";
 
         Object[][] params = new Object[list.size()][];
         //组织params
         for (int i = 0; i < list.size(); i++) {
             String[] bean = list.get(i);
-            Object[] param = new Object[7];
+            Object[] param = new Object[9];
             param[0] = bean[1];
             param[1] = bean[2];
             param[2] = bean[3];
@@ -87,6 +89,18 @@ public class TradeDataDao {
             param[4] = bean[5];
             param[5] = bean[6];
             param[6] = bean[7];
+            param[7] = bean[8];
+            param[8] = bean[9];
+//            param[0] = Integer.valueOf(bean[1]);
+//            param[1] = bean[2];
+//            param[2] = 825;
+//            param[3] = "USDT";
+//            
+//            param[4] = bean[3];
+//            param[5] = bean[4];
+//            param[6] = bean[5];
+//            param[7] = bean[6];
+//            param[8] = bean[7];
 
             params[i] = param;
         }
@@ -101,20 +115,22 @@ public class TradeDataDao {
      * @return
      */
     public static int update(TradeDataBean bean) {
-        String sql = "update tab_trade_data set "
-                + "coin_id=?,coin_symbol=?,sale_or_buy=?,price=?,num=?,"
-                + "total_price=?,trade_date=?"
-                + " where id=?";
+        String sql = "update tab_tradeinfo set "
+                + "base_id=?,base_symbol=?,quote_id=?,quote_symbol=?,"
+                + "sale_or_buy=?,price=?,base_num=?,quote_num=?,trade_date=? "
+                + "where id=?";
 
-        Object[] param = new Object[8];
-        param[0] = bean.getCoin_id();
-        param[1] = bean.getCoin_symbol();
-        param[2] = bean.getSale_or_buy();
-        param[3] = bean.getPrice();
-        param[4] = bean.getNum();
-        param[5] = bean.getTotal_price();
-        param[6] = bean.getTrade_date();
-        param[7] = bean.getId();
+        Object[] param = new Object[10];
+        param[0] = bean.getBase_id();
+        param[1] = bean.getBase_symbol();
+        param[2] = bean.getQuote_id();
+        param[3] = bean.getQuote_symbol();
+        param[4] = bean.getSale_or_buy();
+        param[5] = bean.getPrice();
+        param[6] = bean.getBase_num();
+        param[7] = bean.getQuote_num();
+        param[8] = bean.getTrade_date();
+        param[9] = bean.getId();
 
         return DBHelper.update(sql, param);
     }
@@ -126,9 +142,13 @@ public class TradeDataDao {
      * @return
      */
     public static int delete(TradeDataBean bean) {
-        String sql = "delete from tab_trade_data"
+        return delete(bean.getId());
+    }
+
+    public static int delete(Integer id) {
+        String sql = "delete from tab_tradeinfo"
                 + " where id=?";
-        return DBHelper.update(sql, bean.getId());
+        return DBHelper.update(sql, id);
     }
 
     /**
@@ -137,7 +157,7 @@ public class TradeDataDao {
      * @return
      */
     public static boolean truncate() {
-        String sql = "TRUNCATE TABLE tab_trade_data";
+        String sql = "TRUNCATE TABLE tab_tradeinfo";
         return DBHelper.update(sql) == 0;
     }
 
@@ -148,7 +168,7 @@ public class TradeDataDao {
      * @return 返回CoinMarketCapListingBean
      */
     public static TradeDataBean queryBean(Integer id) {
-        String sql = "select * from tab_trade_data where id=?";
+        String sql = "select * from tab_tradeinfo where id=?";
         return DBHelper.queryBean(TradeDataBean.class, sql, id);
     }
 
@@ -158,21 +178,10 @@ public class TradeDataDao {
      * @param symbol
      * @return
      */
-    public static CoinMarketCapListingBean queryCoinBySymbol(String symbol) {
-        String sql = "select * from tab_CoinMarketCap_listings where symbol=?";
+    public static CoinMarketCapIdBean queryCoinBySymbol(String symbol) {
+        String sql = "select * from TAB_CoinMarketCap_id_map where symbol=?";
         return DBHelper.queryBean(
-                CoinMarketCapListingBean.class, sql, symbol);
-
-    }
-
-    /**
-     * 查询全部Coin的简称
-     *
-     * @return 返回 简称list
-     */
-    public static List<String> queryAllSymbol() {
-        String sql = "select symbol from tab_curuse_coin order by cmc_rank";
-        return DBHelper.queryColumn(sql);
+                CoinMarketCapIdBean.class, sql, symbol);
     }
 
     /**
@@ -181,23 +190,48 @@ public class TradeDataDao {
      * @return 返回 list
      */
     public static List<TradeDataBean> queryAll() {
-        String sql = "select * from tab_trade_data order by id";
+        String sql = "select * from tab_tradeinfo order by id";
         return DBHelper.queryList(TradeDataBean.class, sql);
     }
-    
+
     public static List<TradeDataFXC> queryAllFXC(String symbol) {
-        String sql = "select * from tab_trade_data where coin_symbol=? order by id DESC";
+        String sql = "select * from tab_tradeinfo where base_symbol=? order by id DESC";
         List<TradeDataBean> list = DBHelper.queryList(TradeDataBean.class, sql, symbol);
         List<TradeDataFXC> fxcList = new ArrayList<>();
         list.stream().map((bean) -> {
             TradeDataFXC fxc = new TradeDataFXC();
             fxc.setId(bean.getId());
-            fxc.setCoinId(bean.getCoin_id());
-            fxc.setCoinSymbol(bean.getCoin_symbol());
+            fxc.setCoinId(bean.getBase_id());
+            fxc.setSymbolPairs(bean.getBase_symbol() + "/" + bean.getQuote_symbol());
             fxc.setSaleOrBuy(bean.getSale_or_buy());
             fxc.setPrice(bean.getPrice());
-            fxc.setNum(bean.getNum());
-            fxc.setTotalPrice(bean.getTotal_price());
+            fxc.setBaseNum(bean.getBase_num());
+            fxc.setQuoteNum(bean.getQuote_num());
+            fxc.setDate(bean.getTrade_date());
+            return fxc;
+        }).forEachOrdered((fxc) -> {
+            fxcList.add(fxc);
+        });
+        return fxcList;
+    }
+
+    public static List<TradeDataFXC> queryAllFXCForCash(String symbol) {
+        String sql = "select * from tab_tradeinfo where base_symbol=? order by id DESC";
+        List<TradeDataBean> list = DBHelper.queryList(TradeDataBean.class, sql, symbol);
+        List<TradeDataFXC> fxcList = new ArrayList<>();
+        list.stream().map((bean) -> {
+            TradeDataFXC fxc = new TradeDataFXC();
+            fxc.setId(bean.getId());
+            fxc.setCoinId(bean.getBase_id());
+            fxc.setSymbolPairs(bean.getBase_symbol());
+            if (bean.getSale_or_buy().equals("卖")) {
+                fxc.setSaleOrBuy("入金");
+            } else {
+                fxc.setSaleOrBuy("出金");
+            }
+            fxc.setPrice(bean.getPrice());
+            fxc.setBaseNum(bean.getBase_num());
+            fxc.setQuoteNum(bean.getQuote_num());
             fxc.setDate(bean.getTrade_date());
             return fxc;
         }).forEachOrdered((fxc) -> {
@@ -209,12 +243,14 @@ public class TradeDataDao {
     public static void main(String[] args) {
         TradeDataBean bean = new TradeDataBean();
         List<TradeDataBean> list = new ArrayList<>();
-        bean.setCoin_id(1);
-        bean.setCoin_symbol("BTC");
+        bean.setBase_id(1);
+        bean.setBase_symbol("BTC");
+        bean.setQuote_id(825);
+        bean.setQuote_symbol("USTD");
         bean.setSale_or_buy("买");
         bean.setPrice("7455.001");
-        bean.setNum("1.000");
-        bean.setTotal_price("7455.001");
+        bean.setBase_num("1.000");
+        bean.setQuote_num("7455.001");
         bean.setTrade_date("2019-12-09");
         for (int i = 0; i < 15; i++) {
             list.add(bean);

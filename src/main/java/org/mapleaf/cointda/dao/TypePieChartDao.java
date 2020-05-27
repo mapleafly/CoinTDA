@@ -18,7 +18,7 @@ package org.mapleaf.cointda.dao;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapleaf.cointda.bean.CoinMarketCapListingBean;
+import org.mapleaf.cointda.bean.CoinQuotesLatestBean;
 import org.mapleaf.cointda.bean.TradeDataBean;
 import org.mapleaf.cointda.pool.DBHelper;
 
@@ -32,15 +32,19 @@ public class TypePieChartDao {
             TypePieChartDao.class.getName());
 
     public static List<TradeDataBean> queryAllTradeData() {
-        String sql = "select * from tab_trade_data";
+        String sql = "select * from tab_tradeinfo";
         return DBHelper.queryList(TradeDataBean.class, sql);
     }
     
-    public static List<CoinMarketCapListingBean> queryByTradeData(){
-          String sql = "select * from tab_CoinMarketCap_listings where id in"
-                  + " (select coin_id from tab_trade_data group by coin_id ) "
+    /**
+     * 找出有交易记录的coin的现价
+     * @return 
+     */
+    public static List<CoinQuotesLatestBean> queryByTradeData(){
+          String sql = "select * from tab_quotesLatest where id in"
+                  + " (select base_id from tab_tradeinfo group by base_id ) "
                   + "order by cmc_rank";
-         return DBHelper.queryList(CoinMarketCapListingBean.class, sql);
+         return DBHelper.queryList(CoinQuotesLatestBean.class, sql);
     }
 
 }

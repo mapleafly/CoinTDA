@@ -15,7 +15,6 @@
  */
 package org.mapleaf.cointda.bean;
 
-
 /**
  *
  * @author xuelf
@@ -229,8 +228,6 @@ public class CoinMarketCapListingBean {
         this.volume_24h = volume_24h;
     }
 
- 
-
     /**
      * @return the name
      */
@@ -328,8 +325,8 @@ public class CoinMarketCapListingBean {
     public void setToken_address(String token_address) {
         this.token_address = token_address;
     }
-    
-       @Override
+
+    @Override
     public String toString() {
         return "CoinMarketListing [id:" + getId()
                 + ",name:" + this.getName()
