@@ -21,7 +21,6 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import java.time.LocalDate;
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
@@ -183,33 +182,6 @@ public class App extends Application {
                 .build();
 
         return workbench;
-    }
-
-    private void initNightMode() {
-        // initially set stylesheet
-        //setNightMode(preferences.isNightMode());
-
-        // change stylesheet depending on whether nightmode is on or not
-        //preferences.nightModeProperty().addListener(
-        //        (observable, oldValue, newValue) -> setNightMode(newValue)
-        //);
-        setNightMode(false);
-
-    }
-
-    private void setNightMode(boolean on) {
-        String customTheme = App.class.getResource("themes/customTheme.css")
-                .toExternalForm();
-        String darkTheme = App.class.getResource("themes/darkTheme.css")
-                .toExternalForm();
-        ObservableList<String> stylesheets = workbench.getStylesheets();
-        if (on) {
-            stylesheets.remove(customTheme);
-            stylesheets.add(darkTheme);
-        } else {
-            stylesheets.remove(darkTheme);
-            stylesheets.add(customTheme);
-        }
     }
 
     public Workbench getWorkbench() {
