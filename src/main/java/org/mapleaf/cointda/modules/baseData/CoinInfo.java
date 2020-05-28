@@ -17,9 +17,8 @@ package org.mapleaf.cointda.modules.baseData;
 
 import com.dlsc.workbenchfx.Workbench;
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mapleaf.cointda.bean.CoinMarketCapIdBean;
@@ -113,6 +112,7 @@ public class CoinInfo {
             return false;
         }
         List<Integer> dbCurId = CoinTypeDao.queryCurID();
+        dbCurId.add(825);
         ok = CoinMarketCapDao.truncate();
         CoinMarketCapDao.batchInsert(list);
         if(dbCurId != null && !dbCurId.isEmpty()){

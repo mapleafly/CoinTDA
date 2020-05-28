@@ -37,6 +37,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mapleaf.cointda.dao.CoinTypeDao;
 import org.mapleaf.cointda.bean.property.CoinTypeFXC;
+import org.mapleaf.cointda.modules.baseData.CoinInfo;
 
 /**
  * FXML Controller class
@@ -117,6 +118,10 @@ public class SelectCoinViewController implements Initializable {
             }
         });
         if (CoinTypeDao.batchUpdate(tableSelectedMap) == tableSelectedMap.size()) {
+            //自动更新选择coin的当前价格
+            CoinInfo info = new CoinInfo(workbench);
+            info.updateCurPrice();
+
             workbench.showInformationDialog(
                     "信息",
                     "完成可用品种保存操作！",

@@ -5,7 +5,7 @@
 :lang: en
 :toc: left
 :numbered:
-:revnumber: 2.2.0
+:revnumber: 2.2.1
 :revdate: 2020-05-28
 :revremark: 
 :version-label!: 
@@ -32,6 +32,8 @@ CoinTDA是一个虚拟货币交易信息记录和分析工具。本简介帮助�
 . 修改导入导出功能，调整导出文件结构
 . 修改交易数据管理模块，增加计价货币参数
 . 修改数据库结构
+. 修改-可用币种改变时，自动更新当前价格
+. 修改-默认USDT可用
 
 == 各种烦恼的问题
 
