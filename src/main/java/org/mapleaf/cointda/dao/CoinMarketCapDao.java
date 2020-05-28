@@ -32,8 +32,9 @@ public class CoinMarketCapDao {
 
     /**
      * 修改一条数据
+     *
      * @param bean
-     * @return 
+     * @return
      */
     public static int update(CoinMarketCapIdBean bean) {
         String sql = "update TAB_CoinMarketCap_id_map set "
@@ -120,11 +121,12 @@ public class CoinMarketCapDao {
         return DBHelper.batch(sql, params);
     }
 
-    public static int delete(CoinMarketCapIdBean bean){
+    public static int delete(CoinMarketCapIdBean bean) {
         String sql = "delete from TAB_CoinMarketCap_id_map"
                 + " where id=?";
         return DBHelper.update(sql, bean.getId());
     }
+
     /**
      * 删除全部数据
      *
@@ -166,11 +168,10 @@ public class CoinMarketCapDao {
         logger.info(CoinMarketCapDao.batchInsert(list).length);
         //logger.info(CoinMarketCapDao.insert(list.get(0)));
         logger.info("QueryAll().size == " + CoinMarketCapDao.queryAll().size());
-         CoinMarketCapIdBean coin = CoinMarketCapDao.queryBean(2781);
-         logger.info(coin);
-         //CoinMarketCapDao.delete(coin);
+        CoinMarketCapIdBean coin = CoinMarketCapDao.queryBean(2781);
+        logger.info(coin);
+        //CoinMarketCapDao.delete(coin);
         //logger.info("QueryAll().size == " + CoinMarketCapDao.queryAll().size());
-         
-        
+
     }
 }

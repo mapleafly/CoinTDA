@@ -35,16 +35,17 @@ public class TypePieChartDao {
         String sql = "select * from tab_tradeinfo";
         return DBHelper.queryList(TradeDataBean.class, sql);
     }
-    
+
     /**
      * 找出有交易记录的coin的现价
-     * @return 
+     *
+     * @return
      */
-    public static List<CoinQuotesLatestBean> queryByTradeData(){
-          String sql = "select * from tab_quotesLatest where id in"
-                  + " (select base_id from tab_tradeinfo group by base_id ) "
-                  + "order by cmc_rank";
-         return DBHelper.queryList(CoinQuotesLatestBean.class, sql);
+    public static List<CoinQuotesLatestBean> queryByTradeData() {
+        String sql = "select * from tab_quotesLatest where id in"
+                + " (select base_id from tab_tradeinfo group by base_id ) "
+                + "order by cmc_rank";
+        return DBHelper.queryList(CoinQuotesLatestBean.class, sql);
     }
 
 }

@@ -28,7 +28,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author lif
  */
-public class CashViewModule  extends WorkbenchModule {
+public class CashViewModule extends WorkbenchModule {
 
     private static final Logger logger = LogManager.getLogger(CashViewModule.class.getName());
 
@@ -43,7 +43,7 @@ public class CashViewModule  extends WorkbenchModule {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(CashViewModule.class.getResource("CashView.fxml"));
             view = (AnchorPane) loader.load();
-            
+
             CashViewController controller = loader.getController();
             controller.setWorkbench(getWorkbench());
         } catch (IOException e) {

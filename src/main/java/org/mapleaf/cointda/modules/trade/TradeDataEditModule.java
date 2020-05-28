@@ -28,7 +28,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author lif
  */
-public class TradeDataEditModule  extends WorkbenchModule {
+public class TradeDataEditModule extends WorkbenchModule {
 
     private static final Logger logger = LogManager.getLogger(TradeDataEditModule.class.getName());
 
@@ -43,7 +43,7 @@ public class TradeDataEditModule  extends WorkbenchModule {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(TradeDataEditModule.class.getResource("TradeDataEditView.fxml"));
             view = (AnchorPane) loader.load();
-            
+
             TradeDataEditViewController controller = loader.getController();
             controller.setWorkbench(getWorkbench());
         } catch (IOException e) {

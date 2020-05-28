@@ -42,8 +42,7 @@ public class PrefsHelper {
     //忽略小额品种
     public static final String NOTSMALLCOIN = "notsmallcoin";
     public static final String NOTSMALLCOINNUM = "notsmallcoinnum";
-    
-            
+
     /**
      * 更新Preferences的内容
      *
@@ -61,8 +60,7 @@ public class PrefsHelper {
         try {
             preferences.flush();
         } catch (BackingStoreException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
@@ -70,6 +68,7 @@ public class PrefsHelper {
      * 根据key获取configProperties中对应的value
      *
      * @param key
+     * @param v
      * @return
      */
     public static String getPreferencesValue(String key, String v) {

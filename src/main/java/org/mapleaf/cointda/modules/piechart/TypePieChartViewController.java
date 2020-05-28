@@ -148,7 +148,7 @@ public class TypePieChartViewController implements Initializable {
                 String notSmallCoinNumValue = PrefsHelper.getPreferencesValue(PrefsHelper.NOTSMALLCOINNUM, "100");
                 if (allPrice > Integer.valueOf(notSmallCoinNumValue)) {
                     list.add(new PieChart.Data(symbol, allPrice));
-                }else{
+                } else {
                     otherAllPrice += allPrice;
                 }
             } else {

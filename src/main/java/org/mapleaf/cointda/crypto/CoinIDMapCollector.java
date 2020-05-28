@@ -15,9 +15,6 @@
  */
 package org.mapleaf.cointda.crypto;
 
-/**
- * This example uses the Apache HTTPComponents library.
- */
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

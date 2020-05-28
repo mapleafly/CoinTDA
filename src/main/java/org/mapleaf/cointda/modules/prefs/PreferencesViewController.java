@@ -26,7 +26,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.ToggleGroup;
-import org.mapleaf.cointda.enums.CoinIDMapEnum;
 import org.mapleaf.cointda.enums.BooleanEnum;
 import org.mapleaf.cointda.enums.ThemeEnum;
 import org.mapleaf.cointda.modules.baseData.CoinInfo;
@@ -59,6 +58,8 @@ public class PreferencesViewController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -113,9 +114,6 @@ public class PreferencesViewController implements Initializable {
             numSpinner.setDisable(true);
         }
 
-    }
-
-    public PreferencesViewController() {
     }
 
     /**

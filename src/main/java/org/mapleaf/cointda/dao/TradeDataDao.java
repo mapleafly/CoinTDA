@@ -91,16 +91,6 @@ public class TradeDataDao {
             param[6] = bean[7];
             param[7] = bean[8];
             param[8] = bean[9];
-//            param[0] = Integer.valueOf(bean[1]);
-//            param[1] = bean[2];
-//            param[2] = 825;
-//            param[3] = "USDT";
-//            
-//            param[4] = bean[3];
-//            param[5] = bean[4];
-//            param[6] = bean[5];
-//            param[7] = bean[6];
-//            param[8] = bean[7];
 
             params[i] = param;
         }

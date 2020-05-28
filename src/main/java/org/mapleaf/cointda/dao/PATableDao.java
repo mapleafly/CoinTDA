@@ -102,7 +102,7 @@ public class PATableDao {
     }
 
     public static void main(String[] s) {
-        
+
     }
 
 }

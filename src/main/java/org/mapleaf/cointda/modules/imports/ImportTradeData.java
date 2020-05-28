@@ -18,10 +18,8 @@ package org.mapleaf.cointda.modules.imports;
 import com.dlsc.workbenchfx.Workbench;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,7 +45,8 @@ public class ImportTradeData {
     public void handleImportData() {
         FileChooser fileChooser = new FileChooser();
         //文档类型过滤器
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("txt files (*.csv)", "*.csv");
+        FileChooser.ExtensionFilter extFilter
+                = new FileChooser.ExtensionFilter("txt files (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showOpenDialog(workbench.getScene().getWindow());
         if (file != null) {

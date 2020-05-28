@@ -58,11 +58,11 @@ public class CoinTypeDao {
         }
         return DBHelper.batch(sql, params).length;
     }
-    
+
     /**
-     * 
+     *
      * @param list
-     * @return 
+     * @return
      */
     public static int batchUpdate(List<Integer> list) {
         String sql = "update TAB_CoinMarketCap_id_map set "
@@ -76,7 +76,6 @@ public class CoinTypeDao {
         }
         return DBHelper.batch(sql, params).length;
     }
-    
 
     /**
      * 查询数据
@@ -131,7 +130,7 @@ public class CoinTypeDao {
         return ctList;
     }
 
-     /**
+    /**
      * 查询全部可用Coin的简称
      *
      * @return 返回 简称list
@@ -141,16 +140,8 @@ public class CoinTypeDao {
                 + "where is_active=1 order by rank";
         return DBHelper.queryColumn(sql);
     }
-    
+
     public static List<Integer> queryCurID() {
-//        List<CoinMarketCapIdBean> list = queryCur();
-//        List<Integer> idList = new ArrayList<>();
-//        if (list != null) {
-//            list.forEach(action -> {
-//                idList.add(action.getId());
-//            });
-//        }
-//        return idList;
         String sql = "select id from TAB_CoinMarketCap_id_map "
                 + "where is_active=1 order by rank";
         return DBHelper.queryColumn(sql);

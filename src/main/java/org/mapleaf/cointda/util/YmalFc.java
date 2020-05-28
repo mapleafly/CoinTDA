@@ -51,7 +51,7 @@ public class YmalFc<T> {
     public T build(String path) {
         T config = null;
         try {
-            InputStream input =new FileInputStream(path);
+            InputStream input = new FileInputStream(path);
             //InputStream input = YmalFc.class.getResourceAsStream(path);
             YAMLParser yamlParser = yamlFactory.createParser(input);
             final JsonNode node = mapper.readTree(yamlParser);
@@ -72,7 +72,7 @@ public class YmalFc<T> {
         CryptocurrencyBean contact = new CryptocurrencyBean();
         YmalFc<CryptocurrencyBean> ymalFc = new YmalFc<>(CryptocurrencyBean.class);
 
-         String filePath = System.getProperty("user.dir");
+        String filePath = System.getProperty("user.dir");
         contact = ymalFc.build(filePath + "/conf/Cryptocurrency.yml");
 
     }

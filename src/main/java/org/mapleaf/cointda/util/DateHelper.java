@@ -99,8 +99,14 @@ public class DateHelper {
         }
 
     }
-    
-    public static Long differentDays(LocalDate newDate, LocalDate oldDate){
+
+    /**
+     * 计算两个日期相差的天数  newDate - oldDate
+     * @param newDate
+     * @param oldDate
+     * @return 
+     */
+    public static Long differentDays(LocalDate newDate, LocalDate oldDate) {
         return newDate.toEpochDay() - oldDate.toEpochDay();
     }
 }

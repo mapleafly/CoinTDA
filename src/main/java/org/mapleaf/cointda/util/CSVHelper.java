@@ -35,7 +35,7 @@ import org.apache.logging.log4j.LogManager;
  */
 public class CSVHelper {
 
-    private static final org.apache.logging.log4j.Logger logger 
+    private static final org.apache.logging.log4j.Logger logger
             = LogManager.getLogger(CSVHelper.class.getName());
     private static final String NEW_LINE_SEPARATOR = "\n";
     private static final char DELIMITER = ',';
@@ -89,22 +89,22 @@ public class CSVHelper {
     }
 
     public static void main(String[] args) {
-        String[] headers = {"名字", "年龄", "出生地"};
-        List<String[]> data = new ArrayList<>();
-        data.add(new String[]{"小明", "22", "重庆"});
-        data.add(new String[]{"小红", "aaa", "南充"});
-        data.add(new String[]{"小强", "20", "成都"});
-        //writeCsv(headers, data, "E:/text.csv");
-        List<String[]> list = readCsv("E:/4-7.csv");
-        list.stream().map((str) -> {
-            String line = "";
-            for (String str1 : str) {
-                line += str1 + "--";
-            }
-            return line;
-        }).forEachOrdered((line) -> {
-            logger.info(line);
-        });
+//        String[] headers = {"名字", "年龄", "出生地"};
+//        List<String[]> data = new ArrayList<>();
+//        data.add(new String[]{"小明", "22", "重庆"});
+//        data.add(new String[]{"小红", "aaa", "南充"});
+//        data.add(new String[]{"小强", "20", "成都"});
+//        //writeCsv(headers, data, "E:/text.csv");
+//        List<String[]> list = readCsv("E:/4-7.csv");
+//        list.stream().map((str) -> {
+//            String line = "";
+//            for (String str1 : str) {
+//                line += str1 + "--";
+//            }
+//            return line;
+//        }).forEachOrdered((line) -> {
+//            logger.info(line);
+//        });
     }
 
 }

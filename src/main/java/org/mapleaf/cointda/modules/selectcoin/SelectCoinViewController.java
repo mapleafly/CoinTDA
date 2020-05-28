@@ -108,7 +108,7 @@ public class SelectCoinViewController implements Initializable {
         }
         //交集-dbCurId留下items中也存在的项
         dbCurId.retainAll(items);
-        
+
         dbCurId.forEach((id) -> {
             if (tableSelectedMap.containsKey(id)) {
                 tableSelectedMap.remove(id);

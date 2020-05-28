@@ -53,15 +53,6 @@ public class DruidConnection {
             InputStream ipstream = new BufferedInputStream(new FileInputStream(filePath + "/conf/druid.properties"));
             properties = new Properties();
             properties.load(ipstream);
-
-//            properties = new Properties();
-//            // 1.加载properties文件
-//            InputStream is = DruidConnection.class.getClassLoader().getResourceAsStream("druid.properties");
-//            //ResourceBundle res = ResourceBundle.getBundle("jdbc");
-//            // 2.加载输入流
-//            properties.load(is);
-//            //logger.info("properties.get(\"username\")"+properties.get("username"));
-            // 3.获取数据源
             dataSource = getDatasource();
 
         } catch (IOException e) {

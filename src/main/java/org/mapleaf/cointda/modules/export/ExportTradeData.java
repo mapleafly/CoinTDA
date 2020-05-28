@@ -41,7 +41,11 @@ public class ExportTradeData {
 
     public void handleExportData() {
         List<TradeDataBean> list = TradeDataDao.queryAll();
-        String[] headers = {"id", "coid_id", "base_symbol", "quote_id", "quote_symbol", "sale_or_buy", "price", "base_num", "quote_num", "trade_date"};
+        String[] headers = {
+            "id", "coid_id", "base_symbol", "quote_id",
+            "quote_symbol", "sale_or_buy", "price", "base_num", "quote_num",
+            "trade_date"
+        };
         if (list == null || list.isEmpty()) {
             workbench.showErrorDialog(
                     "错误",
@@ -71,7 +75,8 @@ public class ExportTradeData {
         });
         FileChooser fileChooser = new FileChooser();
         //文档类型过滤器
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("txt files (*.csv)", "*.csv");
+        FileChooser.ExtensionFilter extFilter
+                = new FileChooser.ExtensionFilter("txt files (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(workbench.getScene().getWindow());
         if (file != null) {
