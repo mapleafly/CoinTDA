@@ -33,7 +33,7 @@ public class SelectCoinModule extends WorkbenchModule {
     private static final Logger logger = LogManager.getLogger(SelectCoinModule.class.getName());
 
     public SelectCoinModule() {
-        super("选择可用币种", MaterialDesignIcon.SELECT);
+        super("可用币种管理", MaterialDesignIcon.SELECT);
     }
 
     @Override

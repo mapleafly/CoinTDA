@@ -33,7 +33,7 @@ public class CashViewModule extends WorkbenchModule {
     private static final Logger logger = LogManager.getLogger(CashViewModule.class.getName());
 
     public CashViewModule() {
-        super("出入金录入", MaterialDesignIcon.CASH);
+        super("出入金管理", MaterialDesignIcon.CASH);
     }
 
     @Override

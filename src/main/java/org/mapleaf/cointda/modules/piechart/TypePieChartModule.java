@@ -33,7 +33,7 @@ public class TypePieChartModule extends WorkbenchModule {
     private static final Logger logger = LogManager.getLogger(TypePieChartModule.class.getName());
 
     public TypePieChartModule() {
-        super("品种比例图", MaterialDesignIcon.CHART_PIE);
+        super("数据图例", MaterialDesignIcon.CHART_PIE);
     }
 
     @Override

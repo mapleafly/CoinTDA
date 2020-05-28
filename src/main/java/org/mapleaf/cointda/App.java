@@ -25,7 +25,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
-
 import javafx.scene.image.Image;
 
 import org.apache.logging.log4j.LogManager;
@@ -61,7 +60,7 @@ public class App extends Application {
 
         primaryStage.setTitle("CoinTDA");
         primaryStage.getIcons().add(new Image(
-                App.class.getResource("images/cointda.jpg").toString()));
+                App.class.getResource("images/lifng.jpg").toString()));
         primaryStage.setScene(myScene);
         primaryStage.setWidth(1000);
         primaryStage.setHeight(700);

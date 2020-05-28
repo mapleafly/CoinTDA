@@ -5,13 +5,14 @@
 :lang: en
 :toc: left
 :numbered:
-:revnumber: 2.1.1
-:revdate: 2020-04-07
+:revnumber: 2.2.0
+:revdate: 2020-05-28
 :revremark: 
 :version-label!: 
 :title: CoinTDA简介
 
 CoinTDA是一个虚拟货币交易信息记录和分析工具。本简介帮助读者快速了解CoinTDA。
+这里下载安装文件 https://github.com/mapleafly/CoinTDA/releases/download/v2.2.0/CoinTDA-Setup.exe[CoinTDA-Setup.exe]到计算机
 
 == 版本记录
 
@@ -19,7 +20,17 @@ CoinTDA是一个虚拟货币交易信息记录和分析工具。本简介帮助�
 
 版本发布日期: {revdate}
 
-版本信息: {revremark}
+版本信息: 
+
+. 增加首选项配置模块
+. 增加界面主题选择功能
+. 增加数据图例中忽略小额品种功能
+. 增加数据自动更新设置
+. 增加出入金管理模块
+. 修改界面布局
+. 修改导入导出功能，调整导出文件结构
+. 修改交易数据管理模块，增加计价货币参数
+. 修改数据库结构
 
 == 各种烦恼的问题
 
@@ -34,8 +45,8 @@ CoinTDA是一个虚拟货币交易信息记录和分析工具。本简介帮助�
 . 记录交易信息
 . 查询某品种的交易信息
 . 统计某品种的综合购入成本、个人存量、当前价值
-. 饼图直观显示各品种所占投资比例
-. 导出交易数据(csv格式)
+. 图表直观显示各品种所占投资比例
+. 导入导出交易数据(csv格式)
 
 == 特点
 
@@ -50,36 +61,49 @@ CoinTDA是一个虚拟货币交易信息记录和分析工具。本简介帮助�
 
 image::img/1.jpg[初始界面]
 
-* 录入交易信息界面 
+* 出入金管理界面 
+
+image::img/8.jpg[录入界面]
+
+* 交易数据管理界面 
 
 image::img/2.jpg[录入界面]
 
-* 饼图效果
+* 数据图例效果
 
 image::img/3.jpg[饼图效果]
 
-* 查询、价格分析 
+* 数据分析 
 
 image::img/4.jpg[价格分析]
 
-* 选择可交易品种 
+* 可交易品种管理界面
 
 image::img/5.jpg[价格分析]
 
-* 更新基础数据选择和导出交易数据 
+* 数据文件导入/导出 
 
 image::img/6.jpg[基础数据]
 
+* 更新基础数据和当前价格 
+
+image::img/7.jpg[基础数据]
+
+* 首选项设置界面
+
+image::img/9.jpg[基础数据]
+
+
 == 安装使用
 
-. 下载安装文件 https://github.com/mapleafly/CoinTDA/releases/download/v2.0/Setup.exe[setup.exe]到计算机
-. 双击运行setup.exe
+. 下载安装文件 https://github.com/mapleafly/CoinTDA/releases/download/v2.2.0/CoinTDA-Setup.exe[CoinTDA-Setup.exe]到计算机
+. 双击运行CoinTDA-Setup.exe
 . 按照安装步骤操作，你可以一直“下一步”直到完成安装。
 . 找到安装目录，windows默认安装目录在C:\Program Files (x86)\CoinTDA
 . 准备修改目录下的conf\Cryptocurrency.yml文件
 . 访问 https://coinmarketcap.com/api/[coinmarketcap]
 . 注册一个帐号，申请一个api key
-. 把apikey保存到Cryptocurrency.yml文件
+. 把apikey保存到安装目录下的conf\Cryptocurrency.yml文件
 
     文件中的第二行apiKey: 默认没有值，把申请的apikey放在这一行的冒号后面
     注意：冒号和你要输入的apikey之间要有一个空格
@@ -87,26 +111,27 @@ image::img/6.jpg[基础数据]
 . 运行cointda.exe
 . 更新基础数据
 
-    安装配置完成后，第一次开始使用，首先执行“更新基础数据”
-    以后的每次打开软件都可以点击执行“更新基础数据”
+    安装配置完成后，第一次开始使用，首先执行“更新-更新货币数据”    
     
-. 在“设置”中点击菜单“选择可用品种”，选择将来要交易的品种并保存。
+. 点击“可用品种管理”模块，选择将来要交易的品种并保存。
 
     因为Coin品种太多，软件默认没有选择可交易品种。初次使用软件，更新基础数据后，
     需要先执行此功能。这样才能在录入界面选择Coin。将来随着交易品种增多，可以在这里
     继续增减。
 
-. 去数据录入界面输入交易信息。
-. 比例图和分析表查询统计数据。
+. 去出入金管理界面输入入金信息。
+. 去交易数据管理界面录入输入交易信息。
+. 数据分析和图例查询统计数据。
+. 首选项模块可以设置各种参数。
 
 == 开发者
 
 .本项目开发所用：
-. https://adoptopenjdk.net/?variant=openjdk11&jvmVariant=hotspot[AdoptOpenJDK 11.01]
+. https://adoptopenjdk.net/?variant=openjdk11&jvmVariant=hotspot[AdoptOpenJDK 11.05]
 . https://gluonhq.com/products/javafx/[openjfx 11.0.2]
-. https://netbeans.apache.org/download/index.html[netbeans 11.2]
+. https://netbeans.apache.org/download/index.html[netbeans 11.3]
 . https://maven.apache.org/[maven]
-. 其他依赖见pom.xml
+. 其他依赖见 https://github.com/mapleafly/CoinTDA/blob/master/pom.xml[pom.xml] 
 
 
 

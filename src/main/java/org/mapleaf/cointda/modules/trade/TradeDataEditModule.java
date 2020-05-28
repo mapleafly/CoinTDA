@@ -33,7 +33,7 @@ public class TradeDataEditModule extends WorkbenchModule {
     private static final Logger logger = LogManager.getLogger(TradeDataEditModule.class.getName());
 
     public TradeDataEditModule() {
-        super("交易数据录入", MaterialDesignIcon.HAND_POINTING_RIGHT);
+        super("交易数据管理", MaterialDesignIcon.HAND_POINTING_RIGHT);
     }
 
     @Override
