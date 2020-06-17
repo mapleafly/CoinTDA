@@ -132,7 +132,7 @@ image::img/9.jpg[基础数据]
 .本项目开发所用：
 . https://adoptopenjdk.net/?variant=openjdk11&jvmVariant=hotspot[AdoptOpenJDK 11.05]
 . https://gluonhq.com/products/javafx/[openjfx 11.0.2]
-. https://netbeans.apache.org/download/index.html[netbeans 11.3]
+. https://netbeans.apache.org/download/index.html[netbeans 12.0]
 . https://maven.apache.org/[maven]
 . 其他依赖见 https://github.com/mapleafly/CoinTDA/blob/master/pom.xml[pom.xml] 
 
