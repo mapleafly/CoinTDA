@@ -18,88 +18,87 @@ package org.mapleaf.cointda.pool;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.alibaba.druid.pool.DruidPooledConnection;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.sql.DataSource;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Properties;
-import javax.sql.DataSource;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-/**
- *
- * @author xuelf
- */
+/** @author xuelf */
 public class DruidConnection {
 
-    private static final Logger logger = LogManager.getLogger(DruidConnection.class.getName());
+  private static final Logger logger = LogManager.getLogger(DruidConnection.class.getName());
 
-    private static Properties properties = null;
-    private static DruidDataSource dataSource = null;
-    private volatile static DruidConnection instatce = null;
-    private DruidPooledConnection connection = null;
+  private static Properties properties = null;
+  private static DruidDataSource dataSource = null;
+  private static volatile DruidConnection instatce = null;
 
-    //私有构造函数,防止实例化对象
-    private DruidConnection() {
+  static {
+    try {
+      // 设定为jar包的绝对路径 在IDE中运行时为project的绝对路径
+      String filePath = System.getProperty("user.dir");
+      InputStream ipstream =
+          new BufferedInputStream(new FileInputStream(filePath + "/conf/druid.properties"));
+      properties = new Properties();
+      properties.load(ipstream);
+      dataSource = getDatasource();
 
+    } catch (IOException e) {
+      logger.error(e.getMessage());
     }
+  }
 
-    static {
-        try {
-            //设定为jar包的绝对路径 在IDE中运行时为project的绝对路径
-            String filePath = System.getProperty("user.dir");
-            InputStream ipstream = new BufferedInputStream(new FileInputStream(filePath + "/conf/druid.properties"));
-            properties = new Properties();
-            properties.load(ipstream);
-            dataSource = getDatasource();
+  private DruidPooledConnection connection = null;
 
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
+  // 私有构造函数,防止实例化对象
+  private DruidConnection() {}
 
-    /**
-     * 用简单单例模式确保只返回一个链接对象
-     *
-     * @return
-     */
-    public static DruidConnection getInstace() {
+  /**
+   * @Description: 用简单单例模式确保只返回一个链接对象
+   *
+   * @return: org.mapleaf.cointda.pool.DruidConnection
+   * @author: mapleaf
+   * @date: 2020/6/23 18:40
+   */
+  public static DruidConnection getInstace() {
+    if (instatce == null) {
+      synchronized (DruidConnection.class) {
         if (instatce == null) {
-            synchronized (DruidConnection.class) {
-                if (instatce == null) {
-                    instatce = new DruidConnection();
-                }
-            }
+          instatce = new DruidConnection();
         }
-        return instatce;
+      }
     }
+    return instatce;
+  }
 
-    // 返回一个数据源
-    public DataSource getDataSource() {
-        return dataSource;
+  // 加载数据源
+  private static DruidDataSource getDatasource() {
+    DruidDataSource source = null;
+    try {
+      source = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
+    } catch (Exception e) {
+      logger.error(e.getMessage());
     }
+    return source;
+  }
 
-    // 返回一个链接
-    public DruidPooledConnection getConnection() {
-        try {
-            connection = dataSource.getConnection();
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        }
-        return connection;
+  // 返回一个数据源
+  public DataSource getDataSource() {
+    return dataSource;
+  }
+
+  // 返回一个链接
+  public DruidPooledConnection getConnection() {
+    try {
+      connection = dataSource.getConnection();
+    } catch (SQLException e) {
+      logger.error(e.getMessage());
     }
-
-    // 加载数据源
-    private static DruidDataSource getDatasource() {
-        DruidDataSource source = null;
-        try {
-            source = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-        return source;
-    }
-
+    return connection;
+  }
 }

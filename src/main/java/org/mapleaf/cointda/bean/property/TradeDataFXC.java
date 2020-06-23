@@ -18,185 +18,191 @@ package org.mapleaf.cointda.bean.property;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-/**
- *
- * @author xuelf
- */
+/** @author xuelf */
 public class TradeDataFXC {
 
-    //自增键
-    private SimpleIntegerProperty id;
-    //coin id
-    private SimpleIntegerProperty coinId;
-    //symbol交易对
-    private final SimpleStringProperty symbolPairs;
-    //买==b, 卖==s
-    private final SimpleStringProperty saleOrBuy;
-    private final SimpleStringProperty price;
-    //base数量
-    private final SimpleStringProperty baseNum;
-    //quote数量
-    private final SimpleStringProperty quoteNum;
-    private final SimpleStringProperty date;
+  // symbol交易对
+  private final SimpleStringProperty symbolPairs;
+  // 买==b, 卖==s
+  private final SimpleStringProperty saleOrBuy;
+  private final SimpleStringProperty price;
+  // base数量
+  private final SimpleStringProperty baseNum;
+  // quote数量
+  private final SimpleStringProperty quoteNum;
+  private final SimpleStringProperty date;
+  // 自增键
+  private SimpleIntegerProperty id;
+  // coin id
+  private SimpleIntegerProperty coinId;
 
-    public TradeDataFXC() {
-        this(-1, -1, null, null, "-1", "-1", "-1", null);
-    }
+  public TradeDataFXC() {
+    this(-1, -1, null, null, "-1", "-1", "-1", null);
+  }
 
-    public TradeDataFXC(Integer id, Integer coinId, String symbolPairs,
-            String saleOrBuy, String price, String baseNum, String quoteNum,
-            String date) {
-        this.id = new SimpleIntegerProperty(id);
-        this.coinId = new SimpleIntegerProperty(coinId);
-        this.symbolPairs = new SimpleStringProperty(symbolPairs);
-        this.saleOrBuy = new SimpleStringProperty(saleOrBuy);
-        this.price = new SimpleStringProperty(price);
-        this.baseNum = new SimpleStringProperty(baseNum);
-        this.quoteNum = new SimpleStringProperty(quoteNum);
-        this.date = new SimpleStringProperty(date);
-    }
+  public TradeDataFXC(
+      Integer id,
+      Integer coinId,
+      String symbolPairs,
+      String saleOrBuy,
+      String price,
+      String baseNum,
+      String quoteNum,
+      String date) {
+    this.id = new SimpleIntegerProperty(id);
+    this.coinId = new SimpleIntegerProperty(coinId);
+    this.symbolPairs = new SimpleStringProperty(symbolPairs);
+    this.saleOrBuy = new SimpleStringProperty(saleOrBuy);
+    this.price = new SimpleStringProperty(price);
+    this.baseNum = new SimpleStringProperty(baseNum);
+    this.quoteNum = new SimpleStringProperty(quoteNum);
+    this.date = new SimpleStringProperty(date);
+  }
 
-    /**
-     * @return the id
-     */
-    public Integer getId() {
-        return id.get();
-    }
+  /** @return the id */
+  public Integer getId() {
+    return id.get();
+  }
 
-    public SimpleIntegerProperty idProperty() {
-        return id;
-    }
+  /** @param id the id to set */
+  public void setId(Integer id) {
+    this.id.set(id);
+  }
 
-    /**
-     * @param id the id to set
-     */
-    public void setId(Integer id) {
-        this.id.set(id);
-    }
+  public SimpleIntegerProperty idProperty() {
+    return id;
+  }
 
-    /**
-     * @return the coinId
-     */
-    public Integer getCoinId() {
-        return coinId.get();
-    }
+  /** @return the coinId */
+  public Integer getCoinId() {
+    return coinId.get();
+  }
 
-    public SimpleIntegerProperty coinIdProperty() {
-        return coinId;
-    }
+  /** @param coinId the coinId to set */
+  public void setCoinId(Integer coinId) {
+    this.coinId.set(coinId);
+  }
 
-    /**
-     * @param coinId the coinId to set
-     */
-    public void setCoinId(Integer coinId) {
-        this.coinId.set(coinId);
-    }
+  public SimpleIntegerProperty coinIdProperty() {
+    return coinId;
+  }
 
-    /**
-     * @return the coinSymbol
-     */
-    public String getSymbolPairs() {
-        return symbolPairs.get();
-    }
+  /** @return the coinSymbol */
+  public String getSymbolPairs() {
+    return symbolPairs.get();
+  }
 
-    public SimpleStringProperty symbolPairsProperty() {
-        return symbolPairs;
-    }
+  /**
+   * @Description: set symbolPairs
+   *
+   * @param symbolPairs 1
+   * @return: void
+   * @author: mapleaf
+   * @date: 2020/6/23 17:34
+   */
+  public void setSymbolPairs(String symbolPairs) {
+    this.symbolPairs.set(symbolPairs);
+  }
 
-    /**
-     * @param symbolPairs
-     */
-    public void setSymbolPairs(String symbolPairs) {
-        this.symbolPairs.set(symbolPairs);
-    }
+  /**
+   * @Description: set symbolPairs
+   *
+   * @return: javafx.beans.property.SimpleStringProperty
+   * @author: mapleaf
+   * @date: 2020/6/23 18:53
+   */
+  public SimpleStringProperty symbolPairsProperty() {
+    return symbolPairs;
+  }
 
-    /**
-     * @return the saleOrBuy
-     */
-    public String getSaleOrBuy() {
-        return saleOrBuy.get();
-    }
+  /** @return the saleOrBuy */
+  public String getSaleOrBuy() {
+    return saleOrBuy.get();
+  }
 
-    public SimpleStringProperty saleOrBuyProperty() {
-        return saleOrBuy;
-    }
+  /** @param saleOrBuy the saleOrBuy to set */
+  public void setSaleOrBuy(String saleOrBuy) {
+    this.saleOrBuy.set(saleOrBuy);
+  }
 
-    /**
-     * @param saleOrBuy the saleOrBuy to set
-     */
-    public void setSaleOrBuy(String saleOrBuy) {
-        this.saleOrBuy.set(saleOrBuy);
-    }
+  public SimpleStringProperty saleOrBuyProperty() {
+    return saleOrBuy;
+  }
 
-    /**
-     * @return the price
-     */
-    public String getPrice() {
-        return price.get();
-    }
+  /** @return the price */
+  public String getPrice() {
+    return price.get();
+  }
 
-    public SimpleStringProperty priceProperty() {
-        return price;
-    }
+  /** @param price the price to set */
+  public void setPrice(String price) {
+    this.price.set(price);
+  }
 
-    /**
-     * @param price the price to set
-     */
-    public void setPrice(String price) {
-        this.price.set(price);
-    }
+  public SimpleStringProperty priceProperty() {
+    return price;
+  }
 
-    /**
-     * @return the num
-     */
-    public String getBaseNum() {
-        return baseNum.get();
-    }
+  /** @return the num */
+  public String getBaseNum() {
+    return baseNum.get();
+  }
 
-    public SimpleStringProperty baseNumProperty() {
-        return baseNum;
-    }
+  /**
+   * @Description: set baseNum
+   *
+   * @param baseNum 1
+   * @return: void
+   * @author: mapleaf
+   * @date: 2020/6/23 17:36
+   */
+  public void setBaseNum(String baseNum) {
+    this.baseNum.set(baseNum);
+  }
 
-    /**
-     * @param baseNum
-     */
-    public void setBaseNum(String baseNum) {
-        this.baseNum.set(baseNum);
-    }
+  /**
+   * @Description: set baseNum
+   *
+   * @return: javafx.beans.property.SimpleStringProperty
+   * @author: mapleaf
+   * @date: 2020/6/23 18:54
+   */
+  public SimpleStringProperty baseNumProperty() {
+    return baseNum;
+  }
 
-    /**
-     * @return the totalPrice
-     */
-    public String getQuoteNum() {
-        return quoteNum.get();
-    }
+  /** @return the totalPrice */
+  public String getQuoteNum() {
+    return quoteNum.get();
+  }
 
-    public SimpleStringProperty quoteNumProperty() {
-        return quoteNum;
-    }
+  /**
+   * @Description: set quoteNum
+   *
+   * @param quoteNum 1
+   * @return: void
+   * @author: mapleaf
+   * @date: 2020/6/23 17:36
+   */
+  public void setQuoteNum(String quoteNum) {
+    this.quoteNum.set(quoteNum);
+  }
 
-    /**
-     * @param quoteNum
-     */
-    public void setQuoteNum(String quoteNum) {
-        this.quoteNum.set(quoteNum);
-    }
+  public SimpleStringProperty quoteNumProperty() {
+    return quoteNum;
+  }
 
-    /**
-     * @return the date
-     */
-    public String getDate() {
-        return date.get();
-    }
+  /** @return the date */
+  public String getDate() {
+    return date.get();
+  }
 
-    public SimpleStringProperty dateProperty() {
-        return date;
-    }
+  /** @param date the date to set */
+  public void setDate(String date) {
+    this.date.set(date);
+  }
 
-    /**
-     * @param date the date to set
-     */
-    public void setDate(String date) {
-        this.date.set(date);
-    }
+  public SimpleStringProperty dateProperty() {
+    return date;
+  }
 }

@@ -17,39 +17,37 @@ package org.mapleaf.cointda.modules.prefs;
 
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/**
- *
- * @author lif
- */
+import java.io.IOException;
+
+/** @author lif */
 public class PreferencesViewModule extends WorkbenchModule {
 
-    private static final Logger logger = LogManager.getLogger(PreferencesViewModule.class.getName());
+  private static final Logger logger = LogManager.getLogger(PreferencesViewModule.class.getName());
 
-    public PreferencesViewModule() {
-        super("首选项", MaterialDesignIcon.SETTINGS);
+  public PreferencesViewModule() {
+    super("首选项", MaterialDesignIcon.SETTINGS);
+  }
+
+  @Override
+  public Node activate() {
+    AnchorPane view = null;
+    try {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(PreferencesViewModule.class.getResource("PreferencesView.fxml"));
+      view = loader.load();
+
+      PreferencesViewController controller = loader.getController();
+      controller.setWorkbench(getWorkbench());
+
+    } catch (IOException e) {
+      logger.error(e.toString());
     }
-
-    @Override
-    public Node activate() {
-        AnchorPane view = null;
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(PreferencesViewModule.class.getResource("PreferencesView.fxml"));
-            view = (AnchorPane) loader.load();
-
-            PreferencesViewController controller = loader.getController();
-            controller.setWorkbench(getWorkbench());
-
-        } catch (IOException e) {
-            logger.error(e.toString());
-        }
-        return view;
-    }
+    return view;
+  }
 }

@@ -17,38 +17,36 @@ package org.mapleaf.cointda.modules.cash;
 
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/**
- *
- * @author lif
- */
+import java.io.IOException;
+
+/** @author lif */
 public class CashViewModule extends WorkbenchModule {
 
-    private static final Logger logger = LogManager.getLogger(CashViewModule.class.getName());
+  private static final Logger logger = LogManager.getLogger(CashViewModule.class.getName());
 
-    public CashViewModule() {
-        super("出入金管理", MaterialDesignIcon.CASH);
+  public CashViewModule() {
+    super("出入金管理", MaterialDesignIcon.CASH);
+  }
+
+  @Override
+  public Node activate() {
+    AnchorPane view = null;
+    try {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(CashViewModule.class.getResource("CashView.fxml"));
+      view = loader.load();
+
+      CashViewController controller = loader.getController();
+      controller.setWorkbench(getWorkbench());
+    } catch (IOException e) {
+      logger.error(e.toString());
     }
-
-    @Override
-    public Node activate() {
-        AnchorPane view = null;
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(CashViewModule.class.getResource("CashView.fxml"));
-            view = (AnchorPane) loader.load();
-
-            CashViewController controller = loader.getController();
-            controller.setWorkbench(getWorkbench());
-        } catch (IOException e) {
-            logger.error(e.toString());
-        }
-        return view;
-    }
+    return view;
+  }
 }

@@ -17,35 +17,33 @@ package org.mapleaf.cointda.modules.piechart;
 
 import com.dlsc.workbenchfx.model.WorkbenchModule;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/**
- *
- * @author lif
- */
+import java.io.IOException;
+
+/** @author lif */
 public class TypePieChartModule extends WorkbenchModule {
 
-    private static final Logger logger = LogManager.getLogger(TypePieChartModule.class.getName());
+  private static final Logger logger = LogManager.getLogger(TypePieChartModule.class.getName());
 
-    public TypePieChartModule() {
-        super("数据图例", MaterialDesignIcon.CHART_PIE);
-    }
+  public TypePieChartModule() {
+    super("数据图例", MaterialDesignIcon.CHART_PIE);
+  }
 
-    @Override
-    public Node activate() {
-        AnchorPane view = null;
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(TypePieChartModule.class.getResource("TypePieChartView.fxml"));
-            view = (AnchorPane) loader.load();
-        } catch (IOException e) {
-            logger.error(e.toString());
-        }
-        return view;
+  @Override
+  public Node activate() {
+    AnchorPane view = null;
+    try {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(TypePieChartModule.class.getResource("TypePieChartView.fxml"));
+      view = loader.load();
+    } catch (IOException e) {
+      logger.error(e.toString());
     }
+    return view;
+  }
 }

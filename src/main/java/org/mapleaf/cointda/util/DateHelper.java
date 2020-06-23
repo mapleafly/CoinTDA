@@ -15,10 +15,11 @@
  */
 package org.mapleaf.cointda.util;
 
+import javafx.util.StringConverter;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import javafx.util.StringConverter;
 
 /**
  * Date Helper
@@ -27,86 +28,94 @@ import javafx.util.StringConverter;
  */
 public class DateHelper {
 
-    private static final String DATE_PATTERN = "yyyy-MM-dd";
-    private static final DateTimeFormatter DATE_FORMATTER
-            = DateTimeFormatter.ofPattern(DATE_PATTERN);
-
-    public static final StringConverter<LocalDate> CONVERTER
-            = new StringConverter<LocalDate>() {
+  private static final String DATE_PATTERN = "yyyy-MM-dd";
+  public static final StringConverter<LocalDate> CONVERTER =
+      new StringConverter<>() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
 
         @Override
         public String toString(LocalDate date) {
-            if (date != null) {
-                return dateFormatter.format(date);
-            } else {
-                return "";
-            }
+          if (date != null) {
+            return dateFormatter.format(date);
+          } else {
+            return "";
+          }
         }
 
         @Override
         public LocalDate fromString(String string) {
-            if (string != null && !string.isEmpty()) {
-                return LocalDate.parse(string, dateFormatter);
-            } else {
-                return null;
-            }
-        }
-    };
-
-    /**
-     *
-     * @param date
-     * @return formatted string
-     */
-    public static String toString(LocalDate date) {
-        if (date == null) {
+          if (string != null && !string.isEmpty()) {
+            return LocalDate.parse(string, dateFormatter);
+          } else {
             return null;
+          }
         }
-        return DATE_FORMATTER.format(date);
-    }
+      };
+  private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_PATTERN);
 
-    /**
-     *
-     * @param date
-     * @return the date object or null if it could not be converted
-     */
-    public static LocalDate fromString(String date) {
-        try {
-            return DATE_FORMATTER.parse(date, LocalDate::from);
-        } catch (DateTimeParseException e) {
-            return null;
-        }
+  /**
+   * @Description:
+   *
+   * @param date 1
+   * @return: java.lang.String formatted string
+   * @author: mapleaf
+   * @date: 2020/6/23 18:05
+   */
+  public static String toString(LocalDate date) {
+    if (date == null) {
+      return null;
     }
+    return DATE_FORMATTER.format(date);
+  }
 
-    /**
-     * valid date
-     *
-     * @param date
-     * @return true if the String is a valid date
-     */
-    public static boolean validDate(String date) {
-        // Try to parse the String.
-        return DateHelper.fromString(date) != null;
+  /**
+   * @Description: String转成LocalDate
+   *
+   * @param date 1
+   * @return: the date object or null if it could not be converted
+   * @author: mapleaf
+   * @date: 2020/6/23 18:07
+   */
+  public static LocalDate fromString(String date) {
+    try {
+      return DATE_FORMATTER.parse(date, LocalDate::from);
+    } catch (DateTimeParseException e) {
+      return null;
     }
+  }
 
-    public static String utcToLocal(String utc) {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        try {
-            return DATE_FORMATTER.format(format.parse(utc));
-        } catch (DateTimeParseException e) {
-            return null;
-        }
+  /**
+   * @Description: valid date
+   *
+   * @param date 1
+   * @return: boolean true if the String is a valid date
+   * @author: mapleaf
+   * @date: 2020/6/23 18:07
+   */
+  public static boolean validDate(String date) {
+    // Try to parse the String.
+    return DateHelper.fromString(date) != null;
+  }
 
+  public static String utcToLocal(String utc) {
+    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    try {
+      return DATE_FORMATTER.format(format.parse(utc));
+    } catch (DateTimeParseException e) {
+      return null;
     }
+  }
 
-    /**
-     * 计算两个日期相差的天数  newDate - oldDate
-     * @param newDate
-     * @param oldDate
-     * @return 
-     */
-    public static Long differentDays(LocalDate newDate, LocalDate oldDate) {
-        return newDate.toEpochDay() - oldDate.toEpochDay();
-    }
+  /**
+   * @Description: 计算两个日期相差的天数 newDate - oldDate
+   *
+   * @param newDate 1
+   * @param oldDate 2
+   * @return: java.lang.Long
+   * @author: mapleaf
+   * @date: 2020/6/23 18:08
+   */
+  public static Long differentDays(LocalDate newDate, LocalDate oldDate) {
+    return newDate.toEpochDay() - oldDate.toEpochDay();
+  }
 }

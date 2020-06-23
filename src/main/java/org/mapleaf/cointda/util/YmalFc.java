@@ -21,59 +21,56 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TreeTraversingParser;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mapleaf.cointda.bean.CryptocurrencyBean;
 
 /**
- *
  * @author xuelf
  * @param <T>
  */
 public class YmalFc<T> {
 
-    private static final Logger logger = LogManager.getLogger(YmalFc.class.getName());
-    private final YAMLFactory yamlFactory;
-    private final ObjectMapper mapper;
-    private final Class<T> klass;
+  private static final Logger logger = LogManager.getLogger(YmalFc.class.getName());
+  private final YAMLFactory yamlFactory;
+  private final ObjectMapper mapper;
+  private final Class<T> klass;
 
-    public YmalFc(Class<T> klass) {
-        this.klass = klass;
-        this.yamlFactory = new YAMLFactory();
-        this.mapper = new ObjectMapper();
-        mapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+  public YmalFc(Class<T> klass) {
+    this.klass = klass;
+    this.yamlFactory = new YAMLFactory();
+    this.mapper = new ObjectMapper();
+    mapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+  }
 
+  public T build(String path) {
+    T config = null;
+    try {
+      InputStream input = new FileInputStream(path);
+      // InputStream input = YmalFc.class.getResourceAsStream(path);
+      YAMLParser yamlParser = yamlFactory.createParser(input);
+      final JsonNode node = mapper.readTree(yamlParser);
+      TreeTraversingParser treeTraversingParser = new TreeTraversingParser(node);
+      config = mapper.readValue(treeTraversingParser, klass);
+    } catch (IOException e) {
+      logger.error(e.toString());
     }
+    return config;
+  }
 
-    public T build(String path) {
-        T config = null;
-        try {
-            InputStream input = new FileInputStream(path);
-            //InputStream input = YmalFc.class.getResourceAsStream(path);
-            YAMLParser yamlParser = yamlFactory.createParser(input);
-            final JsonNode node = mapper.readTree(yamlParser);
-            TreeTraversingParser treeTraversingParser = new TreeTraversingParser(node);
-            config = mapper.readValue(treeTraversingParser, klass);
-        } catch (IOException e) {
-            logger.error(e.toString());
-        }
-        return config;
-    }
+  public T build() {
+    String filePath = System.getProperty("user.dir");
+    return build(filePath + "/conf/Cryptocurrency.yml");
+  }
 
-    public T build() {
-        String filePath = System.getProperty("user.dir");
-        return build(filePath + "/conf/Cryptocurrency.yml");
-    }
-
-    public static void main(String[] args) {
-        CryptocurrencyBean contact = new CryptocurrencyBean();
-        YmalFc<CryptocurrencyBean> ymalFc = new YmalFc<>(CryptocurrencyBean.class);
-
-        String filePath = System.getProperty("user.dir");
-        contact = ymalFc.build(filePath + "/conf/Cryptocurrency.yml");
-
-    }
+  //  public static void main(String[] args) {
+  //    CryptocurrencyBean contact = new CryptocurrencyBean();
+  //    YmalFc<CryptocurrencyBean> ymalFc = new YmalFc<>(CryptocurrencyBean.class);
+  //
+  //    String filePath = System.getProperty("user.dir");
+  //    contact = ymalFc.build(filePath + "/conf/Cryptocurrency.yml");
+  //  }
 }
