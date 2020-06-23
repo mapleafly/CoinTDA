@@ -1,0 +1,14 @@
+## YAML Template.
+apiKey:
+customHeader: X-CMC_PRO_API_KEY
+httpHeader: application/json
+coinMarketCapIDMap: https://pro-api.coinmarketcap.com/v1/cryptocurrency/map
+metadata: https://pro-api.coinmarketcap.com/v1/cryptocurrency/info
+latestlistings: https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest
+historicalListings: https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/historical 
+latestQuotes: https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest 
+historicalQuotes: https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/historical
+latestMarketPairs: https://pro-api.coinmarketcap.com/v1/cryptocurrency/market-pairs/latest -
+latestOHLCV: https://pro-api.coinmarketcap.com/v1/cryptocurrency/ohlcv/latest 
+historicalOHLCV: https://pro-api.coinmarketcap.com/v1/cryptocurrency/ohlcv/historical
+pricePerformanceStats: https://pro-api.coinmarketcap.com/v1/cryptocurrency/price-performance-stats/latest 
