@@ -13,13 +13,13 @@
 *.tar.gz
 *.rar
 
+# idea
+*.iml
+
 # CoinTDA
 /target/
 /CoinTDADB/
 /logs/
-/derby.log
 /shade/
 /.idea/
-.idea
-/.idea
-*.iml
+/conf/Cryptocurrency.yml
