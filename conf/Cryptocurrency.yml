@@ -1,5 +1,5 @@
 ## YAML Template.
-apiKey: a
+apiKey:
 customHeader: X-CMC_PRO_API_KEY
 httpHeader: application/json
 coinMarketCapIDMap: https://pro-api.coinmarketcap.com/v1/cryptocurrency/map
