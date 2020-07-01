@@ -11,7 +11,7 @@
         <javafx.version>11.0.2</javafx.version>
         <mainClass>org.mapleaf.cointda.Launcher</mainClass>
         <derby.version>10.15.1.3</derby.version>
-        <log4j.version>2.12.1</log4j.version>
+        <log4j.version>2.13.3</log4j.version>
         <jackson.version>2.10.1</jackson.version>
     </properties>
     <dependencies>
