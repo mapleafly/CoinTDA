@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mapleaf.cointda.enums.BooleanEnum;
+import org.mapleaf.cointda.modules.note.NoteModule;
 import org.mapleaf.cointda.modules.baseData.CoinInfo;
 import org.mapleaf.cointda.modules.cash.CashViewModule;
 import org.mapleaf.cointda.modules.export.ExportTradeData;
@@ -170,13 +171,14 @@ public class App extends Application {
 
     workbench =
         Workbench.builder(
-                new CashViewModule(),
+                new NoteModule(),
                 new TradeDataEditModule(),
                 new PATableModule(),
                 new TypePieChartModule(),
                 new SelectCoinModule(),
+                new CashViewModule(),
                 new PreferencesViewModule())
-            .modulesPerPage(6)
+            .modulesPerPage(9)
             .toolbarLeft(fileItem, updateItem)
             // .toolbarRight( )
             // .navigationDrawerItems(item3)

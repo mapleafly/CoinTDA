@@ -5,8 +5,8 @@
 :lang: en
 :toc: left
 :numbered:
-:revnumber: 2.2.2
-:revdate: 2020-06-24
+:revnumber: 2.3.0
+:revdate: 2020-07-21
 :revremark: 
 :version-label!: 
 :title: CoinTDA简介
@@ -23,17 +23,7 @@ CoinTDA是一个虚拟货币交易信息记录和分析工具。本简介帮助�
 
 版本信息: 
 
-. 增加首选项配置模块
-. 增加界面主题选择功能
-. 增加数据图例中忽略小额品种功能
-. 增加数据自动更新设置
-. 增加出入金管理模块
-. 修改界面布局
-. 修改导入导出功能，调整导出文件结构
-. 修改交易数据管理模块，增加计价货币参数
-. 修改数据库结构
-. 修改-可用币种改变时，自动更新当前价格
-. 修改-默认USDT可用
+. 增加记事本功能
 
 == 各种烦恼的问题
 
@@ -99,7 +89,7 @@ image::img/9.jpg[基础数据]
 
 == 安装使用
 
-. 下载安装文件 https://github.com/mapleafly/CoinTDA/releases/download/v2.2.0/CoinTDA-Setup.exe[CoinTDA-Setup.exe]到计算机
+. 下载安装文件 https://github.com/mapleafly/CoinTDA/releases/download/v2.3.0/CoinTDA-Setup.exe[CoinTDA-Setup.exe]到计算机
 . 双击运行CoinTDA-Setup.exe
 . 按照安装步骤操作，你可以一直“下一步”直到完成安装。
 . 找到安装目录，windows默认安装目录在C:\Program Files (x86)\CoinTDA
