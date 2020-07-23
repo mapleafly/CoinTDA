@@ -28,11 +28,11 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mapleaf.cointda.enums.BooleanEnum;
-import org.mapleaf.cointda.modules.note.NoteModule;
 import org.mapleaf.cointda.modules.baseData.CoinInfo;
 import org.mapleaf.cointda.modules.cash.CashViewModule;
 import org.mapleaf.cointda.modules.export.ExportTradeData;
 import org.mapleaf.cointda.modules.imports.ImportTradeData;
+import org.mapleaf.cointda.modules.note.NoteModule;
 import org.mapleaf.cointda.modules.patable.PATableModule;
 import org.mapleaf.cointda.modules.piechart.TypePieChartModule;
 import org.mapleaf.cointda.modules.prefs.PreferencesViewModule;
@@ -45,6 +45,7 @@ import org.mapleaf.cointda.util.PrefsHelper;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 /** JavaFX App */
 public class App extends Application {
@@ -78,6 +79,11 @@ public class App extends Application {
     // 初始化数据库表
     InitTable.createTable();
 
+    // 异步
+    CompletableFuture.runAsync(() -> updateData());
+  }
+
+  private void updateData() {
     // 插入CoinIDMap数据
     BooleanEnum coinIDMapEnum =
         BooleanEnum.valueOf(
@@ -152,7 +158,7 @@ public class App extends Application {
                 buttonType -> {
                   if (buttonType == ButtonType.YES) {
                     CoinInfo coinInfo = new CoinInfo(workbench);
-                    coinInfo.handleUpdateCurPrice();
+                    CompletableFuture.runAsync(() -> coinInfo.handleUpdateCurPrice());
                   }
                 }));
 
@@ -165,7 +171,7 @@ public class App extends Application {
                 buttonType -> {
                   if (buttonType == ButtonType.YES) {
                     CoinInfo coinInfo = new CoinInfo(workbench);
-                    coinInfo.handleUpdateCoinIDMap();
+                    CompletableFuture.runAsync(() -> coinInfo.handleUpdateCoinIDMap());
                   }
                 }));
 

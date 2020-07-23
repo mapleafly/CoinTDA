@@ -16,6 +16,7 @@
 package org.mapleaf.cointda.modules.baseData;
 
 import com.dlsc.workbenchfx.Workbench;
+import javafx.application.Platform;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mapleaf.cointda.bean.CoinMarketCapIdBean;
@@ -81,10 +82,12 @@ public class CoinInfo {
 
   public void handleUpdateCurPrice() {
     if (updateCurPrice()) {
-      workbench.showInformationDialog("消息", "更新当前价格数据成功！", buttonType -> {});
+      Platform.runLater(
+          () -> workbench.showInformationDialog("消息", "更新当前价格数据成功！", buttonType -> {}));
     } else {
-      workbench.showErrorDialog(
-          "错误", "更新当前价格数据失败！", "请确认网络状况和网站key！/n 请确认是否选择了可用Coin。", buttonType -> {});
+      Platform.runLater(
+          () -> workbench.showErrorDialog(
+              "错误", "更新当前价格数据失败！", "请确认网络状况和网站key！/n 请确认是否选择了可用Coin。", buttonType -> {}));
     }
   }
 
@@ -117,10 +120,21 @@ public class CoinInfo {
       PrefsHelper.updatePreferencesValue(
           PrefsHelper.COINIDMAP_DATE, DateHelper.toString(LocalDate.now()));
       PrefsHelper.flushPreferences();
-
-      workbench.showInformationDialog("消息", "更新货币数据成功！", buttonType -> {});
+      Platform.runLater(
+          new Runnable() {
+            @Override
+            public void run() {
+              workbench.showInformationDialog("消息", "更新货币数据成功！", buttonType -> {});
+            }
+          });
     } else {
-      workbench.showErrorDialog("错误", "更新货币数据失败！", "请首先确认网络状况和网站key！", buttonType -> {});
+      Platform.runLater(
+          new Runnable() {
+            @Override
+            public void run() {
+              workbench.showErrorDialog("错误", "更新货币数据失败！", "请首先确认网络状况和网站key！", buttonType -> {});
+            }
+          });
     }
   }
 }
