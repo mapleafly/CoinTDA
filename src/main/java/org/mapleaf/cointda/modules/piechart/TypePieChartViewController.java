@@ -75,7 +75,7 @@ public class TypePieChartViewController implements Initializable {
       n += data.getPieValue();
     }
     final double total = n;
-    totalPrice.setText("当前总价值约:" + Math.round(total));
+    totalPrice.setText("当前总价值约:$" + Math.round(total));
     pieChart
         .getData()
         .forEach(

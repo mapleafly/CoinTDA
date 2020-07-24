@@ -74,16 +74,22 @@ public class App extends Application {
     // 设置主题
     InterfaceTheme theme = new InterfaceTheme(workbench);
     theme.initNightMode();
-    // open a module by default
-    // workbench.openModule(oneModule);
+
+    // 异步
+    CompletableFuture.runAsync(() -> initData());
+  }
+
+
+  /**
+  * @Description:  更新数据，包括：1.初始化数据库表；2。获取远程数据，更新到数据库
+  * @return: void
+  * @author: mapleaf
+  * @date: 2020/7/24 10:40
+  */
+  private void initData() {
     // 初始化数据库表
     InitTable.createTable();
 
-    // 异步
-    CompletableFuture.runAsync(() -> updateData());
-  }
-
-  private void updateData() {
     // 插入CoinIDMap数据
     BooleanEnum coinIDMapEnum =
         BooleanEnum.valueOf(

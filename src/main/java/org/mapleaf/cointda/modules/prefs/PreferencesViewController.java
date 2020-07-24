@@ -37,6 +37,9 @@ import java.util.ResourceBundle;
  */
 public class PreferencesViewController implements Initializable {
 
+  private final int PRICE_MIN = 50;
+  private final int PRICE_MAX = 5000;
+
   private Workbench workbench;
   @FXML private RadioButton lightRadio;
   @FXML private ToggleGroup modeGroup;
@@ -85,7 +88,7 @@ public class PreferencesViewController implements Initializable {
     autoCoinInfoCheck.setSelected(acEnum.equals(BooleanEnum.YES));
 
     SpinnerValueFactory<Integer> spinner =
-        new SpinnerValueFactory.IntegerSpinnerValueFactory(50, 1000, 100, 50);
+        new SpinnerValueFactory.IntegerSpinnerValueFactory(PRICE_MIN, PRICE_MAX, 100, 100);
     numSpinner.setValueFactory(spinner);
 
     String notSmallCoinValue =

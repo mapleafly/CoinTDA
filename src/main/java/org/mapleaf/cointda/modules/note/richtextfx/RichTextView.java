@@ -256,9 +256,16 @@ public class RichTextView extends AnchorPane {
         //ToolBar toolBar2 = new ToolBar(sizeCombo, familyCombo, textColorPicker, backgroundColorPicker);
 
         VirtualizedScrollPane<GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle>> vsPane = new VirtualizedScrollPane<>(area);
+        AnchorPane anchorPane = new AnchorPane();
+        anchorPane.getChildren().addAll(vsPane);
+        AnchorPane.setTopAnchor(vsPane, 0.0);
+        AnchorPane.setLeftAnchor(vsPane, 20.0);
+        AnchorPane.setRightAnchor(vsPane, 20.0);
+        AnchorPane.setBottomAnchor(vsPane, 20.0);
+
         VBox vbox = new VBox();
-        VBox.setVgrow(vsPane, Priority.ALWAYS);
-        vbox.getChildren().addAll(toolBar1, vsPane);
+        VBox.setVgrow(anchorPane, Priority.ALWAYS);
+        vbox.getChildren().addAll(toolBar1, anchorPane);
 
         this.getStylesheets().add(RichTextView.class.getResource("rich-text.css").toExternalForm());
         getChildren().addAll(vbox);
