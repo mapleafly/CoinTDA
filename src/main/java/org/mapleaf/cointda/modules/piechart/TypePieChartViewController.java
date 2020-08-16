@@ -35,10 +35,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * FXML Controller class
@@ -78,6 +75,7 @@ public class TypePieChartViewController implements Initializable {
     totalPrice.setText("当前总价值约:$" + Math.round(total));
     pieChart
         .getData()
+        .sorted()
         .forEach(
             data -> {
               // 建立货币格式化引用
@@ -165,6 +163,15 @@ public class TypePieChartViewController implements Initializable {
     list.add(new PieChart.Data("其他", otherAllPrice));
     // 计算USDT数量
     list.add(new PieChart.Data("USDT", usdtNum.doubleValue()));
+
+    Collections.sort(
+        list,
+        new Comparator<PieChart.Data>() {
+          @Override
+          public int compare(PieChart.Data o1, PieChart.Data o2) {
+            return (int) (o2.getPieValue() - o1.getPieValue());
+          }
+        });
     return list;
   }
 }

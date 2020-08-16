@@ -5,8 +5,8 @@
 :lang: en
 :toc: left
 :numbered:
-:revnumber: 2.3.1
-:revdate: 2020-07-24
+:revnumber: 2.3.2
+:revdate: 2020-08-16
 :revremark: 
 :version-label!: 
 :title: CoinTDA简介
@@ -23,10 +23,8 @@ CoinTDA是一个虚拟货币交易信息记录和分析工具。本简介帮助�
 
 版本信息: 
 
-. 增加异步获取数据功能，改善软件启动速度
-. 修改记事本界面边界宽度
-. 调整小额品种额度上下限
-. 初始化数据库按钮添加警示叹号
+. 调整饼图，按价值排序
+
 
 == 各种烦恼的问题
 
