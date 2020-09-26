@@ -281,7 +281,7 @@ public class RichTextView extends AnchorPane {
     private static String createDir(){
         String dir = null;
         String cointdaDir = System.getProperty("user.home");
-        File f1 = new File(cointdaDir, "/cointda");
+        File f1 = new File(cointdaDir, "/.cointda");
         if(f1.exists() && f1.isDirectory()){
             File f2 = new File(f1, "/note");
             if(!f2.exists() || !f2.isDirectory()){
@@ -385,6 +385,9 @@ public class RichTextView extends AnchorPane {
     }
 
     private void load(File file) {
+        if(file.length() == 0){
+            return;
+        }
         if(area.getStyleCodecs().isPresent()) {
             Tuple2<Codec<ParStyle>, Codec<StyledSegment<Either<String, LinkedImage>, TextStyle>>> codecs = area.getStyleCodecs().get();
             Codec<StyledDocument<ParStyle, Either<String, LinkedImage>, TextStyle>>
