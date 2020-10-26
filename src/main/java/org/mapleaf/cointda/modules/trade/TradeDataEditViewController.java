@@ -246,7 +246,7 @@ public class TradeDataEditViewController implements Initializable {
     }
     BigDecimal num = new BigDecimal(numTextField.getText());
     BigDecimal price = new BigDecimal(priceTextField.getText());
-    totalTextField.setText(num.multiply(price).setScale(12, RoundingMode.HALF_UP).toString());
+    totalTextField.setText(num.multiply(price).setScale(12, RoundingMode.HALF_UP).toPlainString());
   }
 
   @FXML
@@ -256,7 +256,7 @@ public class TradeDataEditViewController implements Initializable {
     }
     BigDecimal num = new BigDecimal(numTextField.getText());
     BigDecimal price = new BigDecimal(priceTextField.getText());
-    totalTextField.setText(num.multiply(price).setScale(12, RoundingMode.HALF_UP).toString());
+    totalTextField.setText(num.multiply(price).setScale(12, RoundingMode.HALF_UP).toPlainString());
   }
 
   private TradeDataFXC beanToFXC(TradeDataBean bean) {

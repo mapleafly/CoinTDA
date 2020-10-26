@@ -162,12 +162,12 @@ public class PATableViewController implements Initializable {
     if (numTotal.compareTo(new BigDecimal("0")) > 0) {
       paPrice = paPriceTotal.divide(numTotal, 12, RoundingMode.HALF_UP);
     }
-    map.put("numTotal", numTotal.setScale(12, RoundingMode.HALF_UP).toString());
+    map.put("numTotal", numTotal.setScale(12, RoundingMode.HALF_UP).toPlainString());
     map.put(
-        "nowPriceTotal", numTotal.multiply(curPrice).setScale(12, RoundingMode.HALF_UP).toString());
-    map.put("nowPrice", curPrice.setScale(12, RoundingMode.HALF_UP).toString());
-    map.put("paPriceTotal", paPriceTotal.setScale(12, RoundingMode.HALF_UP).toString());
-    map.put("paPrice", paPrice.toString());
+        "nowPriceTotal", numTotal.multiply(curPrice).setScale(12, RoundingMode.HALF_UP).toPlainString());
+    map.put("nowPrice", curPrice.setScale(12, RoundingMode.HALF_UP).toPlainString());
+    map.put("paPriceTotal", paPriceTotal.setScale(12, RoundingMode.HALF_UP).toPlainString());
+    map.put("paPrice", paPrice.toPlainString());
     return map;
   }
 
