@@ -112,12 +112,13 @@
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.4</version>
+                <version>0.0.5</version>
                 <executions>
                     <execution>
                         <!-- Default configuration for running -->
                         <id>default-cli</id>
                         <configuration>
+                            <executable>/home/lifxue/.sdkman/candidates/java/current/bin/java</executable>
                             <mainClass>${mainClass}</mainClass>
                         </configuration>
                     </execution>
