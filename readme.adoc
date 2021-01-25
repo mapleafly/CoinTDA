@@ -5,8 +5,8 @@
 :lang: en
 :toc: left
 :numbered:
-:revnumber: 2.3.2
-:revdate: 2020-08-16
+:revnumber: 2.3.3
+:revdate: 2021-01-25
 :revremark: 
 :version-label!: 
 :title: CoinTDA简介
