@@ -16,6 +16,7 @@
 package org.mapleaf.cointda.modules.imports;
 
 import com.dlsc.workbenchfx.Workbench;
+import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,6 +42,17 @@ public class ImportTradeData {
   }
 
   public void handleImportData() {
+    workbench.showConfirmationDialog(
+        "导入数据操作",
+        "这个操作会覆盖原有数据！你确定要导入新数据吗？",
+        buttonType -> {
+          if (buttonType == ButtonType.YES) {
+            importData();
+          }
+        });
+  }
+
+  public void importData() {
     FileChooser fileChooser = new FileChooser();
     // 文档类型过滤器
     FileChooser.ExtensionFilter extFilter =
@@ -68,6 +80,8 @@ public class ImportTradeData {
           CoinTypeDao.batchUpdate(listWithoutDuplicates);
         }
 
+        // 删除数据库中的原有数据
+        TradeDataDao.truncate();
         // 导入到数据库
         int[] is = TradeDataDao.batchInsert(list);
         CoinInfo info = new CoinInfo(workbench);

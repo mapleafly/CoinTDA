@@ -41,7 +41,7 @@ public class ExportTradeData {
     List<TradeDataBean> list = TradeDataDao.queryAll();
     String[] headers = {
       "id",
-      "coid_id",
+      "coin_id",
       "base_symbol",
       "quote_id",
       "quote_symbol",
