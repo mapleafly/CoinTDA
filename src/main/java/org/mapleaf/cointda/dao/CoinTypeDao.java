@@ -138,7 +138,7 @@ public class CoinTypeDao {
    * @return 返回 简称list
    */
   public static List<String> queryCurSymbol() {
-    String sql = "select symbol from TAB_CoinMarketCap_id_map " + "where is_active=1 order by rank";
+    String sql = "select symbol from TAB_CoinMarketCap_id_map " + "where is_active=1 order by symbol";
     return DBHelper.queryColumn(sql);
   }
 
