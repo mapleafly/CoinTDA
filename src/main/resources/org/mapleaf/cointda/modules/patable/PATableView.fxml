@@ -69,7 +69,7 @@
                                             </rowConstraints>
                                             <children>
                                                 <Label text="当前总价:" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                                                <Label text="当前涨幅:" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                                <Label text="当前涨幅率:" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                                 <Label text="成本单价:" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                                 <Label fx:id="curCHGLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                                     <font>
@@ -115,7 +115,7 @@
                                                 <TableColumn fx:id="idCol" prefWidth="75.0" text="id" visible="false" />
                                                 <TableColumn fx:id="coinIdCol" prefWidth="75.0" text="coinId" visible="false" />
                                                 <TableColumn fx:id="symbolPairsCol" prefWidth="75.0" text="交易对" />
-                                                <TableColumn fx:id="chgCol" prefWidth="75.0" text="当前涨跌幅" />
+                                                <TableColumn fx:id="chgCol" prefWidth="75.0" text="当前涨幅率" />
                                                 <TableColumn fx:id="buyOrSaleCol" prefWidth="75.0" text="买/卖" />
                                                 <TableColumn fx:id="priceCol" prefWidth="75.0" text="单价" />
                                                 <TableColumn fx:id="baseNumCol" prefWidth="75.0" text="Base" />
