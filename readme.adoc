@@ -5,8 +5,8 @@
 :lang: en
 :toc: left
 :numbered:
-:revnumber: 2.3.4
-:revdate: 2021-03-18
+:revnumber: 2.3.5
+:revdate: 2021-04-18
 :revremark: 
 :version-label!: 
 :title: CoinTDA简介
@@ -23,7 +23,9 @@ CoinTDA是一个虚拟货币交易信息记录和分析工具。本简介帮助�
 
 版本信息: 
 
-. 修改列表排序方式，按照简称排序
+. 在数据分析界面增加涨跌幅数据
+. 增加查询条件“查询类型”，可以指定查询分为“全部”、“买入”、“卖出”三种类型。
+
 
 
 == 各种烦恼的问题
@@ -125,7 +127,7 @@ image::img/10.jpg[记事本界面]
 
 本项目开发所用：
 
-. https://adoptopenjdk.net/?variant=openjdk11&jvmVariant=hotspot[AdoptOpenJDK 11.05]
+. https://adoptopenjdk.net/?variant=openjdk11&jvmVariant=hotspot[AdoptOpenJDK 11.0.10.9]
 . https://gluonhq.com/products/javafx/[openjfx 11.0.2]
 . https://maven.apache.org/[maven]
 . 其他依赖见 https://github.com/mapleafly/CoinTDA/blob/master/pom.xml[pom.xml] 

@@ -23,6 +23,8 @@ public class TradeDataFXC {
 
   // symbol交易对
   private final SimpleStringProperty symbolPairs;
+  //当前涨跌幅
+  private final SimpleStringProperty chg;
   // 买==b, 卖==s
   private final SimpleStringProperty saleOrBuy;
   private final SimpleStringProperty price;
@@ -37,13 +39,14 @@ public class TradeDataFXC {
   private SimpleIntegerProperty coinId;
 
   public TradeDataFXC() {
-    this(-1, -1, null, null, "-1", "-1", "-1", null);
+    this(-1, -1, null, null, null, "-1", "-1", "-1", null);
   }
 
   public TradeDataFXC(
       Integer id,
       Integer coinId,
       String symbolPairs,
+      String chg,
       String saleOrBuy,
       String price,
       String baseNum,
@@ -52,6 +55,7 @@ public class TradeDataFXC {
     this.id = new SimpleIntegerProperty(id);
     this.coinId = new SimpleIntegerProperty(coinId);
     this.symbolPairs = new SimpleStringProperty(symbolPairs);
+    this.chg = new SimpleStringProperty(chg);
     this.saleOrBuy = new SimpleStringProperty(saleOrBuy);
     this.price = new SimpleStringProperty(price);
     this.baseNum = new SimpleStringProperty(baseNum);
@@ -114,6 +118,10 @@ public class TradeDataFXC {
   public SimpleStringProperty symbolPairsProperty() {
     return symbolPairs;
   }
+
+  public String getChg(){ return  chg.get();}
+  public void setChg(String chg){this.chg.set(chg);}
+  public SimpleStringProperty chgProperty(){return chg;}
 
   /** @return the saleOrBuy */
   public String getSaleOrBuy() {

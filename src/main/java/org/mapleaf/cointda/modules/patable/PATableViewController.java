@@ -34,10 +34,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * FXML Controller class
@@ -50,10 +47,12 @@ public class PATableViewController implements Initializable {
   /** The data as an observable list of TradeData. */
   private final ObservableList<TradeDataFXC> tradeDataList;
   private final List<String> coinSymbolList;
+  private final List<String> tradeTypeList;
   @FXML private DatePicker startDatePicker;
   @FXML private DatePicker endDatePicker;
   @FXML private ChoiceBox<String> typeChoiceBox;
-  @FXML private Label coinTypeLabel;
+  @FXML private ChoiceBox<String> tradeChoiceBox;
+  @FXML private Label curCHGLabel;
   @FXML private Label paLabel;
   @FXML private Label numTotalLabel;
   @FXML private Label nowPriceTotalLabel;
@@ -63,6 +62,7 @@ public class PATableViewController implements Initializable {
   @FXML private TableColumn<TradeDataFXC, Integer> idCol;
   @FXML private TableColumn<TradeDataFXC, Integer> coinIdCol;
   @FXML private TableColumn<TradeDataFXC, String> symbolPairsCol;
+  @FXML private TableColumn<TradeDataFXC, String> chgCol;
   @FXML private TableColumn<TradeDataFXC, String> buyOrSaleCol;
   @FXML private TableColumn<TradeDataFXC, String> priceCol;
   @FXML private TableColumn<TradeDataFXC, String> baseNumCol;
@@ -76,6 +76,11 @@ public class PATableViewController implements Initializable {
     tradeDataList.addAll(list);
 
     coinSymbolList = CoinTypeDao.queryCurSymbol();
+
+    tradeTypeList = new ArrayList<>();
+    tradeTypeList.add("全部");
+    tradeTypeList.add("买");
+    tradeTypeList.add("卖");
   }
 
   /**
@@ -94,11 +99,16 @@ public class PATableViewController implements Initializable {
     idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
     coinIdCol.setCellValueFactory(new PropertyValueFactory<>("coinId"));
     symbolPairsCol.setCellValueFactory(cellData -> cellData.getValue().symbolPairsProperty());
+    chgCol.setCellValueFactory(cellData -> cellData.getValue().chgProperty());
     buyOrSaleCol.setCellValueFactory(cellData -> cellData.getValue().saleOrBuyProperty());
     priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
     baseNumCol.setCellValueFactory(new PropertyValueFactory<>("baseNum"));
     quoteNumCol.setCellValueFactory(new PropertyValueFactory<>("quoteNum"));
     dateCol.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
+
+    tradeChoiceBox.setItems(FXCollections.observableArrayList(tradeTypeList));
+    tradeChoiceBox.setValue("全部");
+    tradeChoiceBox.setTooltip(new Tooltip("选择交易类型"));
 
     typeChoiceBox.setItems(FXCollections.observableArrayList(coinSymbolList));
     typeChoiceBox.setTooltip(new Tooltip("选择交易品种"));
@@ -117,16 +127,19 @@ public class PATableViewController implements Initializable {
   @FXML
   private void handleSearchOnAction(ActionEvent event) {
     if (isInputValid()) {
+      String tradeType = this.tradeChoiceBox.getValue();
       String coinSymbol = this.typeChoiceBox.getValue();
       String startDate = DateHelper.toString(this.startDatePicker.getValue());
       String endDate = DateHelper.toString(this.endDatePicker.getValue());
 
-      List<TradeDataFXC> list = PATableDao.queryBy(coinSymbol, startDate, endDate);
+      List<TradeDataFXC> list = PATableDao.queryBy(coinSymbol, startDate, endDate, tradeType);
+
+
       tradeDataList.clear();
       tradeDataList.addAll(list);
 
       Map<String, String> mapTotal = getPAData(coinSymbol, list);
-      this.coinTypeLabel.setText(coinSymbol);
+      this.curCHGLabel.setText(mapTotal.get("curCHG"));
       this.nowPriceTotalLabel.setText(mapTotal.get("nowPriceTotal"));
       nowPriceTotalLabel.setTooltip(new Tooltip(mapTotal.get("nowPriceTotal")));
       this.paLabel.setText(mapTotal.get("paPrice"));
@@ -168,6 +181,18 @@ public class PATableViewController implements Initializable {
     map.put("nowPrice", curPrice.setScale(12, RoundingMode.HALF_UP).toPlainString());
     map.put("paPriceTotal", paPriceTotal.setScale(12, RoundingMode.HALF_UP).toPlainString());
     map.put("paPrice", paPrice.toPlainString());
+    //计算涨跌幅
+    String chg = "∞";
+    if(paPrice.compareTo(new BigDecimal("0")) <= 0){//如果成本价格小于0
+      chg = "+∞";
+    }else{
+      chg = curPrice.subtract(paPrice)
+              .divide(paPrice, 5, RoundingMode.HALF_UP)
+              .multiply(new BigDecimal("100"))
+              .setScale(2, RoundingMode.HALF_UP)
+              .toPlainString();
+    }
+    map.put("curCHG", chg + "%");
     return map;
   }
 
@@ -180,8 +205,11 @@ public class PATableViewController implements Initializable {
   private boolean isInputValid() {
     String errorMessage = "";
 
+    if (tradeChoiceBox.getValue() == null || tradeChoiceBox.getValue().length() == 0) {
+      errorMessage += "无效的交易类型!\n";
+    }
     if (typeChoiceBox.getValue() == null || typeChoiceBox.getValue().length() == 0) {
-      errorMessage += "无效的类别!\n";
+      errorMessage += "无效的Coin类别!\n";
     }
     if (!DateHelper.validDate(DateHelper.toString(startDatePicker.getValue()))
         || startDatePicker.getValue() == null) {

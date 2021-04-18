@@ -21,6 +21,8 @@
                     <children>
                         <GridPane alignment="CENTER" prefHeight="137.0" prefWidth="848.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -33,13 +35,15 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label text="起始时间:" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                <Label text="结束时间:" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                <Label text="品种名称:" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                <Button mnemonicParsing="false" onAction="#handleSearchOnAction" prefHeight="40.0" prefWidth="80.0" text="搜索" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                <DatePicker fx:id="startDatePicker" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                <DatePicker fx:id="endDatePicker" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                <ChoiceBox fx:id="typeChoiceBox" prefWidth="150.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                <Label text="起始时间:" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                <Label text="结束时间:" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                <Label text="品种名称:" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                <Button mnemonicParsing="false" onAction="#handleSearchOnAction" prefHeight="40.0" prefWidth="80.0" text="搜索" GridPane.columnIndex="8" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                <DatePicker fx:id="startDatePicker" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                <DatePicker fx:id="endDatePicker" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                <ChoiceBox fx:id="typeChoiceBox" prefWidth="150.0" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Label text="交易类型:" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <ChoiceBox fx:id="tradeChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                             </children>
                         </GridPane>
                     </children>
@@ -65,9 +69,9 @@
                                             </rowConstraints>
                                             <children>
                                                 <Label text="当前总价:" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                                                <Label text="品种名称:" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                                <Label text="当前涨幅:" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                                 <Label text="成本单价:" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                                <Label fx:id="coinTypeLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                <Label fx:id="curCHGLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                                     <font>
                                                         <Font name="System Bold" size="15.0" />
                                                     </font>
@@ -90,12 +94,12 @@
                                                 </Label>
                                                 <Label text="成本总价:" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                                 <Label text="当前单价:" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                                                <Label fx:id="PriceTotalLabel" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" >
+                                                <Label fx:id="PriceTotalLabel" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                                     <font>
                                                         <Font name="System Bold" size="15.0" />
                                                     </font>
                                                 </Label>
-                                                <Label fx:id="nowpaLabel" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" >
+                                                <Label fx:id="nowpaLabel" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                                     <font>
                                                         <Font name="System Bold" size="15.0" />
                                                     </font>
@@ -111,6 +115,7 @@
                                                 <TableColumn fx:id="idCol" prefWidth="75.0" text="id" visible="false" />
                                                 <TableColumn fx:id="coinIdCol" prefWidth="75.0" text="coinId" visible="false" />
                                                 <TableColumn fx:id="symbolPairsCol" prefWidth="75.0" text="交易对" />
+                                                <TableColumn fx:id="chgCol" prefWidth="75.0" text="当前涨跌幅" />
                                                 <TableColumn fx:id="buyOrSaleCol" prefWidth="75.0" text="买/卖" />
                                                 <TableColumn fx:id="priceCol" prefWidth="75.0" text="单价" />
                                                 <TableColumn fx:id="baseNumCol" prefWidth="75.0" text="Base" />
