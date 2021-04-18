@@ -13,7 +13,7 @@
 
 CoinTDA是一个虚拟货币交易信息记录和分析工具。本简介帮助读者快速了解CoinTDA。
 
-这里下载安装文件 https://github.com/mapleafly/CoinTDA/releases/download/v2.3.0/CoinTDA-Setup.exe[CoinTDA-Setup.exe]到计算机
+这里下载安装文件 https://github.com/mapleafly/CoinTDA/releases/download/v2.3.5/CoinTDA-Setup.exe[CoinTDA-Setup.exe]到计算机
 
 == 版本记录
 
