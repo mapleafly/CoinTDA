@@ -35,6 +35,11 @@ public class PrefsHelper {
   // 忽略小额品种
   public static final String NOTSMALLCOIN = "notsmallcoin";
   public static final String NOTSMALLCOINNUM = "notsmallcoinnum";
+  //代理设置
+  public static final String PROXY = "proxy";
+  public static final String HOST = "host";
+  public static final String PORT = "port";
+
   private static final Logger logger = LogManager.getLogger(PrefsHelper.class.getName());
   private static final Preferences preferences =
       Preferences.userRoot().node("/org/mapleaf/cointda");

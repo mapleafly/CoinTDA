@@ -1,23 +1,15 @@
 package org.mapleaf.cointda.crypto;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHeaders;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mapleaf.cointda.bean.CoinQuotesLatestBean;
 import org.mapleaf.cointda.bean.CryptocurrencyBean;
 import org.mapleaf.cointda.util.DateHelper;
+import org.mapleaf.cointda.util.HttpHelper;
 import org.mapleaf.cointda.util.YmalFc;
 
 import java.io.IOException;
@@ -25,6 +17,7 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /*
  * Copyright 2020 lif.
@@ -61,23 +54,35 @@ public class CoinQuotesLatestCollector {
     httpHeaders = contact.getHttpHeader();
   }
 
-  //  public static void main(String[] args) {
-  //    CoinQuotesLatestCollector c = new CoinQuotesLatestCollector();
-  //    List<CoinQuotesLatestBean> list = c.getQuotesLatest("id", "2,3");
-  //    // c.getQuotesLatest("symbol", "MDA,RDN");
-  //    list.forEach((bean) -> logger.info(bean));
-  //  }
+    public static void main(String[] args) {
+      CoinQuotesLatestCollector c = new CoinQuotesLatestCollector();
+      List<CoinQuotesLatestBean> list = null;
+      try {
+        list = c.getQuotesLatest("id", "1982,9444");
+      } catch (IOException e) {
+        e.printStackTrace();
+      } catch (URISyntaxException e) {
+        e.printStackTrace();
+      }
+      // c.getQuotesLatest("symbol", "MDA,RDN");
+      list.forEach((bean) -> {
+        if(bean.getSymbol().toLowerCase().equals("knc") || bean.getSymbol().toLowerCase(Locale.ROOT).equals("kncl")){
+          logger.info(bean.toString());
+        }
+      });
 
-  public List<CoinQuotesLatestBean> getQuotesLatest(String k, String v) {
+    }
+
+  public List<CoinQuotesLatestBean> getQuotesLatest(String k, String v) throws IOException, URISyntaxException {
     List<NameValuePair> paratmers = new ArrayList<>();
     paratmers.add(new BasicNameValuePair(k, v));
     paratmers.add(new BasicNameValuePair("convert", "USD"));
 
-    String result = makeAPICall(uri, paratmers);
+    String result = new HttpHelper().makeAPICall(uri, httpHeaders, customHeader, apiKey, paratmers);
     // logger.info(result);
     ObjectMapper mapper = new ObjectMapper();
     List<CoinQuotesLatestBean> list = new ArrayList<>();
-    try {
+
       JsonNode rootNode = mapper.readTree(result);
       JsonNode status = rootNode.path("status");
       if (status.get("error_code").isNull() || !status.get("error_code").asText().equals("0")) {
@@ -165,34 +170,7 @@ public class CoinQuotesLatestCollector {
         }
         list.add(bean);
       }
-    } catch (JsonProcessingException ex) {
-      logger.error(ex.toString());
-    }
+
     return list;
-  }
-
-  public String makeAPICall(String uri, List<NameValuePair> parameters) {
-    String response_content = "";
-    try {
-
-      URIBuilder query = new URIBuilder(uri);
-      query.addParameters(parameters);
-
-      CloseableHttpClient client = HttpClients.createDefault();
-      HttpGet request = new HttpGet(query.build());
-
-      request.setHeader(HttpHeaders.ACCEPT, httpHeaders);
-      request.addHeader(customHeader, apiKey);
-
-      try (CloseableHttpResponse response = client.execute(request)) {
-        // System.out.println(response.getStatusLine());
-        HttpEntity entity = response.getEntity();
-        response_content = EntityUtils.toString(entity);
-        EntityUtils.consume(entity);
-      }
-    } catch (URISyntaxException | IOException ex) {
-      logger.error(ex.toString());
-    }
-    return response_content;
   }
 }

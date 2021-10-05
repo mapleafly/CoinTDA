@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -63,6 +64,21 @@
                   <Separator layoutX="20.0" layoutY="73.0" prefHeight="0.0" prefWidth="330.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
                   <Separator layoutX="20.0" layoutY="148.0" prefHeight="0.0" prefWidth="330.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
                   <Separator layoutX="30.0" layoutY="222.0" prefHeight="0.0" prefWidth="330.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+                  <Separator layoutX="20.0" layoutY="300.0" prefHeight="3.0" prefWidth="808.0" />
+                  <HBox alignment="CENTER_LEFT" layoutX="40.0" layoutY="252.0" prefHeight="23.0" prefWidth="653.0" spacing="20.0" AnchorPane.leftAnchor="40.0">
+                     <children>
+                        <Label prefHeight="19.0" prefWidth="73.0" text="代理设置：">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <CheckBox fx:id="proxyCheck" mnemonicParsing="false" onAction="#proxyCheckOnAction" text="使用代理" />
+                        <Label prefHeight="19.0" prefWidth="61.0" text="HOST：" />
+                        <TextField fx:id="hostTextField" prefHeight="23.0" prefWidth="176.0" />
+                        <Label prefHeight="19.0" prefWidth="56.0" text="PORT：" />
+                        <TextField fx:id="portTextField" prefHeight="23.0" prefWidth="99.0" />
+                     </children>
+                  </HBox>
                </children></AnchorPane>
           <AnchorPane maxHeight="40.0" minHeight="0.0" minWidth="0.0" prefHeight="40.0" prefWidth="848.0">
                <children>

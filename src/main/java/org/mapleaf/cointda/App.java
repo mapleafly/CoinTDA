@@ -74,7 +74,6 @@ public class App extends Application {
     // 设置主题
     InterfaceTheme theme = new InterfaceTheme(workbench);
     theme.initNightMode();
-
     // 异步
     CompletableFuture.runAsync(() -> initData());
   }

@@ -48,6 +48,12 @@ public class PreferencesViewController implements Initializable {
   @FXML private CheckBox autoCoinInfoCheck;
   @FXML private CheckBox notSmallCheck;
   @FXML private Spinner<Integer> numSpinner;
+  @FXML
+  private TextField portTextField;
+  @FXML
+  private TextField hostTextField;
+  @FXML
+  private CheckBox proxyCheck;
 
   /**
    * @Description: Initializes the controller class.
@@ -60,6 +66,7 @@ public class PreferencesViewController implements Initializable {
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
+    //初始化界面主题
     lightRadio.setUserData(ThemeEnum.LIGHT);
     nightRadio.setUserData(ThemeEnum.NIGHT);
     String themeValue =
@@ -76,7 +83,7 @@ public class PreferencesViewController implements Initializable {
         lightRadio.requestFocus();
         break;
     }
-
+    //初始化自动更新设置
     String apValue =
         PrefsHelper.getPreferencesValue(PrefsHelper.UPDATEPRICE, BooleanEnum.NO.toString());
     BooleanEnum apEnum = BooleanEnum.valueOf(apValue);
@@ -87,6 +94,7 @@ public class PreferencesViewController implements Initializable {
     BooleanEnum acEnum = BooleanEnum.valueOf(acValue);
     autoCoinInfoCheck.setSelected(acEnum.equals(BooleanEnum.YES));
 
+    //初始化小额品种设置
     SpinnerValueFactory<Integer> spinner =
         new SpinnerValueFactory.IntegerSpinnerValueFactory(PRICE_MIN, PRICE_MAX, 100, 100);
     numSpinner.setValueFactory(spinner);
@@ -103,6 +111,22 @@ public class PreferencesViewController implements Initializable {
     } else {
       notSmallCheck.setSelected(false);
       numSpinner.setDisable(true);
+    }
+    //初始化代理设置
+    String proxyValue = PrefsHelper.getPreferencesValue(PrefsHelper.PROXY, BooleanEnum.NO.toString());
+    BooleanEnum proxyEnum = BooleanEnum.valueOf(proxyValue);
+    if(proxyEnum.equals(BooleanEnum.YES)){
+      proxyCheck.setSelected(true);
+      hostTextField.setDisable(false);
+      hostTextField.setText(PrefsHelper.getPreferencesValue(PrefsHelper.HOST, "127.0.0.1"));
+      portTextField.setDisable(false);
+      portTextField.setText(PrefsHelper.getPreferencesValue(PrefsHelper.PORT, "62010"));
+    }else{
+      proxyCheck.setSelected(false);
+      hostTextField.setDisable(true);
+      hostTextField.setText(PrefsHelper.getPreferencesValue(PrefsHelper.HOST, "127.0.0.1"));
+      portTextField.setDisable(true);
+      portTextField.setText(PrefsHelper.getPreferencesValue(PrefsHelper.PORT, "62010"));
     }
   }
 
@@ -136,6 +160,14 @@ public class PreferencesViewController implements Initializable {
     } else {
       PrefsHelper.updatePreferencesValue(PrefsHelper.NOTSMALLCOIN, BooleanEnum.NO.toString());
     }
+    //代理设置
+    if(proxyCheck.isSelected()){
+      PrefsHelper.updatePreferencesValue(PrefsHelper.PROXY, BooleanEnum.YES.toString());
+      PrefsHelper.updatePreferencesValue(PrefsHelper.HOST, hostTextField.getText());
+      PrefsHelper.updatePreferencesValue(PrefsHelper.PORT, portTextField.getText());
+    }else{
+      PrefsHelper.updatePreferencesValue(PrefsHelper.PROXY, BooleanEnum.NO.toString());
+    }
 
     // 刷新保存
     PrefsHelper.flushPreferences();
@@ -143,6 +175,8 @@ public class PreferencesViewController implements Initializable {
     // theme即时生效
     InterfaceTheme theme = new InterfaceTheme(workbench);
     theme.initNightMode();
+
+    workbench.showInformationDialog("消息", "设置信息保存成功！", buttonType -> {});
   }
 
   @FXML
@@ -150,12 +184,23 @@ public class PreferencesViewController implements Initializable {
     InitTable.dropTable();
     InitTable.createTable();
     CoinInfo info = new CoinInfo(workbench);
-    info.updateCoinIDMap();
-    workbench.showInformationDialog("消息", "初始化数据库成功！", buttonType -> {});
+    if(info.updateCoinIDMap()) {
+      workbench.showInformationDialog("消息", "初始化数据库成功！", buttonType -> {
+      });
+    }else{
+      workbench.showInformationDialog("消息", "初始化数据库失败！", buttonType -> {
+      });
+    }
   }
 
   @FXML
   private void handleNotSmallCheckOnAction(ActionEvent event) {
     numSpinner.setDisable(!notSmallCheck.isSelected());
+  }
+
+  @FXML
+  public void proxyCheckOnAction(ActionEvent actionEvent) {
+    hostTextField.setDisable(!proxyCheck.isSelected());
+    portTextField.setDisable(!proxyCheck.isSelected());
   }
 }

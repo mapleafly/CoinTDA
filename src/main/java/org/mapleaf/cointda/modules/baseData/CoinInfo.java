@@ -29,6 +29,8 @@ import org.mapleaf.cointda.dao.CoinTypeDao;
 import org.mapleaf.cointda.util.DateHelper;
 import org.mapleaf.cointda.util.PrefsHelper;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -67,15 +69,18 @@ public class CoinInfo {
       }
     }
     CoinQuotesLatestCollector quotesLatest = new CoinQuotesLatestCollector();
-    List<CoinQuotesLatestBean> list = quotesLatest.getQuotesLatest(k, v.toString());
-    if (list == null || list.isEmpty()) {
-      return false;
-    }
-
-    if (CoinQuotesLatestDao.truncate()) {
-      if (CoinQuotesLatestDao.batchInsert(list).length > 0) {
-        ok = true;
+    try {
+      List<CoinQuotesLatestBean> list = quotesLatest.getQuotesLatest(k, v.toString());
+      if (list == null || list.isEmpty()) {
+        return false;
       }
+      if (CoinQuotesLatestDao.truncate()) {
+        if (CoinQuotesLatestDao.batchInsert(list).length > 0) {
+          ok = true;
+        }
+      }
+    } catch (IOException |URISyntaxException e) {
+      ok = false;
     }
     return ok;
   }
@@ -87,7 +92,7 @@ public class CoinInfo {
     } else {
       Platform.runLater(
           () -> workbench.showErrorDialog(
-              "错误", "更新当前价格数据失败！", "请确认网络状况和网站key！/n 请确认是否选择了可用Coin。", buttonType -> {}));
+              "错误", "更新当前价格数据失败！", "请确认网络状况和网站key！\n 请确认是否选择了可用Coin。", buttonType -> {}));
     }
   }
 
@@ -99,17 +104,22 @@ public class CoinInfo {
    * @date: 2020/6/23 16:49
    */
   public boolean updateCoinIDMap() {
-    boolean ok;
-    CoinIDMapCollector c = new CoinIDMapCollector();
-    List<CoinMarketCapIdBean> list = c.getCoinMarketCapIds();
-    if (list == null || list.isEmpty()) {
-      return false;
+    boolean ok = false;
+    try {
+      CoinIDMapCollector c = new CoinIDMapCollector();
+      List<CoinMarketCapIdBean> list = c.getCoinMarketCapIds();
+      if (list == null || list.isEmpty()) {
+        return false;
+      }
+      List<Integer> dbCurId = CoinTypeDao.queryCurID();
+      dbCurId.add(825);
+      CoinMarketCapDao.truncate();
+      CoinMarketCapDao.batchInsert(list);
+      ok = CoinTypeDao.batchUpdate(dbCurId) == dbCurId.size();
+    } catch (URISyntaxException | IOException e) {
+      ok = false;
     }
-    List<Integer> dbCurId = CoinTypeDao.queryCurID();
-    dbCurId.add(825);
-    CoinMarketCapDao.truncate();
-    CoinMarketCapDao.batchInsert(list);
-    ok = CoinTypeDao.batchUpdate(dbCurId) == dbCurId.size();
+
     return ok;
   }
 
