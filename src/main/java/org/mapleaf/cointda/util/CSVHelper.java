@@ -26,60 +26,62 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-/** @author lif */
+/**
+ * @author lif
+ */
 public class CSVHelper {
 
-  private static final org.apache.logging.log4j.Logger logger =
-      LogManager.getLogger(CSVHelper.class.getName());
-  private static final String NEW_LINE_SEPARATOR = "\n";
-  private static final char DELIMITER = ',';
-  private static final Charset CHARSET = StandardCharsets.UTF_8;
+    private static final org.apache.logging.log4j.Logger logger =
+        LogManager.getLogger(CSVHelper.class.getName());
+    private static final String NEW_LINE_SEPARATOR = "\n";
+    private static final char DELIMITER = ',';
+    private static final Charset CHARSET = StandardCharsets.UTF_8;
 
-  public static void writeCsv(String[] header, List<String[]> data, File filePath) {
-    // 初始化csvformat
-    CSVFormat formator =
-        CSVFormat.DEFAULT
-            .withHeader(header)
-            .withRecordSeparator(NEW_LINE_SEPARATOR)
-            .withDelimiter(DELIMITER);
+    public static void writeCsv(String[] header, List<String[]> data, File filePath) {
+        // 初始化csvformat
+        CSVFormat formator =
+            CSVFormat.DEFAULT
+                .withHeader(header)
+                .withRecordSeparator(NEW_LINE_SEPARATOR)
+                .withDelimiter(DELIMITER);
 
-    try {
-      // 创建FileWriter对象
-      FileWriter fileWriter = new FileWriter(filePath, CHARSET);
-      // 创建CSVPrinter对象
-      try (CSVPrinter printer = new CSVPrinter(fileWriter, formator)) {
-        if (null != data) {
-          // 循环写入数据
-          printer.printRecords(data);
+        try {
+            // 创建FileWriter对象
+            FileWriter fileWriter = new FileWriter(filePath, CHARSET);
+            // 创建CSVPrinter对象
+            try (CSVPrinter printer = new CSVPrinter(fileWriter, formator)) {
+                if (null != data) {
+                    // 循环写入数据
+                    printer.printRecords(data);
+                }
+            } catch (Exception e) {
+                logger.error(e);
+            }
+        } catch (IOException ex) {
+            logger.error(ex);
         }
-      } catch (Exception e) {
-        logger.error(e);
-      }
-    } catch (IOException ex) {
-      logger.error(ex);
     }
-  }
 
-  public static List<String[]> readCsv(String filePath) {
-    List<String[]> data = new ArrayList<>();
-    try (Reader reader = new FileReader(filePath, CHARSET)) {
-      Iterable<CSVRecord> records =
-          CSVFormat.DEFAULT
-              // 第一行作为header
-              .withFirstRecordAsHeader()
-              .parse(reader);
-      for (CSVRecord csvRecord : records) {
-        String[] str = new String[csvRecord.size()];
-        for (int i = 0; i < csvRecord.size(); i++) {
-          str[i] = csvRecord.get(i);
+    public static List<String[]> readCsv(String filePath) {
+        List<String[]> data = new ArrayList<>();
+        try (Reader reader = new FileReader(filePath, CHARSET)) {
+            Iterable<CSVRecord> records =
+                CSVFormat.DEFAULT
+                    // 第一行作为header
+                    .withFirstRecordAsHeader()
+                    .parse(reader);
+            for (CSVRecord csvRecord : records) {
+                String[] str = new String[csvRecord.size()];
+                for (int i = 0; i < csvRecord.size(); i++) {
+                    str[i] = csvRecord.get(i);
+                }
+                data.add(str);
+            }
+        } catch (IOException ex) {
+            logger.error(ex);
         }
-        data.add(str);
-      }
-    } catch (IOException ex) {
-      logger.error(ex);
+        return data;
     }
-    return data;
-  }
 
 //  public static void main(String[] args) {
 //    String[] headers = {"名字", "年龄", "出生地"};
