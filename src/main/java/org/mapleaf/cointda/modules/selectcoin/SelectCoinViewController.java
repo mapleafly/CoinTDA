@@ -43,101 +43,109 @@ import java.util.*;
  */
 public class SelectCoinViewController implements Initializable {
 
-  private static final Logger logger =
-      LogManager.getLogger(SelectCoinViewController.class.getName());
-  private final ObservableList<CoinTypeFXC> coinTypeData;
-  @FXML private TableView<CoinTypeFXC> priceTable;
-  @FXML private TableColumn<CoinTypeFXC, String> idCol;
-  @FXML private TableColumn<CoinTypeFXC, Boolean> selectCol;
-  @FXML private TableColumn<CoinTypeFXC, String> nameCol;
-  @FXML private TableColumn<CoinTypeFXC, String> symbolCol;
-  @FXML private TableColumn<CoinTypeFXC, String> rankCol;
-  @FXML private TableColumn<CoinTypeFXC, String> dateCol;
-  @FXML private TextField searchField;
-  private Workbench workbench;
+    private static final Logger logger =
+        LogManager.getLogger(SelectCoinViewController.class.getName());
+    private final ObservableList<CoinTypeFXC> coinTypeData;
+    @FXML
+    private TableView<CoinTypeFXC> priceTable;
+    @FXML
+    private TableColumn<CoinTypeFXC, String> idCol;
+    @FXML
+    private TableColumn<CoinTypeFXC, Boolean> selectCol;
+    @FXML
+    private TableColumn<CoinTypeFXC, String> nameCol;
+    @FXML
+    private TableColumn<CoinTypeFXC, String> symbolCol;
+    @FXML
+    private TableColumn<CoinTypeFXC, String> rankCol;
+    @FXML
+    private TableColumn<CoinTypeFXC, String> dateCol;
+    @FXML
+    private TextField searchField;
+    private Workbench workbench;
 
-  public SelectCoinViewController() {
-    this.coinTypeData = FXCollections.observableArrayList();
-    List<CoinTypeFXC> list = CoinTypeDao.queryAll();
-    coinTypeData.addAll(list);
-  }
-
-  /**
-   * @Description: Initializes the controller class.
-   *
-   * @param url 1
-   * @param rb 2
-   * @return: void
-   * @author: mapleaf
-   * @date: 2020/6/23 18:49
-   */
-  @Override
-  public void initialize(URL url, ResourceBundle rb) {
-    priceTable.setItems(coinTypeData);
-    idCol.setCellValueFactory(cellData -> cellData.getValue().idProperty());
-    selectCol.setCellValueFactory(new PropertyValueFactory<>("select"));
-    selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
-
-    nameCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-    symbolCol.setCellValueFactory(cellData -> cellData.getValue().symbolProperty());
-    rankCol.setCellValueFactory(cellData -> cellData.getValue().rankProperty());
-    dateCol.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
-  }
-
-  @FXML
-  private void handleSave(ActionEvent event) {
-    List<Integer> dbCurId = CoinTypeDao.queryCurID();
-    Map<Integer, Integer> tableSelectedMap = new HashMap<>();
-    List<Integer> items = new ArrayList<>();
-    for (int i = 0; i < priceTable.getItems().size(); i++) {
-      items.add(Integer.valueOf(priceTable.getItems().get(i).getId()));
-      if (priceTable.getItems().get(i).getSelect()) {
-        tableSelectedMap.put(Integer.valueOf(priceTable.getItems().get(i).getId()), 1);
-      }
+    public SelectCoinViewController() {
+        this.coinTypeData = FXCollections.observableArrayList();
+        List<CoinTypeFXC> list = CoinTypeDao.queryAll();
+        coinTypeData.addAll(list);
     }
-    // 交集-dbCurId留下items中也存在的项
-    dbCurId.retainAll(items);
 
-    dbCurId.forEach(
-        (id) -> {
-          if (tableSelectedMap.containsKey(id)) {
-            tableSelectedMap.remove(id);
-          } else {
-            tableSelectedMap.put(id, 0);
-          }
-        });
-    if (CoinTypeDao.batchUpdate(tableSelectedMap) == tableSelectedMap.size()) {
-      // 自动更新选择coin的当前价格
-      CoinInfo info = new CoinInfo(workbench);
-      info.updateCurPrice();
+    /**
+     * @param url 1
+     * @param rb  2
+     * @Description: Initializes the controller class.
+     * @return: void
+     * @author: mapleaf
+     * @date: 2020/6/23 18:49
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        priceTable.setItems(coinTypeData);
+        idCol.setCellValueFactory(cellData -> cellData.getValue().idProperty());
+        selectCol.setCellValueFactory(new PropertyValueFactory<>("select"));
+        selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
 
-      workbench.showInformationDialog("信息", "完成可用品种保存操作！", buttonType -> {});
+        nameCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        symbolCol.setCellValueFactory(cellData -> cellData.getValue().symbolProperty());
+        rankCol.setCellValueFactory(cellData -> cellData.getValue().rankProperty());
+        dateCol.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
     }
-  }
 
-  @FXML
-  private void handleSearchFieldKeyReleased(KeyEvent event) {
-    coinTypeData.clear();
-    coinTypeData.addAll(CoinTypeDao.queryBySymbol(searchField.getText().trim()));
-    List<CoinTypeFXC> list = CoinTypeDao.queryCurFXC();
-    for (CoinTypeFXC coin : list) {
-      for (CoinTypeFXC coinTypeDatum : coinTypeData) {
-        if (coin.getId().equals(coinTypeDatum.getId())) {
-          coinTypeDatum.setSelect(true);
-          break;
+    @FXML
+    private void handleSave(ActionEvent event) {
+        List<Integer> dbCurId = CoinTypeDao.queryCurID();
+        Map<Integer, Integer> tableSelectedMap = new HashMap<>();
+        List<Integer> items = new ArrayList<>();
+        for (int i = 0; i < priceTable.getItems().size(); i++) {
+            items.add(Integer.valueOf(priceTable.getItems().get(i).getId()));
+            if (priceTable.getItems().get(i).getSelect()) {
+                tableSelectedMap.put(Integer.valueOf(priceTable.getItems().get(i).getId()), 1);
+            }
         }
-      }
-    }
-  }
+        // 交集-dbCurId留下items中也存在的项
+        dbCurId.retainAll(items);
 
-  /**
-  * @Description: set workbench
-  * @param workbench 1
-  * @return: void
-  * @author: mapleaf
-  * @date: 2020/6/23 18:51
-  */
-  public void setWorkbench(Workbench workbench) {
-    this.workbench = workbench;
-  }
+        dbCurId.forEach(
+            (id) -> {
+                if (tableSelectedMap.containsKey(id)) {
+                    tableSelectedMap.remove(id);
+                } else {
+                    tableSelectedMap.put(id, 0);
+                }
+            });
+        if (CoinTypeDao.batchUpdate(tableSelectedMap) == tableSelectedMap.size()) {
+            // 自动更新选择coin的当前价格
+            CoinInfo info = new CoinInfo(workbench);
+            info.updateCurPrice();
+
+            workbench.showInformationDialog("信息", "完成可用品种保存操作！", buttonType -> {
+            });
+        }
+    }
+
+    @FXML
+    private void handleSearchFieldKeyReleased(KeyEvent event) {
+        coinTypeData.clear();
+        coinTypeData.addAll(CoinTypeDao.queryBySymbol(searchField.getText().trim()));
+        List<CoinTypeFXC> list = CoinTypeDao.queryCurFXC();
+        for (CoinTypeFXC coin : list) {
+            for (CoinTypeFXC coinTypeDatum : coinTypeData) {
+                if (coin.getId().equals(coinTypeDatum.getId())) {
+                    coinTypeDatum.setSelect(true);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param workbench 1
+     * @Description: set workbench
+     * @return: void
+     * @author: mapleaf
+     * @date: 2020/6/23 18:51
+     */
+    public void setWorkbench(Workbench workbench) {
+        this.workbench = workbench;
+    }
 }

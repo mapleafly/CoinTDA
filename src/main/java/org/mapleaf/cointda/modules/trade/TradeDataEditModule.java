@@ -25,28 +25,30 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-/** @author lif */
+/**
+ * @author lif
+ */
 public class TradeDataEditModule extends WorkbenchModule {
 
-  private static final Logger logger = LogManager.getLogger(TradeDataEditModule.class.getName());
+    private static final Logger logger = LogManager.getLogger(TradeDataEditModule.class.getName());
 
-  public TradeDataEditModule() {
-    super("交易数据管理", MaterialDesignIcon.HAND_POINTING_RIGHT);
-  }
-
-  @Override
-  public Node activate() {
-    AnchorPane view = null;
-    try {
-      FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(TradeDataEditModule.class.getResource("TradeDataEditView.fxml"));
-      view = loader.load();
-
-      TradeDataEditViewController controller = loader.getController();
-      controller.setWorkbench(getWorkbench());
-    } catch (IOException e) {
-      logger.error(e.toString());
+    public TradeDataEditModule() {
+        super("交易数据管理", MaterialDesignIcon.HAND_POINTING_RIGHT);
     }
-    return view;
-  }
+
+    @Override
+    public Node activate() {
+        AnchorPane view = null;
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(TradeDataEditModule.class.getResource("TradeDataEditView.fxml"));
+            view = loader.load();
+
+            TradeDataEditViewController controller = loader.getController();
+            controller.setWorkbench(getWorkbench());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+        return view;
+    }
 }

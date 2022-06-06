@@ -25,29 +25,31 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-/** @author lif */
+/**
+ * @author lif
+ */
 public class SelectCoinModule extends WorkbenchModule {
 
-  private static final Logger logger = LogManager.getLogger(SelectCoinModule.class.getName());
+    private static final Logger logger = LogManager.getLogger(SelectCoinModule.class.getName());
 
-  public SelectCoinModule() {
-    super("可用币种管理", MaterialDesignIcon.SELECT);
-  }
-
-  @Override
-  public Node activate() {
-    AnchorPane view = null;
-    try {
-      FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(SelectCoinModule.class.getResource("SelectCoinView.fxml"));
-      view = loader.load();
-
-      SelectCoinViewController controller = loader.getController();
-      controller.setWorkbench(getWorkbench());
-
-    } catch (IOException e) {
-      logger.error(e.toString());
+    public SelectCoinModule() {
+        super("可用币种管理", MaterialDesignIcon.SELECT);
     }
-    return view;
-  }
+
+    @Override
+    public Node activate() {
+        AnchorPane view = null;
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SelectCoinModule.class.getResource("SelectCoinView.fxml"));
+            view = loader.load();
+
+            SelectCoinViewController controller = loader.getController();
+            controller.setWorkbench(getWorkbench());
+
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+        return view;
+    }
 }

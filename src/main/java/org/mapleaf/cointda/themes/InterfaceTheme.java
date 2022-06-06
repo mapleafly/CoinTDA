@@ -15,13 +15,14 @@
  */
 package org.mapleaf.cointda.themes;
 
-import org.mapleaf.cointda.enums.ThemeEnum;
 import com.dlsc.workbenchfx.Workbench;
 import javafx.collections.ObservableList;
+import org.mapleaf.cointda.enums.ThemeEnum;
 import org.mapleaf.cointda.util.PrefsHelper;
 
+import java.util.Objects;
+
 /**
- *
  * @author lif
  */
 public class InterfaceTheme {
@@ -36,12 +37,10 @@ public class InterfaceTheme {
         String themeValue = PrefsHelper.getPreferencesValue(PrefsHelper.THEME, ThemeEnum.LIGHT.toString());
         ThemeEnum themeEnum = ThemeEnum.valueOf(themeValue);
         switch (themeEnum) {
-            case LIGHT:
-                setNightMode(false);
-                break;
             case NIGHT:
                 setNightMode(true);
                 break;
+            case LIGHT:
             default:
                 setNightMode(false);
                 break;
@@ -49,10 +48,10 @@ public class InterfaceTheme {
     }
 
     private void setNightMode(boolean on) {
-        String customTheme = InterfaceTheme.class.getResource("customTheme.css")
-                .toExternalForm();
-        String darkTheme = InterfaceTheme.class.getResource("darkTheme.css")
-                .toExternalForm();
+        String customTheme = Objects.requireNonNull(InterfaceTheme.class.getResource("customTheme.css"))
+            .toExternalForm();
+        String darkTheme = Objects.requireNonNull(InterfaceTheme.class.getResource("darkTheme.css"))
+            .toExternalForm();
         ObservableList<String> stylesheets = workbench.getStylesheets();
         if (on) {
             stylesheets.remove(customTheme);

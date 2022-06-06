@@ -29,76 +29,78 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/** @author xuelf */
+/**
+ * @author xuelf
+ */
 public class DruidConnection {
 
-  private static final Logger logger = LogManager.getLogger(DruidConnection.class.getName());
+    private static final Logger logger = LogManager.getLogger(DruidConnection.class.getName());
 
-  private static Properties properties = null;
-  private static DruidDataSource dataSource = null;
-  private static volatile DruidConnection instatce = null;
+    private static Properties properties = null;
+    private static DruidDataSource dataSource = null;
+    private static volatile DruidConnection instatce = null;
 
-  static {
-    try {
-      // 设定为jar包的绝对路径 在IDE中运行时为project的绝对路径
-      String filePath = System.getProperty("user.dir");
-      InputStream ipstream =
-          new BufferedInputStream(new FileInputStream(filePath + "/conf/druid.properties"));
-      properties = new Properties();
-      properties.load(ipstream);
-      dataSource = getDatasource();
+    static {
+        try {
+            // 设定为jar包的绝对路径 在IDE中运行时为project的绝对路径
+            String filePath = System.getProperty("user.dir");
+            InputStream ipstream =
+                new BufferedInputStream(new FileInputStream(filePath + "/conf/druid.properties"));
+            properties = new Properties();
+            properties.load(ipstream);
+            dataSource = getDatasource();
 
-    } catch (IOException e) {
-      logger.error(e.getMessage());
-    }
-  }
-
-  private DruidPooledConnection connection = null;
-
-  // 私有构造函数,防止实例化对象
-  private DruidConnection() {}
-
-  /**
-   * @Description: 用简单单例模式确保只返回一个链接对象
-   *
-   * @return: org.mapleaf.cointda.pool.DruidConnection
-   * @author: mapleaf
-   * @date: 2020/6/23 18:40
-   */
-  public static DruidConnection getInstace() {
-    if (instatce == null) {
-      synchronized (DruidConnection.class) {
-        if (instatce == null) {
-          instatce = new DruidConnection();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
         }
-      }
     }
-    return instatce;
-  }
 
-  // 加载数据源
-  private static DruidDataSource getDatasource() {
-    DruidDataSource source = null;
-    try {
-      source = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
-    } catch (Exception e) {
-      logger.error(e.getMessage());
+    private DruidPooledConnection connection = null;
+
+    // 私有构造函数,防止实例化对象
+    private DruidConnection() {
     }
-    return source;
-  }
 
-  // 返回一个数据源
-  public DataSource getDataSource() {
-    return dataSource;
-  }
-
-  // 返回一个链接
-  public DruidPooledConnection getConnection() {
-    try {
-      connection = dataSource.getConnection();
-    } catch (SQLException e) {
-      logger.error(e.getMessage());
+    /**
+     * @Description: 用简单单例模式确保只返回一个链接对象
+     * @return: org.mapleaf.cointda.pool.DruidConnection
+     * @author: mapleaf
+     * @date: 2020/6/23 18:40
+     */
+    public static DruidConnection getInstace() {
+        if (instatce == null) {
+            synchronized (DruidConnection.class) {
+                if (instatce == null) {
+                    instatce = new DruidConnection();
+                }
+            }
+        }
+        return instatce;
     }
-    return connection;
-  }
+
+    // 加载数据源
+    private static DruidDataSource getDatasource() {
+        DruidDataSource source = null;
+        try {
+            source = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return source;
+    }
+
+    // 返回一个数据源
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    // 返回一个链接
+    public DruidPooledConnection getConnection() {
+        try {
+            connection = dataSource.getConnection();
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        }
+        return connection;
+    }
 }
