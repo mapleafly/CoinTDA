@@ -47,158 +47,160 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-/** JavaFX App */
+/**
+ * JavaFX App
+ */
 public class App extends Application {
 
-  private static final Logger logger = LogManager.getLogger(App.class.getName());
+    private static final Logger logger = LogManager.getLogger(App.class.getName());
 
-  private Workbench workbench;
+    private Workbench workbench;
 
-  public static void main(String[] args) {
-    launch();
-  }
-
-  @Override
-  public void start(Stage primaryStage) {
-
-    Scene myScene = new Scene(initWorkbench());
-
-    primaryStage.setTitle("CoinTDA");
-    primaryStage.getIcons().add(new Image(App.class.getResource("images/lifng.jpg").toString()));
-    primaryStage.setScene(myScene);
-    primaryStage.setWidth(1000);
-    primaryStage.setHeight(700);
-    primaryStage.show();
-    primaryStage.centerOnScreen();
-
-    // 设置主题
-    InterfaceTheme theme = new InterfaceTheme(workbench);
-    theme.initNightMode();
-    // 异步
-    CompletableFuture.runAsync(() -> initData());
-  }
-
-
-  /**
-  * @Description:  更新数据，包括：1.初始化数据库表；2。获取远程数据，更新到数据库
-  * @return: void
-  * @author: mapleaf
-  * @date: 2020/7/24 10:40
-  */
-  private void initData() {
-    // 初始化数据库表
-    InitTable.createTable();
-
-    // 插入CoinIDMap数据
-    BooleanEnum coinIDMapEnum =
-        BooleanEnum.valueOf(
-            PrefsHelper.getPreferencesValue(PrefsHelper.COINIDMAP, BooleanEnum.YES.toString()));
-    if (coinIDMapEnum.equals(BooleanEnum.YES)) {
-      String oldDate = PrefsHelper.getPreferencesValue(PrefsHelper.COINIDMAP_DATE, "2009-10-10");
-      // 计算天数
-      Long numDay =
-          DateHelper.differentDays(
-              LocalDate.now(), Objects.requireNonNull(DateHelper.fromString(oldDate)));
-      if (numDay >= 30) {
-        CoinInfo info = new CoinInfo(workbench);
-        info.handleUpdateCoinIDMap();
-      }
+    public static void main(String[] args) {
+        launch();
     }
-    // 更新价格
-    BooleanEnum apEnum =
-        BooleanEnum.valueOf(
-            PrefsHelper.getPreferencesValue(PrefsHelper.UPDATEPRICE, BooleanEnum.NO.toString()));
-    if (apEnum.equals(BooleanEnum.YES)) {
-      CoinInfo info = new CoinInfo(workbench);
-      info.handleUpdateCurPrice();
+
+    @Override
+    public void start(Stage primaryStage) {
+
+        Scene myScene = new Scene(initWorkbench());
+
+        primaryStage.setTitle("CoinTDA");
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(App.class.getResource("images/lifng.jpg")).toString()));
+        primaryStage.setScene(myScene);
+        primaryStage.setWidth(1000);
+        primaryStage.setHeight(700);
+        primaryStage.show();
+        primaryStage.centerOnScreen();
+
+        // 设置主题
+        InterfaceTheme theme = new InterfaceTheme(workbench);
+        theme.initNightMode();
+        // 异步
+        CompletableFuture.runAsync(this::initData);
     }
-  }
 
-  private Workbench initWorkbench() {
-    // layoutParts
-    // 导入CSV菜单项
-    MenuItem importItem =
-        new MenuItem("导入CSV", new MaterialDesignIconView(MaterialDesignIcon.IMPORT));
-    // 导出CSV菜单项
-    MenuItem exportItem =
-        new MenuItem("导出CSV", new MaterialDesignIconView(MaterialDesignIcon.EXPORT));
-    // 更新现价菜单项
-    MenuItem updatePriceItem =
-        new MenuItem("更新现价", new MaterialDesignIconView(MaterialDesignIcon.BANK));
-    // 更新MarketCap货币信息菜单项
-    MenuItem coinMapItem =
-        new MenuItem("更新货币数据", new MaterialDesignIconView(MaterialDesignIcon.DOWNLOAD));
 
-    // 文件菜单
-    ToolbarItem fileItem =
-        new ToolbarItem(
-            "文件", new MaterialDesignIconView(MaterialDesignIcon.FILE_WORD), importItem, exportItem);
-    // update菜单
-    ToolbarItem updateItem =
-        new ToolbarItem(
-            "更新",
-            new MaterialDesignIconView(MaterialDesignIcon.UPDATE),
-            coinMapItem,
-            updatePriceItem);
+    /**
+     * @Description: 更新数据，包括：1.初始化数据库表；2。获取远程数据，更新到数据库
+     * @return: void
+     * @author: mapleaf
+     * @date: 2020/7/24 10:40
+     */
+    private void initData() {
+        // 初始化数据库表
+        InitTable.createTable();
 
-    // setupEventHandlers
-    // 导入交易数据
-    importItem.setOnAction(
-        event -> {
-          ImportTradeData importData = new ImportTradeData(workbench);
-          importData.handleImportData();
-        });
-    // 导出交易数据
-    exportItem.setOnAction(
-        event -> {
-          ExportTradeData exportData = new ExportTradeData(workbench);
-          exportData.handleExportData();
-        });
-    // 更新现价
-    updatePriceItem.setOnAction(
-        event ->
-            workbench.showConfirmationDialog(
-                "更新当前价格",
-                "你确定要更新当前价格数据吗？",
-                buttonType -> {
-                  if (buttonType == ButtonType.YES) {
-                    CoinInfo coinInfo = new CoinInfo(workbench);
-                    CompletableFuture.runAsync(() -> coinInfo.handleUpdateCurPrice());
-                  }
-                }));
+        // 插入CoinIDMap数据
+        BooleanEnum coinIDMapEnum =
+            BooleanEnum.valueOf(
+                PrefsHelper.getPreferencesValue(PrefsHelper.COINIDMAP, BooleanEnum.YES.toString()));
+        if (coinIDMapEnum.equals(BooleanEnum.YES)) {
+            String oldDate = PrefsHelper.getPreferencesValue(PrefsHelper.COINIDMAP_DATE, "2009-10-10");
+            // 计算天数
+            Long numDay =
+                DateHelper.differentDays(
+                    LocalDate.now(), Objects.requireNonNull(DateHelper.fromString(oldDate)));
+            if (numDay >= 30) {
+                CoinInfo info = new CoinInfo(workbench);
+                info.handleUpdateCoinIDMap();
+            }
+        }
+        // 更新价格
+        BooleanEnum apEnum =
+            BooleanEnum.valueOf(
+                PrefsHelper.getPreferencesValue(PrefsHelper.UPDATEPRICE, BooleanEnum.NO.toString()));
+        if (apEnum.equals(BooleanEnum.YES)) {
+            CoinInfo info = new CoinInfo(workbench);
+            info.handleUpdateCurPrice();
+        }
+    }
 
-    // 更新货币数据
-    coinMapItem.setOnAction(
-        event ->
-            workbench.showConfirmationDialog(
-                "更新货币数据",
-                "你确定要更新货币数据吗？",
-                buttonType -> {
-                  if (buttonType == ButtonType.YES) {
-                    CoinInfo coinInfo = new CoinInfo(workbench);
-                    CompletableFuture.runAsync(() -> coinInfo.handleUpdateCoinIDMap());
-                  }
-                }));
+    private Workbench initWorkbench() {
+        // layoutParts
+        // 导入CSV菜单项
+        MenuItem importItem =
+            new MenuItem("导入CSV", new MaterialDesignIconView(MaterialDesignIcon.IMPORT));
+        // 导出CSV菜单项
+        MenuItem exportItem =
+            new MenuItem("导出CSV", new MaterialDesignIconView(MaterialDesignIcon.EXPORT));
+        // 更新现价菜单项
+        MenuItem updatePriceItem =
+            new MenuItem("更新现价", new MaterialDesignIconView(MaterialDesignIcon.BANK));
+        // 更新MarketCap货币信息菜单项
+        MenuItem coinMapItem =
+            new MenuItem("更新货币数据", new MaterialDesignIconView(MaterialDesignIcon.DOWNLOAD));
 
-    workbench =
-        Workbench.builder(
-                new NoteModule(),
-                new TradeDataEditModule(),
-                new PATableModule(),
-                new TypePieChartModule(),
-                new SelectCoinModule(),
-                new CashViewModule(),
-                new PreferencesViewModule())
-            .modulesPerPage(9)
-            .toolbarLeft(fileItem, updateItem)
-            // .toolbarRight( )
-            // .navigationDrawerItems(item3)
-            .build();
+        // 文件菜单
+        ToolbarItem fileItem =
+            new ToolbarItem(
+                "文件", new MaterialDesignIconView(MaterialDesignIcon.FILE_WORD), importItem, exportItem);
+        // update菜单
+        ToolbarItem updateItem =
+            new ToolbarItem(
+                "更新",
+                new MaterialDesignIconView(MaterialDesignIcon.UPDATE),
+                coinMapItem,
+                updatePriceItem);
 
-    return workbench;
-  }
+        // setupEventHandlers
+        // 导入交易数据
+        importItem.setOnAction(
+            event -> {
+                ImportTradeData importData = new ImportTradeData(workbench);
+                importData.handleImportData();
+            });
+        // 导出交易数据
+        exportItem.setOnAction(
+            event -> {
+                ExportTradeData exportData = new ExportTradeData(workbench);
+                exportData.handleExportData();
+            });
+        // 更新现价
+        updatePriceItem.setOnAction(
+            event ->
+                workbench.showConfirmationDialog(
+                    "更新当前价格",
+                    "你确定要更新当前价格数据吗？",
+                    buttonType -> {
+                        if (buttonType == ButtonType.YES) {
+                            CoinInfo coinInfo = new CoinInfo(workbench);
+                            CompletableFuture.runAsync(coinInfo::handleUpdateCurPrice);
+                        }
+                    }));
 
-  public Workbench getWorkbench() {
-    return workbench;
-  }
+        // 更新货币数据
+        coinMapItem.setOnAction(
+            event ->
+                workbench.showConfirmationDialog(
+                    "更新货币数据",
+                    "你确定要更新货币数据吗？",
+                    buttonType -> {
+                        if (buttonType == ButtonType.YES) {
+                            CoinInfo coinInfo = new CoinInfo(workbench);
+                            CompletableFuture.runAsync(coinInfo::handleUpdateCoinIDMap);
+                        }
+                    }));
+
+        workbench =
+            Workbench.builder(
+                    new NoteModule(),
+                    new TradeDataEditModule(),
+                    new PATableModule(),
+                    new TypePieChartModule(),
+                    new SelectCoinModule(),
+                    new CashViewModule(),
+                    new PreferencesViewModule())
+                .modulesPerPage(9)
+                .toolbarLeft(fileItem, updateItem)
+                // .toolbarRight( )
+                // .navigationDrawerItems(item3)
+                .build();
+
+        return workbench;
+    }
+
+    public Workbench getWorkbench() {
+        return workbench;
+    }
 }
