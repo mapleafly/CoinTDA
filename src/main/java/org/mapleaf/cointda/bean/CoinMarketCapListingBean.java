@@ -16,7 +16,6 @@
 package org.mapleaf.cointda.bean;
 
 /**
- *
  * @author xuelf
  */
 public class CoinMarketCapListingBean {
@@ -329,24 +328,24 @@ public class CoinMarketCapListingBean {
     @Override
     public String toString() {
         return "CoinMarketListing [id:" + getId()
-                + ",name:" + this.getName()
-                + ",symbol:" + this.getSymbol()
-                + ",slug:" + this.getSlug()
-                + ",cmc_rank:" + this.getCmc_rank()
-                + ",date_added:" + this.getDate_added()
-                + ",platform_id:" + this.getPlatform_id()
-                + ",token_address:" + this.getToken_address()
-                + ",numMarketPairs:" + this.getNumMarketPairs()
-                + ",max_supply:" + this.getMaxSupply()
-                + ",circulating_supply:" + this.getCirculatingSupply()
-                + ",total_supply:" + this.getTotalSupply()
-                + ",price:" + this.getPrice()
-                + ",volume_24h:" + this.getVolume_24h()
-                + ",percent_change_1h:" + this.getPercent_change_1h()
-                + ",percent_change_24h:" + this.getPercent_change_24h()
-                + ",percent_change_7d:" + this.getPercent_change_7d()
-                + ",market_cap:" + this.getMarketCap()
-                + ",last_updated:" + this.getLastUpdated()
-                + "]";
+            + ",name:" + this.getName()
+            + ",symbol:" + this.getSymbol()
+            + ",slug:" + this.getSlug()
+            + ",cmc_rank:" + this.getCmc_rank()
+            + ",date_added:" + this.getDate_added()
+            + ",platform_id:" + this.getPlatform_id()
+            + ",token_address:" + this.getToken_address()
+            + ",numMarketPairs:" + this.getNumMarketPairs()
+            + ",max_supply:" + this.getMaxSupply()
+            + ",circulating_supply:" + this.getCirculatingSupply()
+            + ",total_supply:" + this.getTotalSupply()
+            + ",price:" + this.getPrice()
+            + ",volume_24h:" + this.getVolume_24h()
+            + ",percent_change_1h:" + this.getPercent_change_1h()
+            + ",percent_change_24h:" + this.getPercent_change_24h()
+            + ",percent_change_7d:" + this.getPercent_change_7d()
+            + ",market_cap:" + this.getMarketCap()
+            + ",last_updated:" + this.getLastUpdated()
+            + "]";
     }
 }

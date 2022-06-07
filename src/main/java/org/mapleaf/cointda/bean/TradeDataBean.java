@@ -17,11 +17,10 @@ package org.mapleaf.cointda.bean;
 
 
 /**
- *
  * @author xuelf
  */
 public class TradeDataBean {
-    
+
     //自增id
     private Integer id;
     //base coin id
@@ -56,7 +55,7 @@ public class TradeDataBean {
     public void setId(Integer id) {
         this.id = id;
     }
-  
+
     /**
      * @return the base_id
      */
@@ -141,7 +140,7 @@ public class TradeDataBean {
         this.price = price;
     }
 
-        /**
+    /**
      * @return the base_num
      */
     public String getBase_num() {
@@ -168,7 +167,7 @@ public class TradeDataBean {
     public void setQuote_num(String quote_num) {
         this.quote_num = quote_num;
     }
-    
+
     /**
      * @return the trade_date
      */
@@ -182,20 +181,20 @@ public class TradeDataBean {
     public void setTrade_date(String trade_date) {
         this.trade_date = trade_date;
     }
-    
+
     @Override
-    public String toString(){
-         return "Trade_Data [id:" + getId()
-                + ",baseCoin_id:" + this.getBase_id()
-                + ",baseCoin_symbol:" + this.getBase_symbol()
-                + ",quoteCoin_id:" + this.getQuote_id()
-                + ",quoteCoin_symbol:" + this.getQuote_symbol()
-                + ",sale_or_buy:" + this.getSale_or_buy()
-                + ",price:" + this.getPrice()
-                + ",base_num:" + this.getBase_num()
-                + ",quote_num:" + this.getQuote_num()
-                + ",trade_date:" + this.getTrade_date()
-                + "]";
+    public String toString() {
+        return "Trade_Data [id:" + getId()
+            + ",baseCoin_id:" + this.getBase_id()
+            + ",baseCoin_symbol:" + this.getBase_symbol()
+            + ",quoteCoin_id:" + this.getQuote_id()
+            + ",quoteCoin_symbol:" + this.getQuote_symbol()
+            + ",sale_or_buy:" + this.getSale_or_buy()
+            + ",price:" + this.getPrice()
+            + ",base_num:" + this.getBase_num()
+            + ",quote_num:" + this.getQuote_num()
+            + ",trade_date:" + this.getTrade_date()
+            + "]";
     }
 
 

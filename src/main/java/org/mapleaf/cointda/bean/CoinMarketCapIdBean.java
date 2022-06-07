@@ -18,7 +18,6 @@ package org.mapleaf.cointda.bean;
 import java.util.Objects;
 
 /**
- *
  * @author xuelf
  */
 public class CoinMarketCapIdBean {
@@ -181,16 +180,16 @@ public class CoinMarketCapIdBean {
     @Override
     public String toString() {
         return "CoinMarketCapId [id:" + getId()
-                + ",name:" + getName()
-                + ",symbol:" + getSymbol()
-                + ",slug:" + getSlug()
-                + ",is_active:" + getIs_active()
-                + ",rank:" + getRank()
-                + ",first_historical_data:" + getFirst_historical_data()
-                + ",last_historical_data:" + getLast_historical_data()
-                + ",platform_id:" + getPlatform_id()
-                + ",token_address:" + getToken_address()
-                + "]";
+            + ",name:" + getName()
+            + ",symbol:" + getSymbol()
+            + ",slug:" + getSlug()
+            + ",is_active:" + getIs_active()
+            + ",rank:" + getRank()
+            + ",first_historical_data:" + getFirst_historical_data()
+            + ",last_historical_data:" + getLast_historical_data()
+            + ",platform_id:" + getPlatform_id()
+            + ",token_address:" + getToken_address()
+            + "]";
     }
 
     @Override

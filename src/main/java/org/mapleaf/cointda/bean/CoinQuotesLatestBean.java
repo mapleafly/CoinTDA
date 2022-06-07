@@ -16,7 +16,6 @@
 package org.mapleaf.cointda.bean;
 
 /**
- *
  * @author lif
  */
 public class CoinQuotesLatestBean {
@@ -360,27 +359,27 @@ public class CoinQuotesLatestBean {
     @Override
     public String toString() {
         return "CoinQuotesLatestBean ["
-                + "id:" + getId()
-                + ",name:" + this.getName()
-                + ",symbol:" + this.getSymbol()
-                + ",slug:" + this.getSlug()
-                + ",num_market_pairs:" + this.getNum_market_pairs()
-                + ",date_added:" + this.getDate_added()
-                + ",max_supply:" + this.getMax_supply()
-                + ",circulating_supply:" + this.getCirculating_supply()
-                + ",total_supply:" + this.getTotal_supply()
-                + ",is_active:" + this.getIs_active()
-                + ",platform_id:" + this.getPlatform_id()
-                + ",token_address:" + this.getToken_address()
-                + ",cmc_rank:" + this.getCmc_rank()
-                + ",is_fiat:" + this.getIs_fiat()
-                + ",last_updated:" + this.getLastUpdated()
-                + ",price:" + this.getPrice()
-                + ",volume_24h:" + this.getVolume_24h()
-                + ",percent_change_1h:" + this.getPercent_change_1h()
-                + ",percent_change_24h:" + this.getPercent_change_24h()
-                + ",percent_change_7d:" + this.getPercent_change_7d()
-                + ",market_cap:" + this.getMarket_cap()
-                + "]";
+            + "id:" + getId()
+            + ",name:" + this.getName()
+            + ",symbol:" + this.getSymbol()
+            + ",slug:" + this.getSlug()
+            + ",num_market_pairs:" + this.getNum_market_pairs()
+            + ",date_added:" + this.getDate_added()
+            + ",max_supply:" + this.getMax_supply()
+            + ",circulating_supply:" + this.getCirculating_supply()
+            + ",total_supply:" + this.getTotal_supply()
+            + ",is_active:" + this.getIs_active()
+            + ",platform_id:" + this.getPlatform_id()
+            + ",token_address:" + this.getToken_address()
+            + ",cmc_rank:" + this.getCmc_rank()
+            + ",is_fiat:" + this.getIs_fiat()
+            + ",last_updated:" + this.getLastUpdated()
+            + ",price:" + this.getPrice()
+            + ",volume_24h:" + this.getVolume_24h()
+            + ",percent_change_1h:" + this.getPercent_change_1h()
+            + ",percent_change_24h:" + this.getPercent_change_24h()
+            + ",percent_change_7d:" + this.getPercent_change_7d()
+            + ",market_cap:" + this.getMarket_cap()
+            + "]";
     }
 }
