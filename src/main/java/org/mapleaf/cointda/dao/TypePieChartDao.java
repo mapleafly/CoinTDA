@@ -23,28 +23,29 @@ import org.mapleaf.cointda.pool.DBHelper;
 
 import java.util.List;
 
-/** @author xuelf */
+/**
+ * @author xuelf
+ */
 public class TypePieChartDao {
 
-  private static final Logger logger = LogManager.getLogger(TypePieChartDao.class.getName());
+    private static final Logger logger = LogManager.getLogger(TypePieChartDao.class.getName());
 
-  public static List<TradeDataBean> queryAllTradeData() {
-    String sql = "select * from tab_tradeinfo";
-    return DBHelper.queryList(TradeDataBean.class, sql);
-  }
+    public static List<TradeDataBean> queryAllTradeData() {
+        String sql = "select * from tab_tradeinfo";
+        return DBHelper.queryList(TradeDataBean.class, sql);
+    }
 
-  /**
-   * @Description: 找出有交易记录的coin的现价
-   *
-   * @return: java.util.List<org.mapleaf.cointda.bean.CoinQuotesLatestBean>
-   * @author: mapleaf
-   * @date: 2020/6/23 18:23
-   */
-  public static List<CoinQuotesLatestBean> queryByTradeData() {
-    String sql =
-        "select * from tab_quotesLatest where id in"
-            + " (select base_id from tab_tradeinfo group by base_id ) "
-            + "order by cmc_rank";
-    return DBHelper.queryList(CoinQuotesLatestBean.class, sql);
-  }
+    /**
+     * @Description: 找出有交易记录的coin的现价
+     * @return: java.util.List<org.mapleaf.cointda.bean.CoinQuotesLatestBean>
+     * @author: mapleaf
+     * @date: 2020/6/23 18:23
+     */
+    public static List<CoinQuotesLatestBean> queryByTradeData() {
+        String sql =
+            "select * from tab_quotesLatest where id in"
+                + " (select base_id from tab_tradeinfo group by base_id ) "
+                + "order by cmc_rank";
+        return DBHelper.queryList(CoinQuotesLatestBean.class, sql);
+    }
 }
