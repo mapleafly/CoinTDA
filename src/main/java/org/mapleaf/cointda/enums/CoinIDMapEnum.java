@@ -16,7 +16,8 @@
 package org.mapleaf.cointda.enums;
 
 /**
- *CoinIDMap更新参数
+ * CoinIDMap更新参数
+ *
  * @author lif
  */
 public enum CoinIDMapEnum {

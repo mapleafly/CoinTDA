@@ -48,9 +48,11 @@ class ParStyle {
     final Optional<TextAlignment> alignment;
     final Optional<Color> backgroundColor;
     final Optional<Indent> indent;
+
     public ParStyle() {
         this(Optional.empty(), Optional.empty(), Optional.empty());
     }
+
     public ParStyle(Optional<TextAlignment> alignment, Optional<Color> backgroundColor) {
         this(alignment, backgroundColor, Optional.empty());
     }
@@ -61,15 +63,25 @@ class ParStyle {
         this.indent = indent;
     }
 
-    public static ParStyle alignLeft() { return EMPTY.updateAlignment(LEFT); }
+    public static ParStyle alignLeft() {
+        return EMPTY.updateAlignment(LEFT);
+    }
 
-    public static ParStyle alignCenter() { return EMPTY.updateAlignment(CENTER); }
+    public static ParStyle alignCenter() {
+        return EMPTY.updateAlignment(CENTER);
+    }
 
-    public static ParStyle alignRight() { return EMPTY.updateAlignment(RIGHT); }
+    public static ParStyle alignRight() {
+        return EMPTY.updateAlignment(RIGHT);
+    }
 
-    public static ParStyle alignJustify() { return EMPTY.updateAlignment(JUSTIFY); }
+    public static ParStyle alignJustify() {
+        return EMPTY.updateAlignment(JUSTIFY);
+    }
 
-    public static ParStyle backgroundColor(Color color) { return EMPTY.updateBackgroundColor(color); }
+    public static ParStyle backgroundColor(Color color) {
+        return EMPTY.updateBackgroundColor(color);
+    }
 
     @Override
     public int hashCode() {
@@ -78,10 +90,10 @@ class ParStyle {
 
     @Override
     public boolean equals(Object other) {
-        if(other instanceof ParStyle) {
+        if (other instanceof ParStyle) {
             ParStyle that = (ParStyle) other;
             return Objects.equals(this.alignment, that.alignment) &&
-                   Objects.equals(this.backgroundColor, that.backgroundColor);
+                Objects.equals(this.backgroundColor, that.backgroundColor);
         } else {
             return false;
         }
@@ -97,12 +109,21 @@ class ParStyle {
 
         alignment.ifPresent(al -> {
             String cssAlignment;
-            switch(al) {
-                case LEFT:    cssAlignment = "left";    break;
-                case CENTER:  cssAlignment = "center";  break;
-                case RIGHT:   cssAlignment = "right";   break;
-                case JUSTIFY: cssAlignment = "justify"; break;
-                default: throw new AssertionError("unreachable code");
+            switch (al) {
+                case LEFT:
+                    cssAlignment = "left";
+                    break;
+                case CENTER:
+                    cssAlignment = "center";
+                    break;
+                case RIGHT:
+                    cssAlignment = "right";
+                    break;
+                case JUSTIFY:
+                    cssAlignment = "justify";
+                    break;
+                default:
+                    throw new AssertionError("unreachable code");
             }
             sb.append("-fx-text-alignment: " + cssAlignment + ";");
         });
@@ -116,9 +137,9 @@ class ParStyle {
 
     public ParStyle updateWith(ParStyle mixin) {
         return new ParStyle(
-                mixin.alignment.isPresent() ? mixin.alignment : alignment,
-                mixin.backgroundColor.isPresent() ? mixin.backgroundColor : backgroundColor,
-                mixin.indent.isPresent() ? mixin.indent : indent );
+            mixin.alignment.isPresent() ? mixin.alignment : alignment,
+            mixin.backgroundColor.isPresent() ? mixin.backgroundColor : backgroundColor,
+            mixin.indent.isPresent() ? mixin.indent : indent);
     }
 
     public ParStyle updateAlignment(TextAlignment alignment) {
@@ -134,16 +155,16 @@ class ParStyle {
     }
 
     public ParStyle increaseIndent() {
-        if ( indent.isPresent() ) indent.get().level++;
-        else return updateIndent( new Indent() );
-        return this; 
+        if (indent.isPresent()) indent.get().level++;
+        else return updateIndent(new Indent());
+        return this;
     }
 
     public ParStyle decreaseIndent() {
-        if ( indent.isPresent() && --indent.get().level == 0 ) {
-            return updateIndent( null );
+        if (indent.isPresent() && --indent.get().level == 0) {
+            return updateIndent(null);
         }
-        return this; 
+        return this;
     }
 
 }

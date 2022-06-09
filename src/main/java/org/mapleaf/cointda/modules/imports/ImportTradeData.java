@@ -31,75 +31,79 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-/** @author lif */
+/**
+ * @author lif
+ */
 public class ImportTradeData {
 
-  private static final Logger logger = LogManager.getLogger(ExportTradeData.class.getName());
-  private final Workbench workbench;
+    private static final Logger logger = LogManager.getLogger(ExportTradeData.class.getName());
+    private final Workbench workbench;
 
-  public ImportTradeData(Workbench workbench) {
-    this.workbench = workbench;
-  }
-
-  public void handleImportData() {
-    workbench.showConfirmationDialog(
-        "导入数据操作",
-        "这个操作会覆盖原有数据！你确定要导入新数据吗？",
-        buttonType -> {
-          if (buttonType == ButtonType.YES) {
-            importData();
-          }
-        });
-  }
-
-  public void importData() {
-    FileChooser fileChooser = new FileChooser();
-    // 文档类型过滤器
-    FileChooser.ExtensionFilter extFilter =
-        new FileChooser.ExtensionFilter("txt files (*.csv)", "*.csv");
-    fileChooser.getExtensionFilters().add(extFilter);
-    File file = fileChooser.showOpenDialog(workbench.getScene().getWindow());
-    if (file != null) {
-      List<String[]> list = CSVHelper.readCsv(file.toString());
-      if (list.isEmpty()) {
-        workbench.showErrorDialog("错误", "导入数据失败！", "csv文件为空，或者交易数据格式错误！", buttonType -> {});
-      } else {
-        // 更新可使用品种数据
-        List<Integer> coinid = new ArrayList<>();
-        for (String[] str : list) {
-          coinid.add(Integer.parseInt(str[1]));
-        }
-        // 去重
-        LinkedHashSet<Integer> hashSet = new LinkedHashSet<>(coinid);
-        List<Integer> listWithoutDuplicates = new ArrayList<>(hashSet);
-        List<Integer> usedid = CoinTypeDao.queryCurID();
-        // 差集 (list1 - list2)
-        listWithoutDuplicates.removeAll(usedid);
-        // 将csv文件中的可用类型和数据库中的可用类型做差集后，将差集更新进数据库中
-        if (listWithoutDuplicates.size() > 0) {
-          CoinTypeDao.batchUpdate(listWithoutDuplicates);
-        }
-
-        // 删除数据库中的原有数据
-        TradeDataDao.truncate();
-        // 导入到数据库
-        int[] is = TradeDataDao.batchInsert(list);
-        CoinInfo info = new CoinInfo(workbench);
-        // 导入数据后自动更新价格
-        info.updateCurPrice();
-        int t = 0, f = 0;
-        for (int i : is) {
-          if (i == 1) {
-            t++;
-          } else {
-            f++;
-          }
-        }
-        workbench.showInformationDialog(
-            "完成导入",
-            "数据总行数：" + is.length + ";\n" + "正确导入行数：" + t + ";\n " + "错误导入行数：" + f,
-            buttonType -> {});
-      }
+    public ImportTradeData(Workbench workbench) {
+        this.workbench = workbench;
     }
-  }
+
+    public void handleImportData() {
+        workbench.showConfirmationDialog(
+            "导入数据操作",
+            "这个操作会覆盖原有数据！你确定要导入新数据吗？",
+            buttonType -> {
+                if (buttonType == ButtonType.YES) {
+                    importData();
+                }
+            });
+    }
+
+    public void importData() {
+        FileChooser fileChooser = new FileChooser();
+        // 文档类型过滤器
+        FileChooser.ExtensionFilter extFilter =
+            new FileChooser.ExtensionFilter("txt files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showOpenDialog(workbench.getScene().getWindow());
+        if (file != null) {
+            List<String[]> list = CSVHelper.readCsv(file.toString());
+            if (list.isEmpty()) {
+                workbench.showErrorDialog("错误", "导入数据失败！", "csv文件为空，或者交易数据格式错误！", buttonType -> {
+                });
+            } else {
+                // 更新可使用品种数据
+                List<Integer> coinid = new ArrayList<>();
+                for (String[] str : list) {
+                    coinid.add(Integer.parseInt(str[1]));
+                }
+                // 去重
+                LinkedHashSet<Integer> hashSet = new LinkedHashSet<>(coinid);
+                List<Integer> listWithoutDuplicates = new ArrayList<>(hashSet);
+                List<Integer> usedid = CoinTypeDao.queryCurID();
+                // 差集 (list1 - list2)
+                listWithoutDuplicates.removeAll(usedid);
+                // 将csv文件中的可用类型和数据库中的可用类型做差集后，将差集更新进数据库中
+                if (listWithoutDuplicates.size() > 0) {
+                    CoinTypeDao.batchUpdate(listWithoutDuplicates);
+                }
+
+                // 删除数据库中的原有数据
+                TradeDataDao.truncate();
+                // 导入到数据库
+                int[] is = TradeDataDao.batchInsert(list);
+                CoinInfo info = new CoinInfo(workbench);
+                // 导入数据后自动更新价格
+                info.updateCurPrice();
+                int t = 0, f = 0;
+                for (int i : is) {
+                    if (i == 1) {
+                        t++;
+                    } else {
+                        f++;
+                    }
+                }
+                workbench.showInformationDialog(
+                    "完成导入",
+                    "数据总行数：" + is.length + ";\n" + "正确导入行数：" + t + ";\n " + "错误导入行数：" + f,
+                    buttonType -> {
+                    });
+            }
+        }
+    }
 }
