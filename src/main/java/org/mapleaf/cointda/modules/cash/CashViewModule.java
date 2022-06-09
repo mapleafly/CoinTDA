@@ -25,28 +25,30 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-/** @author lif */
+/**
+ * @author lif
+ */
 public class CashViewModule extends WorkbenchModule {
 
-  private static final Logger logger = LogManager.getLogger(CashViewModule.class.getName());
+    private static final Logger logger = LogManager.getLogger(CashViewModule.class.getName());
 
-  public CashViewModule() {
-    super("出入金管理", MaterialDesignIcon.CASH);
-  }
-
-  @Override
-  public Node activate() {
-    AnchorPane view = null;
-    try {
-      FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(CashViewModule.class.getResource("CashView.fxml"));
-      view = loader.load();
-
-      CashViewController controller = loader.getController();
-      controller.setWorkbench(getWorkbench());
-    } catch (IOException e) {
-      logger.error(e.toString());
+    public CashViewModule() {
+        super("出入金管理", MaterialDesignIcon.CASH);
     }
-    return view;
-  }
+
+    @Override
+    public Node activate() {
+        AnchorPane view = null;
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(CashViewModule.class.getResource("CashView.fxml"));
+            view = loader.load();
+
+            CashViewController controller = loader.getController();
+            controller.setWorkbench(getWorkbench());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+        return view;
+    }
 }

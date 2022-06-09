@@ -44,248 +44,271 @@ import java.util.ResourceBundle;
  */
 public class CashViewController implements Initializable {
 
-  private static final Logger logger = LogManager.getLogger(CashViewController.class.getName());
-  // USDT
-  private static final String BASESYMBOL = "USDT";
-  private static final String BASEID = "825";
-  /** The data as an observable list of TradeData. */
-  private final ObservableList<TradeDataFXC> tradeDataList;
+    private static final Logger logger = LogManager.getLogger(CashViewController.class.getName());
+    // USDT
+    private static final String BASESYMBOL = "USDT";
+    private static final String BASEID = "825";
+    /**
+     * The data as an observable list of TradeData.
+     */
+    private final ObservableList<TradeDataFXC> tradeDataList;
 
-  private final List<String> coinList;
-  @FXML private TableView<TradeDataFXC> dataTable;
-  @FXML private TableColumn<TradeDataFXC, Integer> idCol;
-  @FXML private TableColumn<TradeDataFXC, Integer> coinIdCol;
-  @FXML private TableColumn<TradeDataFXC, String> baseSymbolCol;
-  @FXML private TableColumn<TradeDataFXC, String> salebuyCol;
-  @FXML private TableColumn<TradeDataFXC, String> priceCol;
-  @FXML private TableColumn<TradeDataFXC, String> baseNumCol;
-  @FXML private TableColumn<TradeDataFXC, String> quoteNumCol;
-  @FXML private TableColumn<TradeDataFXC, String> dateCol;
-  @FXML private ChoiceBox<String> baseChoiceBox;
-  @FXML private ChoiceBox<String> salebuyChoiceBox;
-  @FXML private DatePicker dateDatePicker;
-  @FXML private TextField numTextField;
-  private Workbench workbench;
+    private final List<String> coinList;
+    @FXML
+    private TableView<TradeDataFXC> dataTable;
+    @FXML
+    private TableColumn<TradeDataFXC, Integer> idCol;
+    @FXML
+    private TableColumn<TradeDataFXC, Integer> coinIdCol;
+    @FXML
+    private TableColumn<TradeDataFXC, String> baseSymbolCol;
+    @FXML
+    private TableColumn<TradeDataFXC, String> salebuyCol;
+    @FXML
+    private TableColumn<TradeDataFXC, String> priceCol;
+    @FXML
+    private TableColumn<TradeDataFXC, String> baseNumCol;
+    @FXML
+    private TableColumn<TradeDataFXC, String> quoteNumCol;
+    @FXML
+    private TableColumn<TradeDataFXC, String> dateCol;
+    @FXML
+    private ChoiceBox<String> baseChoiceBox;
+    @FXML
+    private ChoiceBox<String> salebuyChoiceBox;
+    @FXML
+    private DatePicker dateDatePicker;
+    @FXML
+    private TextField numTextField;
+    private Workbench workbench;
 
-  public CashViewController() {
-    tradeDataList = FXCollections.observableArrayList();
-    coinList = new ArrayList<>();
-    coinList.add(BASESYMBOL);
-    List<TradeDataFXC> list = TradeDataDao.queryAllFXCForCash(BASESYMBOL);
-    tradeDataList.addAll(list);
-  }
-
-  /** Initializes the controller class. */
-  @Override
-  public void initialize(URL url, ResourceBundle rb) {
-    dataTable.setItems(tradeDataList);
-
-    idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-    coinIdCol.setCellValueFactory(new PropertyValueFactory<>("coinId"));
-    baseSymbolCol.setCellValueFactory(cellData -> cellData.getValue().symbolPairsProperty());
-    salebuyCol.setCellValueFactory(cellData -> cellData.getValue().saleOrBuyProperty());
-    priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-    baseNumCol.setCellValueFactory(new PropertyValueFactory<>("baseNum"));
-    quoteNumCol.setCellValueFactory(new PropertyValueFactory<>("quoteNum"));
-    dateCol.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
-
-    baseChoiceBox.setItems(FXCollections.observableArrayList(coinList));
-    baseChoiceBox.setTooltip(new Tooltip("选择货币"));
-    baseChoiceBox.getSelectionModel().selectFirst();
-
-    salebuyChoiceBox.setItems(FXCollections.observableArrayList("入金", "出金"));
-    salebuyChoiceBox.setTooltip(new Tooltip("选择出入金类型"));
-
-    dateDatePicker.setConverter(DateHelper.CONVERTER);
-    // dateDatePicker.setPromptText(pattern.toLowerCase());
-    dateDatePicker.setTooltip(new Tooltip("选择操作时间"));
-
-    showTradeDataDetails(null);
-
-    dataTable
-        .getSelectionModel()
-        .selectedItemProperty()
-        .addListener((observable, oldValue, newValue) -> showTradeDataDetails(newValue));
-
-    baseChoiceBox
-        .getSelectionModel()
-        .selectedIndexProperty()
-        .addListener(
-            (ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-              if (newValue.intValue() >= 0) {
-                String selectedCoin = this.coinList.get(newValue.intValue());
-                tradeDataList.clear();
-                tradeDataList.addAll(TradeDataDao.queryAllFXC(selectedCoin));
-              }
-            });
-
-    numTextField
-        .textProperty()
-        .addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-              if (!newValue.matches("\\d*(\\.\\d*)?")) {
-                numTextField.setText(oldValue);
-              }
-            });
-  }
-
-  @FXML
-  private void handleAddData(ActionEvent event) {
-    if (isInputValid()) {
-      TradeDataBean bean = new TradeDataBean();
-      setTradeDataBean(bean);
-      Integer id = TradeDataDao.insert(bean);
-      if (id != -1) {
-        bean.setId(id);
-        tradeDataList.add(0, beanToFXC(bean));
-        numTextField.setText("");
-      }
+    public CashViewController() {
+        tradeDataList = FXCollections.observableArrayList();
+        coinList = new ArrayList<>();
+        coinList.add(BASESYMBOL);
+        List<TradeDataFXC> list = TradeDataDao.queryAllFXCForCash(BASESYMBOL);
+        tradeDataList.addAll(list);
     }
-  }
 
-  private void setTradeDataBean(TradeDataBean bean) {
-    bean.setBase_id(TradeDataDao.queryCoinBySymbol(baseChoiceBox.getValue()).getId());
-    bean.setBase_symbol(baseChoiceBox.getValue());
-    bean.setQuote_id(Integer.valueOf(BASEID));
-    bean.setQuote_symbol(BASESYMBOL);
-    if (salebuyChoiceBox.getValue().equals("入金")) {
-      bean.setSale_or_buy("卖");
-    } else {
-      bean.setSale_or_buy("买");
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        dataTable.setItems(tradeDataList);
+
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        coinIdCol.setCellValueFactory(new PropertyValueFactory<>("coinId"));
+        baseSymbolCol.setCellValueFactory(cellData -> cellData.getValue().symbolPairsProperty());
+        salebuyCol.setCellValueFactory(cellData -> cellData.getValue().saleOrBuyProperty());
+        priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        baseNumCol.setCellValueFactory(new PropertyValueFactory<>("baseNum"));
+        quoteNumCol.setCellValueFactory(new PropertyValueFactory<>("quoteNum"));
+        dateCol.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
+
+        baseChoiceBox.setItems(FXCollections.observableArrayList(coinList));
+        baseChoiceBox.setTooltip(new Tooltip("选择货币"));
+        baseChoiceBox.getSelectionModel().selectFirst();
+
+        salebuyChoiceBox.setItems(FXCollections.observableArrayList("入金", "出金"));
+        salebuyChoiceBox.setTooltip(new Tooltip("选择出入金类型"));
+
+        dateDatePicker.setConverter(DateHelper.CONVERTER);
+        // dateDatePicker.setPromptText(pattern.toLowerCase());
+        dateDatePicker.setTooltip(new Tooltip("选择操作时间"));
+
+        showTradeDataDetails(null);
+
+        dataTable
+            .getSelectionModel()
+            .selectedItemProperty()
+            .addListener((observable, oldValue, newValue) -> showTradeDataDetails(newValue));
+
+        baseChoiceBox
+            .getSelectionModel()
+            .selectedIndexProperty()
+            .addListener(
+                (ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+                    if (newValue.intValue() >= 0) {
+                        String selectedCoin = this.coinList.get(newValue.intValue());
+                        tradeDataList.clear();
+                        tradeDataList.addAll(TradeDataDao.queryAllFXC(selectedCoin));
+                    }
+                });
+
+        numTextField
+            .textProperty()
+            .addListener(
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    if (!newValue.matches("\\d*(\\.\\d*)?")) {
+                        numTextField.setText(oldValue);
+                    }
+                });
     }
-    bean.setPrice("1");
-    bean.setBase_num(numTextField.getText());
-    bean.setQuote_num(numTextField.getText());
-    bean.setTrade_date(DateHelper.toString(this.dateDatePicker.getValue()));
-  }
 
-  @FXML
-  private void handleEdtitData(ActionEvent event) {
-    if (isInputValid()) {
-      int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
-      if (selectedIndex >= 0) {
-        TradeDataFXC fxc = dataTable.getItems().get(selectedIndex);
-        TradeDataBean bean = TradeDataDao.queryBean(fxc.getId());
-        setTradeDataBean(bean);
-        int n = TradeDataDao.update(bean);
-        if (n == 1) {
-          fxc = beanToFXC(bean);
-          for (int i = 0; i < tradeDataList.size(); i++) {
-            if (tradeDataList.get(i).getId().equals(fxc.getId())) {
-              tradeDataList.remove(i);
-              tradeDataList.add(i, fxc);
-              dataTable.getSelectionModel().select(i);
-              break;
+    @FXML
+    private void handleAddData(ActionEvent event) {
+        if (isInputValid()) {
+            TradeDataBean bean = new TradeDataBean();
+            setTradeDataBean(bean);
+            Integer id = TradeDataDao.insert(bean);
+            if (id != -1) {
+                bean.setId(id);
+                tradeDataList.add(0, beanToFXC(bean));
+                numTextField.setText("");
             }
-          }
-        } else {
-          workbench.showErrorDialog("错误", "数据库更新错误！", "选中数据没有被数据库更新!", buttonType -> {});
         }
-      } else {
-        // Nothing selected.
-        workbench.showErrorDialog("提示", "没有选中数据", "请从表格中选择一行数据!", buttonType -> {});
-      }
-    }
-  }
-
-  @FXML
-  private void handleDelData(ActionEvent event) {
-    int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
-    if (selectedIndex >= 0) {
-      TradeDataFXC fxc = dataTable.getItems().get(selectedIndex);
-      if (TradeDataDao.delete(fxc.getId()) == 1) {
-        // 整理表格
-        dataTable.getItems().remove(selectedIndex);
-      } else {
-        workbench.showErrorDialog("错误", "数据库删除错误", "选中数据没有被从数据库删除!", buttonType -> {});
-      }
-    } else {
-      // Nothing selected.
-      workbench.showErrorDialog("提示", "没有选中数据", "请从表格中选择一行数据!", buttonType -> {});
-    }
-  }
-
-  private TradeDataFXC beanToFXC(TradeDataBean bean) {
-    TradeDataFXC fxc = new TradeDataFXC();
-    fxc.setId(bean.getId());
-    fxc.setCoinId(bean.getBase_id());
-    fxc.setSymbolPairs(bean.getBase_symbol());
-    if (bean.getSale_or_buy().equals("卖")) {
-      fxc.setSaleOrBuy("入金");
-    } else {
-      fxc.setSaleOrBuy("出金");
-    }
-    fxc.setPrice(bean.getPrice());
-    fxc.setBaseNum(bean.getBase_num());
-    fxc.setQuoteNum(bean.getQuote_num());
-    fxc.setDate(bean.getTrade_date());
-    return fxc;
-  }
-
-  /**
-   * @Description:
-   *
-   * @param tradeData 1
-   * @return: void
-   * @author: mapleaf
-   * @date: 2020/6/23 16:57
-   */
-  private void showTradeDataDetails(TradeDataFXC tradeData) {
-    if (tradeData != null) {
-      String symbolPairs = tradeData.getSymbolPairs();
-      baseChoiceBox.setValue(symbolPairs);
-      salebuyChoiceBox.setValue(tradeData.getSaleOrBuy());
-      numTextField.setText(tradeData.getBaseNum());
-      dateDatePicker.setValue(DateHelper.fromString(tradeData.getDate()));
-    } else {
-      salebuyChoiceBox.setValue("入金");
-      numTextField.setText("");
-      dateDatePicker.setValue(LocalDate.now());
-    }
-  }
-
-  /**
-   * Validates the user inpu.
-   *
-   * @return true if the input is valid
-   */
-  private boolean isInputValid() {
-    String errorMessage = "";
-
-    if (baseChoiceBox.getValue() == null || baseChoiceBox.getValue().length() == 0) {
-      errorMessage += "无效的类别!\n";
-    }
-    if (salebuyChoiceBox.getValue() == null || salebuyChoiceBox.getValue().length() == 0) {
-      errorMessage += "无效的买/卖!\n";
-    }
-    if (!DateHelper.validDate(DateHelper.toString(dateDatePicker.getValue()))
-        || dateDatePicker.getValue() == null) {
-      errorMessage += "无效的时间!\n";
     }
 
-    if (numTextField.getText() == null || numTextField.getText().length() == 0) {
-      errorMessage += "无效的数量!\n";
-    } else {
-      // try to parse the num into an double.
-      try {
-        Double.parseDouble(numTextField.getText());
-      } catch (NumberFormatException e) {
-        errorMessage += "无效的数量(必须是整数或小数)!\n";
-      }
+    private void setTradeDataBean(TradeDataBean bean) {
+        bean.setBase_id(TradeDataDao.queryCoinBySymbol(baseChoiceBox.getValue()).getId());
+        bean.setBase_symbol(baseChoiceBox.getValue());
+        bean.setQuote_id(Integer.valueOf(BASEID));
+        bean.setQuote_symbol(BASESYMBOL);
+        if (salebuyChoiceBox.getValue().equals("入金")) {
+            bean.setSale_or_buy("卖");
+        } else {
+            bean.setSale_or_buy("买");
+        }
+        bean.setPrice("1");
+        bean.setBase_num(numTextField.getText());
+        bean.setQuote_num(numTextField.getText());
+        bean.setTrade_date(DateHelper.toString(this.dateDatePicker.getValue()));
     }
 
-    if (errorMessage.length() == 0) {
-      return true;
-    } else {
-      // Show the error message.
-      workbench.showErrorDialog("提示", "无效的字段", errorMessage, buttonType -> {});
-
-      return false;
+    @FXML
+    private void handleEdtitData(ActionEvent event) {
+        if (isInputValid()) {
+            int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0) {
+                TradeDataFXC fxc = dataTable.getItems().get(selectedIndex);
+                TradeDataBean bean = TradeDataDao.queryBean(fxc.getId());
+                setTradeDataBean(bean);
+                int n = TradeDataDao.update(bean);
+                if (n == 1) {
+                    fxc = beanToFXC(bean);
+                    for (int i = 0; i < tradeDataList.size(); i++) {
+                        if (tradeDataList.get(i).getId().equals(fxc.getId())) {
+                            tradeDataList.remove(i);
+                            tradeDataList.add(i, fxc);
+                            dataTable.getSelectionModel().select(i);
+                            break;
+                        }
+                    }
+                } else {
+                    workbench.showErrorDialog("错误", "数据库更新错误！", "选中数据没有被数据库更新!", buttonType -> {
+                    });
+                }
+            } else {
+                // Nothing selected.
+                workbench.showErrorDialog("提示", "没有选中数据", "请从表格中选择一行数据!", buttonType -> {
+                });
+            }
+        }
     }
-  }
 
-  /** @param workbench the workbench to set */
-  public void setWorkbench(Workbench workbench) {
-    this.workbench = workbench;
-  }
+    @FXML
+    private void handleDelData(ActionEvent event) {
+        int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            TradeDataFXC fxc = dataTable.getItems().get(selectedIndex);
+            if (TradeDataDao.delete(fxc.getId()) == 1) {
+                // 整理表格
+                dataTable.getItems().remove(selectedIndex);
+            } else {
+                workbench.showErrorDialog("错误", "数据库删除错误", "选中数据没有被从数据库删除!", buttonType -> {
+                });
+            }
+        } else {
+            // Nothing selected.
+            workbench.showErrorDialog("提示", "没有选中数据", "请从表格中选择一行数据!", buttonType -> {
+            });
+        }
+    }
+
+    private TradeDataFXC beanToFXC(TradeDataBean bean) {
+        TradeDataFXC fxc = new TradeDataFXC();
+        fxc.setId(bean.getId());
+        fxc.setCoinId(bean.getBase_id());
+        fxc.setSymbolPairs(bean.getBase_symbol());
+        if (bean.getSale_or_buy().equals("卖")) {
+            fxc.setSaleOrBuy("入金");
+        } else {
+            fxc.setSaleOrBuy("出金");
+        }
+        fxc.setPrice(bean.getPrice());
+        fxc.setBaseNum(bean.getBase_num());
+        fxc.setQuoteNum(bean.getQuote_num());
+        fxc.setDate(bean.getTrade_date());
+        return fxc;
+    }
+
+    /**
+     * @param tradeData 1
+     * @Description:
+     * @return: void
+     * @author: mapleaf
+     * @date: 2020/6/23 16:57
+     */
+    private void showTradeDataDetails(TradeDataFXC tradeData) {
+        if (tradeData != null) {
+            String symbolPairs = tradeData.getSymbolPairs();
+            baseChoiceBox.setValue(symbolPairs);
+            salebuyChoiceBox.setValue(tradeData.getSaleOrBuy());
+            numTextField.setText(tradeData.getBaseNum());
+            dateDatePicker.setValue(DateHelper.fromString(tradeData.getDate()));
+        } else {
+            salebuyChoiceBox.setValue("入金");
+            numTextField.setText("");
+            dateDatePicker.setValue(LocalDate.now());
+        }
+    }
+
+    /**
+     * Validates the user inpu.
+     *
+     * @return true if the input is valid
+     */
+    private boolean isInputValid() {
+        String errorMessage = "";
+
+        if (baseChoiceBox.getValue() == null || baseChoiceBox.getValue().length() == 0) {
+            errorMessage += "无效的类别!\n";
+        }
+        if (salebuyChoiceBox.getValue() == null || salebuyChoiceBox.getValue().length() == 0) {
+            errorMessage += "无效的买/卖!\n";
+        }
+        if (!DateHelper.validDate(DateHelper.toString(dateDatePicker.getValue()))
+            || dateDatePicker.getValue() == null) {
+            errorMessage += "无效的时间!\n";
+        }
+
+        if (numTextField.getText() == null || numTextField.getText().length() == 0) {
+            errorMessage += "无效的数量!\n";
+        } else {
+            // try to parse the num into an double.
+            try {
+                Double.parseDouble(numTextField.getText());
+            } catch (NumberFormatException e) {
+                errorMessage += "无效的数量(必须是整数或小数)!\n";
+            }
+        }
+
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            // Show the error message.
+            workbench.showErrorDialog("提示", "无效的字段", errorMessage, buttonType -> {
+            });
+
+            return false;
+        }
+    }
+
+    /**
+     * @param workbench the workbench to set
+     */
+    public void setWorkbench(Workbench workbench) {
+        this.workbench = workbench;
+    }
 }

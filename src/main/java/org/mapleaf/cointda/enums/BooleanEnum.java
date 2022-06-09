@@ -16,7 +16,6 @@
 package org.mapleaf.cointda.enums;
 
 /**
- *
  * @author lif
  */
 public enum BooleanEnum {
