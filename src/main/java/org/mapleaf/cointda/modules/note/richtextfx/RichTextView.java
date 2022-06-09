@@ -47,21 +47,21 @@ public class RichTextView extends AnchorPane {
     private final LinkedImageOps<TextStyle> linkedImageOps = new LinkedImageOps<>();
 
     private final GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle> area =
-            new GenericStyledArea<>(
-                    ParStyle.EMPTY,                                                 // default paragraph style
-                    (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
+        new GenericStyledArea<>(
+            ParStyle.EMPTY,                                                 // default paragraph style
+            (paragraph, style) -> paragraph.setStyle(style.toCss()),        // paragraph style setter
 
-                    TextStyle.EMPTY.updateFontSize(12).updateFontFamily("Serif").updateTextColor(Color.BLACK),  // default segment style
-                    styledTextOps._or(linkedImageOps, (s1, s2) -> Optional.empty()),                            // segment operations
-                    seg -> createNode(seg, (text, style) -> text.setStyle(style.toCss())));                     // Node creator and segment style setter
+            TextStyle.EMPTY.updateFontSize(12).updateFontFamily("Serif").updateTextColor(Color.BLACK),  // default segment style
+            styledTextOps._or(linkedImageOps, (s1, s2) -> Optional.empty()),                            // segment operations
+            seg -> createNode(seg, (text, style) -> text.setStyle(style.toCss())));                     // Node creator and segment style setter
     private final SuspendableNo updatingToolbar = new SuspendableNo();
 
     {
         area.setWrapText(true);
         area.setStyleCodecs(
-                ParStyle.CODEC,
-                Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
-        area.setParagraphGraphicFactory( new BulletFactory( area ) );
+            ParStyle.CODEC,
+            Codec.styledSegmentCodec(Codec.eitherCodec(Codec.STRING_CODEC, LinkedImage.codec()), TextStyle.CODEC));
+        area.setParagraphGraphicFactory(new BulletFactory(area));
     }
 
 
@@ -72,7 +72,7 @@ public class RichTextView extends AnchorPane {
 //                "Load document.\n\n" +
 //                        "Note: the demo will load only previously-saved \"" + RTFX_FILE_EXTENSION + "\" files. " +
 //                        "This file format is abitrary and may change across versions.");
-        Button saveBtn = createButton("savefile", this::saveDocument,"保存文档");
+        Button saveBtn = createButton("savefile", this::saveDocument, "保存文档");
 //        CheckBox wrapToggle = new CheckBox("自动换行");
 //        wrapToggle.setSelected(true);
         area.wrapTextProperty().set(true);
@@ -117,7 +117,9 @@ public class RichTextView extends AnchorPane {
 //        redoBtn.disableProperty().bind(area.redoAvailableProperty().map(x -> !x));
 
         BooleanBinding selectionEmpty = new BooleanBinding() {
-            { bind(area.selectionProperty()); }
+            {
+                bind(area.selectionProperty());
+            }
 
             @Override
             protected boolean computeValue() {
@@ -129,7 +131,7 @@ public class RichTextView extends AnchorPane {
 //        copyBtn.disableProperty().bind(selectionEmpty);
 
         area.beingUpdatedProperty().addListener((o, old, beingUpdated) -> {
-            if(!beingUpdated) {
+            if (!beingUpdated) {
                 boolean bold, italic, underline, strike;
                 Integer fontSize;
                 String fontFamily;
@@ -137,7 +139,7 @@ public class RichTextView extends AnchorPane {
                 Color backgroundColor;
 
                 IndexRange selection = area.getSelection();
-                if(selection.getLength() != 0) {
+                if (selection.getLength() != 0) {
                     StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
                     bold = styles.styleStream().anyMatch(s -> s.bold.orElse(false));
                     italic = styles.styleStream().anyMatch(s -> s.italic.orElse(false));
@@ -178,32 +180,32 @@ public class RichTextView extends AnchorPane {
                 Optional<Color> paragraphBackground = paragraphBackgrounds.length == 1 ? paragraphBackgrounds[0] : Optional.empty();
 
                 updatingToolbar.suspendWhile(() -> {
-                    if(bold) {
-                        if(!boldBtn.getStyleClass().contains("pressed")) {
+                    if (bold) {
+                        if (!boldBtn.getStyleClass().contains("pressed")) {
                             boldBtn.getStyleClass().add("pressed");
                         }
                     } else {
                         boldBtn.getStyleClass().remove("pressed");
                     }
 
-                    if(italic) {
-                        if(!italicBtn.getStyleClass().contains("pressed")) {
+                    if (italic) {
+                        if (!italicBtn.getStyleClass().contains("pressed")) {
                             italicBtn.getStyleClass().add("pressed");
                         }
                     } else {
                         italicBtn.getStyleClass().remove("pressed");
                     }
 
-                    if(underline) {
-                        if(!underlineBtn.getStyleClass().contains("pressed")) {
+                    if (underline) {
+                        if (!underlineBtn.getStyleClass().contains("pressed")) {
                             underlineBtn.getStyleClass().add("pressed");
                         }
                     } else {
                         underlineBtn.getStyleClass().remove("pressed");
                     }
 
-                    if(strike) {
-                        if(!strikeBtn.getStyleClass().contains("pressed")) {
+                    if (strike) {
+                        if (!strikeBtn.getStyleClass().contains("pressed")) {
                             strikeBtn.getStyleClass().add("pressed");
                         }
                     } else {
@@ -224,19 +226,19 @@ public class RichTextView extends AnchorPane {
 
                     paragraphBackgroundPicker.setValue(paragraphBackground.orElse(null));
 
-                    if(fontSize != -1) {
+                    if (fontSize != -1) {
                         sizeCombo.getSelectionModel().select(fontSize);
                     } else {
                         sizeCombo.getSelectionModel().clearSelection();
                     }
 
-                    if(fontFamily != null) {
+                    if (fontFamily != null) {
                         familyCombo.getSelectionModel().select(fontFamily);
                     } else {
                         familyCombo.getSelectionModel().clearSelection();
                     }
 
-                    if(textColor != null) {
+                    if (textColor != null) {
                         textColorPicker.setValue(textColor);
                     }
 
@@ -246,13 +248,13 @@ public class RichTextView extends AnchorPane {
         });
 
         ToolBar toolBar1 = new ToolBar(
-                saveBtn,  new Separator(Orientation.VERTICAL),
-                boldBtn, italicBtn, underlineBtn, strikeBtn, new Separator(Orientation.VERTICAL),
-                increaseIndentBtn, decreaseIndentBtn, new Separator(Orientation.VERTICAL),
-                paragraphBackgroundPicker, new Separator(Orientation.VERTICAL),
-                sizeCombo, familyCombo, textColorPicker, backgroundColorPicker
+            saveBtn, new Separator(Orientation.VERTICAL),
+            boldBtn, italicBtn, underlineBtn, strikeBtn, new Separator(Orientation.VERTICAL),
+            increaseIndentBtn, decreaseIndentBtn, new Separator(Orientation.VERTICAL),
+            paragraphBackgroundPicker, new Separator(Orientation.VERTICAL),
+            sizeCombo, familyCombo, textColorPicker, backgroundColorPicker
         );
-        
+
         //ToolBar toolBar2 = new ToolBar(sizeCombo, familyCombo, textColorPicker, backgroundColorPicker);
 
         VirtualizedScrollPane<GenericStyledArea<ParStyle, Either<String, LinkedImage>, TextStyle>> vsPane = new VirtualizedScrollPane<>(area);
@@ -278,20 +280,20 @@ public class RichTextView extends AnchorPane {
         loadDocument();
     }
 
-    private static String createDir(){
+    private static String createDir() {
         String dir = null;
         String cointdaDir = System.getProperty("user.home");
         File f1 = new File(cointdaDir, "/.cointda");
-        if(f1.exists() && f1.isDirectory()){
+        if (f1.exists() && f1.isDirectory()) {
             File f2 = new File(f1, "/note");
-            if(!f2.exists() || !f2.isDirectory()){
+            if (!f2.exists() || !f2.isDirectory()) {
                 f2.mkdir();
             }
             dir = f2.getAbsolutePath();
-        }else{
-            if(f1.mkdir()){
+        } else {
+            if (f1.mkdir()) {
                 File f2 = new File(f1, "/note");
-                if(f2.mkdir()){
+                if (f2.mkdir()) {
                     dir = f2.getAbsolutePath();
                 }
             }
@@ -303,8 +305,8 @@ public class RichTextView extends AnchorPane {
     private Node createNode(StyledSegment<Either<String, LinkedImage>, TextStyle> seg,
                             BiConsumer<? super TextExt, TextStyle> applyStyle) {
         return seg.getSegment().unify(
-                text -> StyledTextArea.createStyledTextNode(text, seg.getStyle(), applyStyle),
-                LinkedImage::createNode
+            text -> StyledTextArea.createStyledTextNode(text, seg.getStyle(), applyStyle),
+            LinkedImage::createNode
         );
     }
 
@@ -373,7 +375,7 @@ public class RichTextView extends AnchorPane {
 
     private void loadDocument() {
         File file = new File(RTFX_DIR, fileName + RTFX_FILE_EXTENSION);
-        if(!file.exists()){
+        if (!file.exists()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
@@ -385,10 +387,10 @@ public class RichTextView extends AnchorPane {
     }
 
     private void load(File file) {
-        if(file.length() == 0){
+        if (file.length() == 0) {
             return;
         }
-        if(area.getStyleCodecs().isPresent()) {
+        if (area.getStyleCodecs().isPresent()) {
             Tuple2<Codec<ParStyle>, Codec<StyledSegment<Either<String, LinkedImage>, TextStyle>>> codecs = area.getStyleCodecs().get();
             Codec<StyledDocument<ParStyle, Either<String, LinkedImage>, TextStyle>>
                 codec = ReadOnlyStyledDocument.codec(codecs._1, codecs._2, area.getSegOps());
@@ -399,7 +401,7 @@ public class RichTextView extends AnchorPane {
                 StyledDocument<ParStyle, Either<String, LinkedImage>, TextStyle> doc = codec.decode(dis);
                 fis.close();
 
-                if(doc != null) {
+                if (doc != null) {
                     area.replaceSelection(doc);
                 }
             } catch (IOException e) {
@@ -419,7 +421,7 @@ public class RichTextView extends AnchorPane {
         // Use the Codec to save the document in a binary format
         area.getStyleCodecs().ifPresent(codecs -> {
             Codec<StyledDocument<ParStyle, Either<String, LinkedImage>, TextStyle>> codec =
-                    ReadOnlyStyledDocument.codec(codecs._1, codecs._2, area.getSegOps());
+                ReadOnlyStyledDocument.codec(codecs._1, codecs._2, area.getSegOps());
             try {
                 FileOutputStream fos = new FileOutputStream(file);
                 DataOutputStream dos = new DataOutputStream(fos);
@@ -443,25 +445,25 @@ public class RichTextView extends AnchorPane {
         File selectedFile = fileChooser.showOpenDialog(workbench.getScene().getWindow());
         if (selectedFile != null) {
             String imagePath = selectedFile.getAbsolutePath();
-            imagePath = imagePath.replace('\\',  '/');
+            imagePath = imagePath.replace('\\', '/');
             ReadOnlyStyledDocument<ParStyle, Either<String, LinkedImage>, TextStyle> ros =
-                    ReadOnlyStyledDocument.fromSegment(Either.right(new RealLinkedImage(imagePath)),
-                                                       ParStyle.EMPTY, TextStyle.EMPTY, area.getSegOps());
+                ReadOnlyStyledDocument.fromSegment(Either.right(new RealLinkedImage(imagePath)),
+                    ParStyle.EMPTY, TextStyle.EMPTY, area.getSegOps());
             area.replaceSelection(ros);
         }
     }
 
     private void increaseIndent() {
-        updateParagraphStyleInSelection( ps -> ps.increaseIndent() );
+        updateParagraphStyleInSelection(ps -> ps.increaseIndent());
     }
 
     private void decreaseIndent() {
-        updateParagraphStyleInSelection( ps -> ps.decreaseIndent() );
+        updateParagraphStyleInSelection(ps -> ps.decreaseIndent());
     }
 
     private void updateStyleInSelection(Function<StyleSpans<TextStyle>, TextStyle> mixinGetter) {
         IndexRange selection = area.getSelection();
-        if(selection.getLength() != 0) {
+        if (selection.getLength() != 0) {
             StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
             TextStyle mixin = mixinGetter.apply(styles);
             StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
@@ -482,7 +484,7 @@ public class RichTextView extends AnchorPane {
         IndexRange selection = area.getSelection();
         int startPar = area.offsetToPosition(selection.getStart(), Forward).getMajor();
         int endPar = area.offsetToPosition(selection.getEnd(), Backward).getMajor();
-        for(int i = startPar; i <= endPar; ++i) {
+        for (int i = startPar; i <= endPar; ++i) {
             Paragraph<ParStyle, Either<String, LinkedImage>, TextStyle> paragraph = area.getParagraph(i);
             area.setParagraphStyle(i, updater.apply(paragraph.getParagraphStyle()));
         }
@@ -493,31 +495,31 @@ public class RichTextView extends AnchorPane {
     }
 
     private void updateFontSize(Integer size) {
-        if(!updatingToolbar.get()) {
+        if (!updatingToolbar.get()) {
             updateStyleInSelection(TextStyle.fontSize(size));
         }
     }
 
     private void updateFontFamily(String family) {
-        if(!updatingToolbar.get()) {
+        if (!updatingToolbar.get()) {
             updateStyleInSelection(TextStyle.fontFamily(family));
         }
     }
 
     private void updateTextColor(Color color) {
-        if(!updatingToolbar.get()) {
+        if (!updatingToolbar.get()) {
             updateStyleInSelection(TextStyle.textColor(color));
         }
     }
 
     private void updateBackgroundColor(Color color) {
-        if(!updatingToolbar.get()) {
+        if (!updatingToolbar.get()) {
             updateStyleInSelection(TextStyle.backgroundColor(color));
         }
     }
 
     private void updateParagraphBackground(Color color) {
-        if(!updatingToolbar.get()) {
+        if (!updatingToolbar.get()) {
             updateParagraphStyleInSelection(ParStyle.backgroundColor(color));
         }
     }

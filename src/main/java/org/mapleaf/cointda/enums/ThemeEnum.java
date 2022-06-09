@@ -16,9 +16,8 @@
 package org.mapleaf.cointda.enums;
 
 /**
- *
  * @author lif
  */
 public enum ThemeEnum {
-    LIGHT,NIGHT
+    LIGHT, NIGHT
 }
