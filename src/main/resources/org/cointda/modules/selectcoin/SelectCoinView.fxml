@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.mapleaf.cointda.modules.selectcoin.SelectCoinViewController">
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cointda.modules.selectcoin.SelectCoinViewController">
    <children>
       <SplitPane dividerPositions="0.9" layoutX="87.0" layoutY="73.0" orientation="VERTICAL" prefHeight="700.0" prefWidth="850.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>

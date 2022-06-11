@@ -9,7 +9,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <javafx.version>11.0.2</javafx.version>
-        <mainClass>org.mapleaf.cointda.Launcher</mainClass>
+        <mainClass>org.cointda.Launcher</mainClass>
         <derby.version>10.15.2.0</derby.version>
     </properties>
     <dependencies>

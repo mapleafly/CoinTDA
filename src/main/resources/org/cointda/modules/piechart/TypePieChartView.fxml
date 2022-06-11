@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/11.0.2" fx:controller="org.mapleaf.cointda.modules.piechart.TypePieChartViewController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/11.0.2" fx:controller="org.cointda.modules.piechart.TypePieChartViewController">
    <children>
       <PieChart fx:id="pieChart" labelLineLength="30.0" layoutX="175.0" layoutY="130.0" legendSide="RIGHT" prefHeight="700.0" prefWidth="850.0" title="品种比例(现价)" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <Label fx:id="totalPrice" layoutX="14.0" layoutY="25.0" text="111" textFill="#c91590" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="25.0">
