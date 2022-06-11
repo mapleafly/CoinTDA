@@ -25,25 +25,27 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-/** @author lif */
+/**
+ * @author lif
+ */
 public class TypePieChartModule extends WorkbenchModule {
 
-  private static final Logger logger = LogManager.getLogger(TypePieChartModule.class.getName());
+    private static final Logger logger = LogManager.getLogger(TypePieChartModule.class.getName());
 
-  public TypePieChartModule() {
-    super("数据图例", MaterialDesignIcon.CHART_PIE);
-  }
-
-  @Override
-  public Node activate() {
-    AnchorPane view = null;
-    try {
-      FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(TypePieChartModule.class.getResource("TypePieChartView.fxml"));
-      view = loader.load();
-    } catch (IOException e) {
-      logger.error(e.toString());
+    public TypePieChartModule() {
+        super("数据图例", MaterialDesignIcon.CHART_PIE);
     }
-    return view;
-  }
+
+    @Override
+    public Node activate() {
+        AnchorPane view = null;
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(TypePieChartModule.class.getResource("TypePieChartView.fxml"));
+            view = loader.load();
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+        return view;
+    }
 }

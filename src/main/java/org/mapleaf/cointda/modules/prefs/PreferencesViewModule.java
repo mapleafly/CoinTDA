@@ -25,29 +25,31 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-/** @author lif */
+/**
+ * @author lif
+ */
 public class PreferencesViewModule extends WorkbenchModule {
 
-  private static final Logger logger = LogManager.getLogger(PreferencesViewModule.class.getName());
+    private static final Logger logger = LogManager.getLogger(PreferencesViewModule.class.getName());
 
-  public PreferencesViewModule() {
-    super("首选项", MaterialDesignIcon.SETTINGS);
-  }
-
-  @Override
-  public Node activate() {
-    AnchorPane view = null;
-    try {
-      FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(PreferencesViewModule.class.getResource("PreferencesView.fxml"));
-      view = loader.load();
-
-      PreferencesViewController controller = loader.getController();
-      controller.setWorkbench(getWorkbench());
-
-    } catch (IOException e) {
-      logger.error(e.toString());
+    public PreferencesViewModule() {
+        super("首选项", MaterialDesignIcon.SETTINGS);
     }
-    return view;
-  }
+
+    @Override
+    public Node activate() {
+        AnchorPane view = null;
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(PreferencesViewModule.class.getResource("PreferencesView.fxml"));
+            view = loader.load();
+
+            PreferencesViewController controller = loader.getController();
+            controller.setWorkbench(getWorkbench());
+
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+        return view;
+    }
 }

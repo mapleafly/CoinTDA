@@ -25,28 +25,30 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-/** @author lif */
+/**
+ * @author lif
+ */
 public class PATableModule extends WorkbenchModule {
 
-  private static final Logger logger = LogManager.getLogger(PATableModule.class.getName());
+    private static final Logger logger = LogManager.getLogger(PATableModule.class.getName());
 
-  public PATableModule() {
-    super("数据分析", MaterialDesignIcon.TABLE);
-  }
-
-  @Override
-  public Node activate() {
-    AnchorPane view = null;
-    try {
-      FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(PATableModule.class.getResource("PATableView.fxml"));
-      view = loader.load();
-
-      PATableViewController controller = loader.getController();
-      controller.setWorkbench(getWorkbench());
-    } catch (IOException e) {
-      logger.error(e.toString());
+    public PATableModule() {
+        super("数据分析", MaterialDesignIcon.TABLE);
     }
-    return view;
-  }
+
+    @Override
+    public Node activate() {
+        AnchorPane view = null;
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(PATableModule.class.getResource("PATableView.fxml"));
+            view = loader.load();
+
+            PATableViewController controller = loader.getController();
+            controller.setWorkbench(getWorkbench());
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+        return view;
+    }
 }
