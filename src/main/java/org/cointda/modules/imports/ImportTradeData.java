@@ -34,7 +34,6 @@ import java.util.List;
 public class ImportTradeData {
 
     private final Workbench workbench;
-
     public ImportTradeData(Workbench workbench) {
         this.workbench = workbench;
     }
