@@ -21,8 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TreeTraversingParser;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,9 +31,10 @@ import java.io.InputStream;
  * @param <T>
  * @author xuelf
  */
+@Slf4j
 public class YmalFc<T> {
 
-    private static final Logger logger = LogManager.getLogger(YmalFc.class.getName());
+    //private static final Logger logger = LogManager.getLogger(YmalFc.class.getName());
     private final YAMLFactory yamlFactory;
     private final ObjectMapper mapper;
     private final Class<T> klass;
@@ -56,7 +56,7 @@ public class YmalFc<T> {
             TreeTraversingParser treeTraversingParser = new TreeTraversingParser(node);
             config = mapper.readValue(treeTraversingParser, klass);
         } catch (IOException e) {
-            logger.error(e.toString());
+            log.error(e.toString());
         }
         return config;
     }

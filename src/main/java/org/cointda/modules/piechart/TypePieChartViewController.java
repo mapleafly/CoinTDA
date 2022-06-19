@@ -42,9 +42,6 @@ import java.util.*;
  */
 public class TypePieChartViewController implements Initializable {
 
-    //private static final Logger logger =
-    //    LogManager.getLogger(TypePieChartViewController.class.getName());
-
     @FXML
     private PieChart pieChart;
     @FXML

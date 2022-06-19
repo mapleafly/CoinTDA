@@ -20,18 +20,15 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
 /**
  * @author lif
  */
+@Slf4j
 public class TradeDataEditModule extends WorkbenchModule {
-
-    private static final Logger logger = LogManager.getLogger(TradeDataEditModule.class.getName());
-
     public TradeDataEditModule() {
         super("交易数据管理", MaterialDesignIcon.HAND_POINTING_RIGHT);
     }
@@ -47,7 +44,7 @@ public class TradeDataEditModule extends WorkbenchModule {
             TradeDataEditViewController controller = loader.getController();
             controller.setWorkbench(getWorkbench());
         } catch (IOException e) {
-            logger.error(e.toString());
+            log.error(e.toString());
         }
         return view;
     }

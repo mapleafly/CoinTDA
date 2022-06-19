@@ -15,10 +15,10 @@
  */
 package org.cointda.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -29,10 +29,9 @@ import java.util.List;
 /**
  * @author lif
  */
+@Slf4j
 public class CSVHelper {
 
-    private static final org.apache.logging.log4j.Logger logger =
-        LogManager.getLogger(CSVHelper.class.getName());
     private static final String NEW_LINE_SEPARATOR = "\n";
     private static final char DELIMITER = ',';
     private static final Charset CHARSET = StandardCharsets.UTF_8;
@@ -55,10 +54,10 @@ public class CSVHelper {
                     printer.printRecords(data);
                 }
             } catch (Exception e) {
-                logger.error(e);
+                log.error(e.toString());
             }
         } catch (IOException ex) {
-            logger.error(ex);
+            log.error(ex.toString());
         }
     }
 
@@ -78,7 +77,7 @@ public class CSVHelper {
                 data.add(str);
             }
         } catch (IOException ex) {
-            logger.error(ex);
+            log.error(ex.toString());
         }
         return data;
     }

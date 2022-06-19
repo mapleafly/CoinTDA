@@ -25,8 +25,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.cointda.bean.TradeDataBean;
 import org.cointda.bean.property.TradeDataFXC;
 import org.cointda.dao.CoinTypeDao;
@@ -45,10 +44,8 @@ import java.util.ResourceBundle;
  *
  * @author xuelf
  */
+@Slf4j
 public class TradeDataEditViewController implements Initializable {
-
-    private static final Logger logger =
-        LogManager.getLogger(TradeDataEditViewController.class.getName());
     /**
      * The data as an observable list of TradeData.
      */
@@ -305,7 +302,7 @@ public class TradeDataEditViewController implements Initializable {
             String symbolPairs = tradeData.getSymbolPairs();
             int split = symbolPairs.indexOf('/');
             if (split < 1) {
-                logger.error("交易对是空值或者格式错误");
+                log.error("交易对是空值或者格式错误");
                 return;
             }
             String base = symbolPairs.substring(0, split);

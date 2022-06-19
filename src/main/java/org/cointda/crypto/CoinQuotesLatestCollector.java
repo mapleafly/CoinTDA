@@ -2,10 +2,9 @@ package org.cointda.crypto;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.cointda.bean.CoinQuotesLatestBean;
 import org.cointda.bean.CryptocurrencyBean;
 import org.cointda.util.DateHelper;
@@ -38,11 +37,8 @@ import java.util.Locale;
 /**
  * @author lif
  */
+@Slf4j
 public class CoinQuotesLatestCollector {
-
-    private static final Logger logger =
-        LogManager.getLogger(CoinQuotesLatestCollector.class.getName());
-
     private static String apiKey;
     private static String uri;
     private static String customHeader;
@@ -70,7 +66,7 @@ public class CoinQuotesLatestCollector {
         // c.getQuotesLatest("symbol", "MDA,RDN");
         list.forEach((bean) -> {
             if (bean.getSymbol().toLowerCase().equals("knc") || bean.getSymbol().toLowerCase(Locale.ROOT).equals("kncl")) {
-                logger.info(bean.toString());
+                log.info(bean.toString());
             }
         });
 
@@ -82,7 +78,7 @@ public class CoinQuotesLatestCollector {
         paratmers.add(new BasicNameValuePair("convert", "USD"));
 
         String result = new HttpHelper().makeAPICall(uri, httpHeaders, customHeader, apiKey, paratmers);
-        // logger.info(result);
+        // log.info(result);
         ObjectMapper mapper = new ObjectMapper();
         List<CoinQuotesLatestBean> list = new ArrayList<>();
 
@@ -94,7 +90,7 @@ public class CoinQuotesLatestCollector {
         JsonNode data = rootNode.path("data");
         for (String id : v.split(",")) {
             JsonNode coin = data.path(id);
-            // logger.info(coin);
+            // log.info(coin);
             CoinQuotesLatestBean bean = new CoinQuotesLatestBean();
             bean.setId(coin.get("id").asInt());
             if (!coin.get("name").isNull()) {

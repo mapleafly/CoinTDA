@@ -41,7 +41,6 @@ import java.util.*;
  */
 public class PATableViewController implements Initializable {
 
-    //private static final Logger logger = LogManager.getLogger(PATableViewController.class.getName());
     /**
      * The data as an observable list of TradeData.
      */

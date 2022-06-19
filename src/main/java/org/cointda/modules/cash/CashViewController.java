@@ -42,7 +42,6 @@ import java.util.ResourceBundle;
  */
 public class CashViewController implements Initializable {
 
-    //private static final Logger logger = LogManager.getLogger(CashViewController.class.getName());
     // USDT
     private static final String BASESYMBOL = "USDT";
     private static final String BASEID = "825";

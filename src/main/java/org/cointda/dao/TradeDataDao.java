@@ -15,8 +15,7 @@
  */
 package org.cointda.dao;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.cointda.bean.CoinMarketCapIdBean;
 import org.cointda.bean.TradeDataBean;
 import org.cointda.bean.property.TradeDataFXC;
@@ -29,10 +28,8 @@ import java.util.List;
 /**
  * @author xuelf
  */
+@Slf4j
 public class TradeDataDao {
-
-    private static final Logger logger = LogManager.getLogger(TradeDataDao.class.getName());
-
     public TradeDataDao() {
     }
 
@@ -258,13 +255,13 @@ public class TradeDataDao {
         for (int i = 0; i < 15; i++) {
             list.add(bean);
         }
-        logger.info(list.size());
+        log.info("size = " + list.size());
         // CoinListingDao dao = new CoinListingDao();
         TradeDataDao.truncate();
-        // logger.info(TradeDataDao.batchInsert(list).length);
-        // logger.info(TradeDataDao.insert(bean));
+        // log.info(TradeDataDao.batchInsert(list).length);
+        // log.info(TradeDataDao.insert(bean));
         // TradeDataBean coin2 = TradeDataDao.queryBean(1);
-        // logger.info(coin2);
+        // log.info(coin2);
         // TradeDataDao.delete(coin2);
 
     }

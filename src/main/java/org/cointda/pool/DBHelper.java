@@ -15,6 +15,7 @@
  */
 package org.cointda.pool;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.QueryRunner;
@@ -23,7 +24,6 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
-import org.apache.logging.log4j.LogManager;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -37,10 +37,9 @@ import java.util.List;
 /**
  * @author xuelf
  */
+@Slf4j
 public class DBHelper {
 
-    private static final org.apache.logging.log4j.Logger logger =
-        LogManager.getLogger(DBHelper.class.getName());
     private static Connection connection = null;
     private static DataSource ds = null;
 
@@ -65,7 +64,7 @@ public class DBHelper {
                 connection.close();
             }
         } catch (SQLException e) {
-            logger.error(e.toString());
+            log.error(e.toString());
         }
     }
 
@@ -87,7 +86,7 @@ public class DBHelper {
         try {
             return run.update(sql, params);
         } catch (SQLException ex) {
-            logger.error(ex.toString());
+            log.error(ex.toString());
         }
 
         return -1;
@@ -114,7 +113,7 @@ public class DBHelper {
                 return (BigDecimal) run.query("VALUES IDENTITY_VAL_LOCAL()", new ScalarHandler(1));
             }
         } catch (SQLException ex) {
-            logger.error(ex.toString());
+            log.error(ex.toString());
         }
 
         return new BigDecimal("-1");
@@ -133,7 +132,7 @@ public class DBHelper {
         try {
             return run.batch(sql, params);
         } catch (SQLException ex) {
-            logger.error(ex.toString());
+            log.error(ex.toString());
         }
         return null;
     }
@@ -145,7 +144,7 @@ public class DBHelper {
             // 返回查询值
             return runner.query(sql, rsh, params);
         } catch (SQLException ex) {
-            logger.error(ex.toString());
+            log.error(ex.toString());
         }
         return null;
     }
@@ -155,7 +154,7 @@ public class DBHelper {
         try {
             return (T) run.query(sql, new ColumnListHandler(1), params);
         } catch (SQLException ex) {
-            logger.error(ex.toString());
+            log.error(ex.toString());
         }
         return null;
     }
@@ -177,7 +176,7 @@ public class DBHelper {
         try {
             return run.execute(sql);
         } catch (SQLException ex) {
-            logger.error(ex.toString());
+            log.error(ex.toString());
         }
         return -1;
     }
@@ -187,7 +186,7 @@ public class DBHelper {
         try {
             return run.execute(sql);
         } catch (SQLException ex) {
-            logger.error(ex.toString());
+            log.error(ex.toString());
         }
         return -1;
     }
@@ -204,7 +203,7 @@ public class DBHelper {
             }
             con.close();
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
         // System.out.println(set);
         return set.contains(tablename.toUpperCase());

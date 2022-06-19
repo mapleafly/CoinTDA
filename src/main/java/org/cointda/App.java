@@ -25,8 +25,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.cointda.enums.BooleanEnum;
 import org.cointda.modules.baseData.CoinInfo;
 import org.cointda.modules.cash.CashViewModule;
@@ -51,8 +49,6 @@ import java.util.concurrent.CompletableFuture;
  * JavaFX App
  */
 public class App extends Application {
-
-    private static final Logger logger = LogManager.getLogger(App.class.getName());
 
     private Workbench workbench;
 

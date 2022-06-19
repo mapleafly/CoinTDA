@@ -15,8 +15,6 @@
  */
 package org.cointda.dao;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.cointda.bean.CoinQuotesLatestBean;
 import org.cointda.bean.TradeDataBean;
 import org.cointda.pool.DBHelper;
@@ -27,9 +25,6 @@ import java.util.List;
  * @author xuelf
  */
 public class TypePieChartDao {
-
-    private static final Logger logger = LogManager.getLogger(TypePieChartDao.class.getName());
-
     public static List<TradeDataBean> queryAllTradeData() {
         String sql = "select * from tab_tradeinfo";
         return DBHelper.queryList(TradeDataBean.class, sql);

@@ -20,18 +20,15 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
 /**
  * @author lif
  */
+@Slf4j
 public class TypePieChartModule extends WorkbenchModule {
-
-    private static final Logger logger = LogManager.getLogger(TypePieChartModule.class.getName());
-
     public TypePieChartModule() {
         super("数据图例", MaterialDesignIcon.CHART_PIE);
     }
@@ -44,7 +41,7 @@ public class TypePieChartModule extends WorkbenchModule {
             loader.setLocation(TypePieChartModule.class.getResource("TypePieChartView.fxml"));
             view = loader.load();
         } catch (IOException e) {
-            logger.error(e.toString());
+            log.error(e.toString());
         }
         return view;
     }

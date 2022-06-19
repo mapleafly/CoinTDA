@@ -27,8 +27,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.cointda.bean.property.CoinTypeFXC;
 import org.cointda.dao.CoinTypeDao;
 import org.cointda.modules.baseData.CoinInfo;
@@ -42,9 +40,6 @@ import java.util.*;
  * @author xuelf
  */
 public class SelectCoinViewController implements Initializable {
-
-    private static final Logger logger =
-        LogManager.getLogger(SelectCoinViewController.class.getName());
     private final ObservableList<CoinTypeFXC> coinTypeData;
     @FXML
     private TableView<CoinTypeFXC> priceTable;

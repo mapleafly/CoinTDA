@@ -17,10 +17,9 @@ package org.cointda.crypto;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.cointda.bean.CoinMarketCapListingBean;
 import org.cointda.bean.CryptocurrencyBean;
 import org.cointda.util.DateHelper;
@@ -37,10 +36,8 @@ import java.util.Locale;
 /**
  * @author xuelf
  */
+@Slf4j
 public class CoinListingCollector {
-
-    private static final Logger logger = LogManager.getLogger(CoinListingCollector.class.getName());
-
     private static String apiKey;
     private static String uri;
     private static String customHeader;
@@ -67,7 +64,7 @@ public class CoinListingCollector {
         }
         list.forEach((bean) -> {
             if (bean.getSymbol().toLowerCase().equals("knc") || bean.getSymbol().toLowerCase(Locale.ROOT).equals("kncl")) {
-                logger.info(bean.toString());
+                log.info(bean.toString());
             }
         });
     }
@@ -83,7 +80,7 @@ public class CoinListingCollector {
         //paratmers.add(new BasicNameValuePair("cryptocurrency_type","all"));//all"or "coins"or "tokens"
 
         String result = new HttpHelper().makeAPICall(uri, httpHeaders, customHeader, apiKey, paratmers);
-        //logger.info(result);
+        //log.info(result);
         ObjectMapper mapper = new ObjectMapper();
         List<CoinMarketCapListingBean> list = new ArrayList<>();
         JsonNode rootNode = mapper.readTree(result);
@@ -108,7 +105,7 @@ public class CoinListingCollector {
                 if (objNode.has("date_added") && !objNode.get("date_added").isNull()) {
                     String date = DateHelper.utcToLocal(
                         objNode.get("date_added").asText());
-                    //logger.info(date);
+                    //log.info(date);
                     id.setDate_added(date);
                 } else {
                     id.setDate_added(DateHelper.toString(LocalDate.now()));

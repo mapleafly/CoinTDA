@@ -17,10 +17,9 @@ package org.cointda.crypto;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.cointda.bean.CoinMarketCapIdBean;
 import org.cointda.bean.CryptocurrencyBean;
 import org.cointda.util.DateHelper;
@@ -33,10 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+@Slf4j
 public class CoinIDMapCollector {
-
-    private static final Logger logger = LogManager.getLogger(CoinIDMapCollector.class.getName());
-
     private static String apiKey;
     private static String uri;
     private static String customHeader;
@@ -62,11 +59,11 @@ public class CoinIDMapCollector {
         if (list != null && !list.isEmpty()) {
             for (CoinMarketCapIdBean bean : list) {
                 if (bean.getSymbol().equalsIgnoreCase("knc") || bean.getSymbol().toLowerCase(Locale.ROOT).equals("kncl")) {
-                    logger.info(bean.toString());
+                    log.info(bean.toString());
                 }
             }
         }
-        //logger.info(list);
+        //log.info(list);
     }
 
     public List<CoinMarketCapIdBean> getCoinMarketCapIds() throws URISyntaxException, IOException {
@@ -78,7 +75,7 @@ public class CoinIDMapCollector {
         paratmers.add(new BasicNameValuePair("sort", "cmc_rank"));
         //paratmers.add(new BasicNameValuePair("aux","platform,first_historical_data,last_historical_data,is_active"));
         String result = new HttpHelper().makeAPICall(uri, httpHeaders, customHeader, apiKey, paratmers);
-        //logger.info(result);
+        //log.info(result);
         ObjectMapper mapper = new ObjectMapper();
         List<CoinMarketCapIdBean> list = new ArrayList<>();
 
@@ -89,7 +86,7 @@ public class CoinIDMapCollector {
         // 遍历 data 内的 array
         if (data.isArray()) {
             for (JsonNode objNode : data) {
-                //logger.info(objNode);
+                //log.info(objNode);
                 CoinMarketCapIdBean id = new CoinMarketCapIdBean();
                 id.setId(objNode.get("id").asInt());
                 id.setName(objNode.get("name").asText());

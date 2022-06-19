@@ -15,8 +15,6 @@
  */
 package org.cointda.dao;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.cointda.bean.CoinQuotesLatestBean;
 import org.cointda.pool.DBHelper;
 
@@ -26,9 +24,6 @@ import java.util.List;
  * @author lif
  */
 public class CoinQuotesLatestDao {
-
-    private static final Logger logger = LogManager.getLogger(CoinQuotesLatestDao.class.getName());
-
     /**
      * @param bean 1
      * @Description: 修改一条数据

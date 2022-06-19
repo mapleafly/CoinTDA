@@ -33,7 +33,6 @@ import java.util.List;
  */
 public class ImportTradeData {
 
-    //private static final Logger logger = LogManager.getLogger(ExportTradeData.class.getName());
     private final Workbench workbench;
 
     public ImportTradeData(Workbench workbench) {

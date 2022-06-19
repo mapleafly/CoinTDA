@@ -20,18 +20,15 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
 /**
  * @author lif
  */
+@Slf4j
 public class SelectCoinModule extends WorkbenchModule {
-
-    private static final Logger logger = LogManager.getLogger(SelectCoinModule.class.getName());
-
     public SelectCoinModule() {
         super("可用币种管理", MaterialDesignIcon.SELECT);
     }
@@ -48,7 +45,7 @@ public class SelectCoinModule extends WorkbenchModule {
             controller.setWorkbench(getWorkbench());
 
         } catch (IOException e) {
-            logger.error(e.toString());
+            log.error(e.toString());
         }
         return view;
     }

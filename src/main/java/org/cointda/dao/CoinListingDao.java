@@ -15,8 +15,6 @@
  */
 package org.cointda.dao;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.cointda.bean.CoinMarketCapListingBean;
 import org.cointda.pool.DBHelper;
 
@@ -26,9 +24,6 @@ import java.util.List;
  * @author xuelf
  */
 public class CoinListingDao {
-
-    private static final Logger logger = LogManager.getLogger(CoinListingDao.class.getName());
-
     /**
      * @param bean 1
      * @Description: 修改一条数据

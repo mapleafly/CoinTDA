@@ -20,17 +20,15 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
 /**
  * @author lif
  */
+@Slf4j
 public class CashViewModule extends WorkbenchModule {
-
-    private static final Logger logger = LogManager.getLogger(CashViewModule.class.getName());
 
     public CashViewModule() {
         super("出入金管理", MaterialDesignIcon.CASH);
@@ -47,7 +45,7 @@ public class CashViewModule extends WorkbenchModule {
             CashViewController controller = loader.getController();
             controller.setWorkbench(getWorkbench());
         } catch (IOException e) {
-            logger.error(e.toString());
+            log.error(e.toString());
         }
         return view;
     }

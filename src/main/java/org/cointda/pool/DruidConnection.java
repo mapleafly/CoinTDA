@@ -18,8 +18,7 @@ package org.cointda.pool;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.alibaba.druid.pool.DruidPooledConnection;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.io.BufferedInputStream;
@@ -32,10 +31,8 @@ import java.util.Properties;
 /**
  * @author xuelf
  */
+@Slf4j
 public class DruidConnection {
-
-    private static final Logger logger = LogManager.getLogger(DruidConnection.class.getName());
-
     private static Properties properties = null;
     private static DruidDataSource dataSource = null;
     private static volatile DruidConnection instatce = null;
@@ -51,7 +48,7 @@ public class DruidConnection {
             dataSource = getDatasource();
 
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -84,7 +81,7 @@ public class DruidConnection {
         try {
             source = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
         return source;
     }
@@ -99,7 +96,7 @@ public class DruidConnection {
         try {
             connection = dataSource.getConnection();
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
         return connection;
     }

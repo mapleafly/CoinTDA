@@ -20,18 +20,15 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
 /**
  * @author lif
  */
+@Slf4j
 public class PATableModule extends WorkbenchModule {
-
-    private static final Logger logger = LogManager.getLogger(PATableModule.class.getName());
-
     public PATableModule() {
         super("数据分析", MaterialDesignIcon.TABLE);
     }
@@ -47,7 +44,7 @@ public class PATableModule extends WorkbenchModule {
             PATableViewController controller = loader.getController();
             controller.setWorkbench(getWorkbench());
         } catch (IOException e) {
-            logger.error(e.toString());
+            log.error(e.toString());
         }
         return view;
     }
