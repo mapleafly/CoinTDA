@@ -1,13 +1,16 @@
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    #schema: classpath:db/schema-h2.sql
-    #data: classpath:db/data-h2.sql
-    #url: jdbc:h2:mem:test
-    url: jdbc:h2:~/cointdadbtest
+    url: jdbc:h2:~/.cointda/h2/cointdadbtest;AUTO_SERVER=TRUE
     username: root
     password: test
-
-mybatis:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 在console打印sql语句
+  sql:
+    init:
+      mode: always
+      platform: h2
+      #data-locations: classpath:db/data-h2.sql
+      schema-locations: classpath:db/schema-h2.sql
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto #id生成规则：数据库id自增
