@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cointda.config.CoinMarketCapConfig;
 import org.cointda.entity.TradeInfo;
 import org.cointda.mapper.TradeInfoMapper;
+import org.cointda.service.CoinMarketCapIdMapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -23,10 +24,22 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
     @Autowired
     private CoinMarketCapConfig coinMarketCapConfig;
 
+    @Autowired
+    CoinMarketCapIdMapService coinMarketCapIdMapService;
+
     @Override
     public void run(String... args) throws Exception {
         log.info("加载顺序1");
-        log.info("CoinMarketCapConfig.apiKey = "+ coinMarketCapConfig.getApiKey());
+        //log.info("CoinMarketCapConfig.apiKey = "+ coinMarketCapConfig.getApiKey());
+
+        String str = coinMarketCapIdMapService.getResult("active", "5000", "cmc_rank");
+        log.info("json.str ==" + str);
+
+        //JSONObject jsonObject = coinMarketCapIdMapService.getResult("active", "5000", "cmc_rank");
+        //log.info("jsonObject.toString() ==" + jsonObject.toString());
+        //JSONObject jsonData = jsonObject.getJSONObject("data");
+        //log.info("id = "+ jsonData.getString("id"));
+
         //TradeInfo tradeInfo = new TradeInfo();
         //tradeInfo.setBaseId(1);
         //tradeInfo.setBaseNum("1");

@@ -2,18 +2,18 @@ package org.cointda;
 
 import javafx.application.Application;
 import lombok.extern.slf4j.Slf4j;
-import org.cointda.entity.TradeInfo;
 import org.cointda.mapper.TradeInfoMapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.core.annotation.Order;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @SpringBootApplication
+@EnableFeignClients
 @Order(value = 2)
 @Slf4j
 @MapperScan("org.cointda.mapper")

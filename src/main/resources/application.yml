@@ -29,3 +29,21 @@ coin-market-cap:
   #latestOHLCV: https://pro-api.coinmarketcap.com/v1/cryptocurrency/ohlcv/latest
   #historicalOHLCV: https://pro-api.coinmarketcap.com/v1/cryptocurrency/ohlcv/historical
   #pricePerformanceStats: https://pro-api.coinmarketcap.com/v1/cryptocurrency/price-performance-stats/latest
+
+proxy:
+  host: 127.0.0.1
+  port: 60368
+  domains: pro-api.coinmarketcap.com
+
+feign:
+  client:
+    config:
+      default: # 服务名，填写 default 为所有服务，或者指定某服务，例如：annoroad-beta
+        connectTimeout: 10000 # 连接超时，10秒
+        readTimeout: 20000 # 读取超时，20秒
+  httpclient:
+    enabled: false # 关闭 ApacheHttpClient
+    max-connections: 50 # 连接池连接最大连接数（缺省值 200）
+    time-to-live: 600 # 连接最大闲置时间，单位为秒，600秒==10分钟（缺省值为 900秒==15分钟）
+  okhttp:
+    enabled: true # 开启 okhttp
