@@ -65,7 +65,6 @@ public class CoinIDMapCollector {
         }
         //log.info(list);
     }
-
     public List<CoinMarketCapIdBean> getCoinMarketCapIds() throws URISyntaxException, IOException {
         List<NameValuePair> paratmers = new ArrayList<>();
         //paratmers.add(new BasicNameValuePair("symbol","BTC,USDT,BNB,MDA"));

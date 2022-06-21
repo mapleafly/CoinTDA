@@ -5,6 +5,8 @@ import org.cointda.config.CoinMarketCapConfig;
 import org.cointda.entity.TradeInfo;
 import org.cointda.mapper.TradeInfoMapper;
 import org.cointda.service.CoinMarketCapIdMapService;
+import org.cointda.service.ListingsLatestService;
+import org.cointda.service.QuotesLatestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -26,14 +28,21 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
 
     @Autowired
     CoinMarketCapIdMapService coinMarketCapIdMapService;
+    @Autowired
+    ListingsLatestService listingsLatestService;
+    @Autowired
+    QuotesLatestService quotesLatestService;
 
     @Override
     public void run(String... args) throws Exception {
         log.info("加载顺序1");
         //log.info("CoinMarketCapConfig.apiKey = "+ coinMarketCapConfig.getApiKey());
 
-        String str = coinMarketCapIdMapService.getResult("active", "5000", "cmc_rank");
-        log.info("json.str ==" + str);
+        //String str = coinMarketCapIdMapService.getResult("active", "5000", "cmc_rank");
+        //log.info("json.str2 ==" + str);
+
+        //log.info("listingLatest = "+ listingsLatestService.getResult("1", "5000", "USD"));
+        log.info("quotesLatestService = "+ quotesLatestService.getResult("1", "USD", "is_active,is_fiat"));
 
         //JSONObject jsonObject = coinMarketCapIdMapService.getResult("active", "5000", "cmc_rank");
         //log.info("jsonObject.toString() ==" + jsonObject.toString());

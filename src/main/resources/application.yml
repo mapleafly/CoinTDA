@@ -14,14 +14,13 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto #id生成规则：数据库id自增
-
 coin-market-cap:
   apiKey:
   customHeader: X-CMC_PRO_API_KEY
   httpHeader: application/json
   coinMarketCapIDMap: https://pro-api.coinmarketcap.com/v1/cryptocurrency/map
   latestListings: https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest
-  latestQuotes: https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest
+  quotesLatest: https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest
   #metadata: https://pro-api.coinmarketcap.com/v1/cryptocurrency/info
   #historicalListings: https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/historical
   #historicalQuotes: https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/historical

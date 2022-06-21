@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-
 import java.io.Serializable;
 
 /**
@@ -22,6 +21,10 @@ public class QuotesLatest implements Serializable {
     private String symbol;
     //标称  The web URL friendly shorthand version of this cryptocurrency name
     private String slug;
+    //最后更新时间
+    private String lastUpdated;
+
+    //aux
     //coin在市场中的交易对数量
     private Integer numMarketPairs;
     //首次加入CoinMarketCap的时间
@@ -40,14 +43,15 @@ public class QuotesLatest implements Serializable {
     private String tokenAddress;
     //The cryptocurrency's CoinMarketCap rank by market cap.
     private Integer cmcRank;
-    private Integer isFiat;
-    //最后更新时间
-    private String lastUpdated;
+
+    //quote
     //整个市场的最新平均交易价格
     private String price;
     //24小时交易量
     @TableField("volume_24h")
     private String volume_24h;
+    @TableField("volume_change_24h")
+    private String volume_change_24h;
     //每种货币1小时的交易价格百分比变化
     @TableField("percent_change_1h")
     private String percent_change_1h;
@@ -57,7 +61,15 @@ public class QuotesLatest implements Serializable {
     //每种货币7天交易价格的百分比变化
     @TableField("percent_change_7d")
     private String percent_change_7d;
+    @TableField("percent_change_30d")
+    private String percent_change_30d;
+    @TableField("percent_change_60d")
+    private String percent_change_60d;
+    @TableField("percent_change_90d")
+    private String percent_change_90d;
     //CoinMarketCap计算的市值
     private String marketCap;
+    //市值占总市值百分比
+    private String marketCapDominance;
 
 }

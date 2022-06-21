@@ -11,4 +11,4 @@ historicalQuotes: https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/his
 latestMarketPairs: https://pro-api.coinmarketcap.com/v1/cryptocurrency/market-pairs/latest -
 latestOHLCV: https://pro-api.coinmarketcap.com/v1/cryptocurrency/ohlcv/latest 
 historicalOHLCV: https://pro-api.coinmarketcap.com/v1/cryptocurrency/ohlcv/historical
-pricePerformanceStats: https://pro-api.coinmarketcap.com/v1/cryptocurrency/price-performance-stats/latest 
+pricePerformanceStats: https://pro-api.coinmarketcap.com/v1/cryptocurrency/price-performance-stats/latest

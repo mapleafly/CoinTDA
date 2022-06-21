@@ -71,7 +71,6 @@ public class CoinQuotesLatestCollector {
         });
 
     }
-
     public List<CoinQuotesLatestBean> getQuotesLatest(String k, String v) throws IOException, URISyntaxException {
         List<NameValuePair> paratmers = new ArrayList<>();
         paratmers.add(new BasicNameValuePair(k, v));

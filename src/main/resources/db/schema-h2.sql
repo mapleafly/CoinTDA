@@ -67,13 +67,17 @@ CREATE TABLE IF NOT EXISTS quotesLatest
     platform_id integer,
     token_address VARCHAR(100),
     cmc_rank integer,
-    is_fiat integer,
     last_updated VARCHAR(100),
     price VARCHAR(100),
     volume_24h VARCHAR(100),
+    volume_change_24h VARCHAR(100),
     percent_change_1h VARCHAR(100),
     percent_change_24h VARCHAR(100),
     percent_change_7d VARCHAR(100),
+    percent_change_30d VARCHAR(100),
+    percent_change_60d VARCHAR(100),
+    percent_change_90d VARCHAR(100),
     market_cap VARCHAR(100),
+    market_cap_dominance VARCHAR(100),
     primary key (id)
 );
