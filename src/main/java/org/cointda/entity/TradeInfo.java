@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+/**
+ * 交易信息表
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
