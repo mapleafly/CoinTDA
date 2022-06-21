@@ -12,7 +12,7 @@ public class CoinMarketCapConfig {
     private String customHeader;
     private String httpHeader;
     private String coinMarketCapIDMap;
-    private String latestlistings;
+    private String latestListings;
     private String latestQuotes;
     //private String metadata;
     //private String historicalListings;
