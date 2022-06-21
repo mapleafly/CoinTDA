@@ -42,7 +42,9 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
         //log.info("json.str2 ==" + str);
 
         //log.info("listingLatest = "+ listingsLatestService.getResult("1", "5000", "USD"));
-        log.info("quotesLatestService = "+ quotesLatestService.getResult("1", "USD", "is_active,is_fiat"));
+
+        //num_market_pairs,cmc_rank,date_added,tags,platform,max_supply,circulating_supply,total_supply,market_cap_by_total_supply,volume_24h_reported,volume_7d,volume_7d_reported,volume_30d,volume_30d_reported,is_active,is_fiat
+        log.info("quotesLatestService = "+ quotesLatestService.getResult("1", "USD", "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active"));
 
         //JSONObject jsonObject = coinMarketCapIdMapService.getResult("active", "5000", "cmc_rank");
         //log.info("jsonObject.toString() ==" + jsonObject.toString());

@@ -22,4 +22,11 @@ public interface QuotesLatestService {
         @RequestParam("convert") String convert,
         @RequestParam("aux") String aux
     );
+
+    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    @Headers(value = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    public String getResult(
+        @RequestParam("id") String id,
+        @RequestParam("convert") String convert
+    );
 }

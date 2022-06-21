@@ -19,22 +19,22 @@ import java.util.Set;
 @Configuration
 public class FeignClientConfig {
     @Configuration
-    static class OkHttpClientConfiguration{
+    static class OkHttpClientConfiguration {
         @Value("${proxy.host}")
         private String proxyHost;
         @Value("${proxy.port}")
         private Integer proxyPort;
         @Value("#{'${proxy.domains}'.split(',')}")
         private Set<String> domainList;
+
         @Bean
         public OkHttpClientFactory okHttpClientFactory(OkHttpClient.Builder builder) {
             return new ProxyOkHttpClientFactory(builder);
         }
+
         public class ProxyOkHttpClientFactory extends DefaultOkHttpClientFactory {
             public ProxyOkHttpClientFactory(OkHttpClient.Builder builder) {
                 super(builder);
-                log.info("proxy host= "+ proxyHost);
-                log.info("proxy port= "+ proxyPort);
                 Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
                 List<Proxy> proxyList = new ArrayList<>(1);
                 proxyList.add(proxy);
@@ -42,7 +42,7 @@ public class FeignClientConfig {
                     @Override
                     public List<Proxy> select(URI uri) {
                         if (uri == null || !domainList.contains(uri.getHost())) {
-                        //if (uri == null) {
+                            //if (uri == null) {
                             return Collections.singletonList(Proxy.NO_PROXY);
                         }
                         return proxyList;
