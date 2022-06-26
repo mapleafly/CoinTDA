@@ -2,11 +2,13 @@ package org.cointda;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cointda.config.CoinMarketCapConfig;
+import org.cointda.dto.quote.QuotesLatestDto;
 import org.cointda.entity.TradeInfo;
 import org.cointda.mapper.TradeInfoMapper;
-import org.cointda.service.CoinMarketCapIdMapService;
-import org.cointda.service.ListingsLatestService;
-import org.cointda.service.QuotesLatestService;
+import org.cointda.service.IQuotesLatestService;
+import org.cointda.service.feignc.ICoinMarketCapIdMapFeignClient;
+import org.cointda.service.feignc.IListingsLatestFeignClient;
+import org.cointda.service.feignc.IQuotesLatestFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -27,11 +29,14 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
     private CoinMarketCapConfig coinMarketCapConfig;
 
     @Autowired
-    CoinMarketCapIdMapService coinMarketCapIdMapService;
+    ICoinMarketCapIdMapFeignClient iCoinMarketCapIdMapFeignClient;
     @Autowired
-    ListingsLatestService listingsLatestService;
+    IListingsLatestFeignClient iListingsLatestFeignClient;
     @Autowired
-    QuotesLatestService quotesLatestService;
+    IQuotesLatestFeignClient iQuotesLatestFeignClient;
+
+    @Autowired
+    IQuotesLatestService iQuotesLatestService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -44,8 +49,14 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
         //log.info("listingLatest = "+ listingsLatestService.getResult("1", "5000", "USD"));
 
         //num_market_pairs,cmc_rank,date_added,tags,platform,max_supply,circulating_supply,total_supply,market_cap_by_total_supply,volume_24h_reported,volume_7d,volume_7d_reported,volume_30d,volume_30d_reported,is_active,is_fiat
-        log.info("quotesLatestService = "+ quotesLatestService.getResult("1", "USD", "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active"));
-
+        //log.info("quotesLatestService = "+ iQuotesLatestFeignClient.getHttpJson("1982", "USD", "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active"));
+        String aux = "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active";
+        List<QuotesLatestDto> listQuotesLatestDto = iQuotesLatestService.getJson("id","1,1982", "USD", aux);
+        if(listQuotesLatestDto != null){
+            for(QuotesLatestDto dto : listQuotesLatestDto){
+                log.info("quotesLatestService = "+dto.toString());
+            }
+        }
         //JSONObject jsonObject = coinMarketCapIdMapService.getResult("active", "5000", "cmc_rank");
         //log.info("jsonObject.toString() ==" + jsonObject.toString());
         //JSONObject jsonData = jsonObject.getJSONObject("data");

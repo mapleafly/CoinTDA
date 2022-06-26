@@ -15,44 +15,44 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 使用代理连接网络
+ */
 @Slf4j
 @Configuration
 public class FeignClientConfig {
-    @Configuration
-    static class OkHttpClientConfiguration {
-        @Value("${proxy.host}")
-        private String proxyHost;
-        @Value("${proxy.port}")
-        private Integer proxyPort;
-        @Value("#{'${proxy.domains}'.split(',')}")
-        private Set<String> domainList;
+    @Value("${proxy.host}")
+    private String proxyHost;
+    @Value("${proxy.port}")
+    private Integer proxyPort;
+    @Value("#{'${proxy.domains}'.split(',')}")
+    private Set<String> domainList;
 
-        @Bean
-        public OkHttpClientFactory okHttpClientFactory(OkHttpClient.Builder builder) {
-            return new ProxyOkHttpClientFactory(builder);
-        }
+    @Bean
+    public OkHttpClientFactory okHttpClientFactory(OkHttpClient.Builder builder) {
+        return new ProxyOkHttpClientFactory(builder);
+    }
 
-        public class ProxyOkHttpClientFactory extends DefaultOkHttpClientFactory {
-            public ProxyOkHttpClientFactory(OkHttpClient.Builder builder) {
-                super(builder);
-                Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
-                List<Proxy> proxyList = new ArrayList<>(1);
-                proxyList.add(proxy);
-                builder.proxySelector(new ProxySelector() {
-                    @Override
-                    public List<Proxy> select(URI uri) {
-                        if (uri == null || !domainList.contains(uri.getHost())) {
-                            //if (uri == null) {
-                            return Collections.singletonList(Proxy.NO_PROXY);
-                        }
-                        return proxyList;
+    public class ProxyOkHttpClientFactory extends DefaultOkHttpClientFactory {
+        public ProxyOkHttpClientFactory(OkHttpClient.Builder builder) {
+            super(builder);
+            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
+            List<Proxy> proxyList = new ArrayList<>(1);
+            proxyList.add(proxy);
+            builder.proxySelector(new ProxySelector() {
+                @Override
+                public List<Proxy> select(URI uri) {
+                    if (uri == null || !domainList.contains(uri.getHost())) {
+                        //if (uri == null) {
+                        return Collections.singletonList(Proxy.NO_PROXY);
                     }
+                    return proxyList;
+                }
 
-                    @Override
-                    public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
-                    }
-                });
-            }
+                @Override
+                public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
+                }
+            });
         }
     }
 }

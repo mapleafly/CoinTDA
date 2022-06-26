@@ -29,11 +29,6 @@ coin-market-cap:
   #historicalOHLCV: https://pro-api.coinmarketcap.com/v1/cryptocurrency/ohlcv/historical
   #pricePerformanceStats: https://pro-api.coinmarketcap.com/v1/cryptocurrency/price-performance-stats/latest
 
-proxy:
-  host: 127.0.0.1
-  port: 60368
-  domains: pro-api.coinmarketcap.com
-
 feign:
   client:
     config:
@@ -46,3 +41,8 @@ feign:
     time-to-live: 600 # 连接最大闲置时间，单位为秒，600秒==10分钟（缺省值为 900秒==15分钟）
   okhttp:
     enabled: true # 开启 okhttp
+
+proxy:
+  host: 127.0.0.1
+  port: 60368
+  domains: pro-api.coinmarketcap.com
