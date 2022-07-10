@@ -3,18 +3,21 @@ package org.cointda;
 import lombok.extern.slf4j.Slf4j;
 import org.cointda.config.CoinMarketCapConfig;
 import org.cointda.dto.quote.QuotesLatestDto;
+import org.cointda.entity.QuotesLatest;
 import org.cointda.entity.TradeInfo;
 import org.cointda.mapper.TradeInfoMapper;
 import org.cointda.service.IQuotesLatestService;
 import org.cointda.service.feignc.ICoinMarketCapIdMapFeignClient;
 import org.cointda.service.feignc.IListingsLatestFeignClient;
 import org.cointda.service.feignc.IQuotesLatestFeignClient;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -52,9 +55,14 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
         //log.info("quotesLatestService = "+ iQuotesLatestFeignClient.getHttpJson("1982", "USD", "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active"));
         String aux = "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active";
         List<QuotesLatestDto> listQuotesLatestDto = iQuotesLatestService.getJson("id","1,1982", "USD", aux);
+        List<QuotesLatest> listQuotesLatest = new ArrayList<>();
         if(listQuotesLatestDto != null){
             for(QuotesLatestDto dto : listQuotesLatestDto){
-                log.info("quotesLatestService = "+dto.toString());
+                QuotesLatest quotesLatest = new QuotesLatest();
+                BeanUtils.copyProperties(dto, quotesLatest);
+                listQuotesLatest.add(quotesLatest);
+                log.info("listQuotesLatestDto = "+dto.toString());
+                log.info("quotesLatest = "+quotesLatest.toString());
             }
         }
         //JSONObject jsonObject = coinMarketCapIdMapService.getResult("active", "5000", "cmc_rank");
