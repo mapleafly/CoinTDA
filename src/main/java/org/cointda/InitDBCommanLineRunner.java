@@ -57,7 +57,8 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
         List<QuotesLatestDto> listQuotesLatestDto = iQuotesLatestService.getJson("id","1,1982", "USD", aux);
         List<QuotesLatest> listQuotesLatest = new ArrayList<>();
         if(listQuotesLatestDto != null){
-            List<QuotesLatest> list = CopyUtil.copyList(listQuotesLatestDto, QuotesLatest.class);
+            List<QuotesLatest> list = CopyUtil.copyList(listQuotesLatestDto);
+            listQuotesLatestDto.stream().forEach(b -> log.info(b.toString()));
             list.stream().forEach(b -> log.info(b.toString()));
             //for(QuotesLatestDto dto : listQuotesLatestDto){
             //    QuotesLatest quotesLatest = new QuotesLatest();
