@@ -2,7 +2,6 @@ package org.cointda.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +31,6 @@ public class QuotesLatestServiceImpl implements IQuotesLatestService {
      * @param values  查询值
      * @param convert quote种类
      * @param aux     结果中需要的辅助数据
-     * @return
      */
     @Override
     public List<QuotesLatestDto> getJson(String key, String values, String convert, String aux) {
@@ -42,7 +40,7 @@ public class QuotesLatestServiceImpl implements IQuotesLatestService {
             return null;
         }
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode rootNode = null;
+        JsonNode rootNode;
         try {
             rootNode = mapper.readTree(strJson);
         } catch (JsonProcessingException e) {
@@ -125,19 +123,19 @@ public class QuotesLatestServiceImpl implements IQuotesLatestService {
     }
 
     private String getHttpJson(String key, String values, String convert, String aux) {
-        String strJson = null;
+        String strJson;
         switch (key) {
             case "id":
                 strJson = iQuotesLatestFeignClient.getHttpJsonById(values, convert,
-                    "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active");
+                    aux);
                 break;
             case "symbol":
                 strJson = iQuotesLatestFeignClient.getHttpJsonBySymbol(values, convert,
-                    "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active");
+                    aux);
                 break;
             case "slug":
                 strJson = iQuotesLatestFeignClient.getHttpJsonBySlug(values, convert,
-                    "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active");
+                    aux);
                 break;
             default:
                 strJson = null;
@@ -153,8 +151,6 @@ public class QuotesLatestServiceImpl implements IQuotesLatestService {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 status = mapper.readValue(jsonStatus.toString(), Status.class);
-            } catch (JsonMappingException e) {
-                throw new RuntimeException(e);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
