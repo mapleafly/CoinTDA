@@ -1,5 +1,7 @@
 package org.cointda.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -9,22 +11,30 @@ import org.cointda.dto.Platform;
 import org.cointda.dto.Status;
 import org.cointda.dto.quote.Quote;
 import org.cointda.dto.quote.QuotesLatestDto;
+import org.cointda.entity.QuotesLatest;
+import org.cointda.mapper.QuotesLatestMapper;
 import org.cointda.service.IQuotesLatestService;
 import org.cointda.service.feignc.IQuotesLatestFeignClient;
 import org.cointda.util.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
 @Component
-public class QuotesLatestServiceImpl implements IQuotesLatestService {
+public class QuotesLatestServiceImpl extends ServiceImpl<QuotesLatestMapper, QuotesLatest> implements IQuotesLatestService {
 
     @Autowired
     IQuotesLatestFeignClient iQuotesLatestFeignClient;
+
+    @Resource
+    private QuotesLatestMapper quotesLatestMapper;
 
     /**
      * @param key     查询参数 - by ID, symbol, or slug
@@ -91,6 +101,8 @@ public class QuotesLatestServiceImpl implements IQuotesLatestService {
                 quotesLatestDto.setCmc_rank(coin.get("cmc_rank").asInt());
             }
             if (coin.hasNonNull("last_updated")) {
+                log.info("11111111111111111111");
+                log.info(coin.get("last_updated").asText());
                 String date = DateHelper.utcToLocal(coin.get("last_updated").asText());
                 quotesLatestDto.setLast_updated(date);
             }
@@ -188,4 +200,43 @@ public class QuotesLatestServiceImpl implements IQuotesLatestService {
         return listTags;
     }
 
+    /**
+     *  插入数据
+     * @param entity
+     * @return int n 表示插入几条数据，如果n=0 表示插入失败
+     */
+    @Override
+    public int insert(QuotesLatest entity) {
+        return quotesLatestMapper.insert(entity);
+    }
+
+    @Override
+    public int update(QuotesLatest entity) {
+        return quotesLatestMapper.updateById(entity);
+    }
+
+    @Override
+    public int deleteByID(Serializable id) {
+        return quotesLatestMapper.deleteById(id);
+    }
+
+    @Override
+    public int deleteById(QuotesLatest entity) {
+        return quotesLatestMapper.deleteById(entity);
+    }
+
+    @Override
+    public QuotesLatest selectById(Serializable id) {
+        return quotesLatestMapper.selectById(id);
+    }
+
+    @Override
+    public List<QuotesLatest> selectBatchIds(Collection<? extends Serializable> idList) {
+        return quotesLatestMapper.selectBatchIds(idList);
+    }
+
+    @Override
+    public List<QuotesLatest> selectList(Wrapper<QuotesLatest> queryWrapper) {
+        return quotesLatestMapper.selectList(queryWrapper);
+    }
 }

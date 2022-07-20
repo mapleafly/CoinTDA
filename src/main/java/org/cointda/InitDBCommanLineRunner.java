@@ -28,6 +28,7 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
     @Resource
     private TradeInfoMapper tradeInfoMapper;
 
+
     @Autowired
     private CoinMarketCapConfig coinMarketCapConfig;
 
@@ -58,8 +59,11 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
         List<QuotesLatest> listQuotesLatest = new ArrayList<>();
         if(listQuotesLatestDto != null){
             List<QuotesLatest> list = CopyUtil.copyList(listQuotesLatestDto);
-            listQuotesLatestDto.stream().forEach(b -> log.info(b.toString()));
-            list.stream().forEach(b -> log.info(b.toString()));
+            listQuotesLatestDto.stream().forEach(b -> log.info("dto::"+b.toString()));
+            list.stream().forEach(b -> log.info("last::"+b.toString()));
+            iQuotesLatestService.saveOrUpdateBatch(list);
+
+            iQuotesLatestService.selectList(null).stream().forEach(a -> log.info("sql::"+a.toString()));
             //for(QuotesLatestDto dto : listQuotesLatestDto){
             //    QuotesLatest quotesLatest = new QuotesLatest();
             //    BeanUtils.copyProperties(dto, quotesLatest);
