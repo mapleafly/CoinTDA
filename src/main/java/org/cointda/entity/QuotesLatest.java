@@ -49,24 +49,24 @@ public class QuotesLatest implements Serializable {
     private String price;
     //24小时交易量
     @TableField("volume_24h")
-    private String volume_24h;
+    private String volume24h;
     @TableField("volume_change_24h")
-    private String volume_change_24h;
+    private String volumeChange24h;
     //每种货币1小时的交易价格百分比变化
     @TableField("percent_change_1h")
-    private String percent_change_1h;
+    private String percentChange1h;
     //每种货币的24小时交易价格百分比变化
     @TableField("percent_change_24h")
-    private String percent_change_24h;
+    private String percentChange24h;
     //每种货币7天交易价格的百分比变化
     @TableField("percent_change_7d")
-    private String percent_change_7d;
+    private String percentChange7d;
     @TableField("percent_change_30d")
-    private String percent_change_30d;
+    private String percentChange30d;
     @TableField("percent_change_60d")
-    private String percent_change_60d;
+    private String percentChange60d;
     @TableField("percent_change_90d")
-    private String percent_change_90d;
+    private String percentChange90d;
     //CoinMarketCap计算的市值
     private String marketCap;
     //市值占总市值百分比

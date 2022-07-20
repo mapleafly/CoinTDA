@@ -76,14 +76,14 @@ public class CopyUtil {
         Quote quote = dto.getQuote();
         if(quote != null){
             quotesLatest.setPrice(String.valueOf(quote.getPrice()));
-            quotesLatest.setVolume_24h(String.valueOf(quote.getVolume_24h()));
-            quotesLatest.setVolume_change_24h(String.valueOf(quote.getVolume_change_24h()));
-            quotesLatest.setPercent_change_1h(String.valueOf(quote.getPercent_change_1h()));
-            quotesLatest.setPercent_change_24h(String.valueOf(quote.getPercent_change_24h()));
-            quotesLatest.setPercent_change_7d(String.valueOf(quote.getPercent_change_7d()));
-            quotesLatest.setPercent_change_30d(String.valueOf(quote.getPercent_change_30d()));
-            quotesLatest.setPercent_change_60d(String.valueOf(quote.getPercent_change_60d()));
-            quotesLatest.setPercent_change_90d(String.valueOf(quote.getPercent_change_90d()));
+            quotesLatest.setVolume24h(String.valueOf(quote.getVolume_24h()));
+            quotesLatest.setVolumeChange24h(String.valueOf(quote.getVolume_change_24h()));
+            quotesLatest.setPercentChange1h(String.valueOf(quote.getPercent_change_1h()));
+            quotesLatest.setPercentChange24h(String.valueOf(quote.getPercent_change_24h()));
+            quotesLatest.setPercentChange7d(String.valueOf(quote.getPercent_change_7d()));
+            quotesLatest.setPercentChange30d(String.valueOf(quote.getPercent_change_30d()));
+            quotesLatest.setPercentChange60d(String.valueOf(quote.getPercent_change_60d()));
+            quotesLatest.setPercentChange90d(String.valueOf(quote.getPercent_change_90d()));
             quotesLatest.setMarketCap(String.valueOf(quote.getMarket_cap()));
             quotesLatest.setMarketCapDominance(String.valueOf(quote.getMarket_cap_dominance()));
         }
