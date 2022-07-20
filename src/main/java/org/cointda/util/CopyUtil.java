@@ -18,7 +18,7 @@ public class CopyUtil {
         if (source == null) {
             return null;
         }
-     return copy(source, c, null);
+     return copy(source, c, (String) null);
     }
 
     public static <T> T copy(Object source, Class<T> c, @Nullable String... ignoreProperties){
@@ -33,22 +33,16 @@ public class CopyUtil {
                 BeanUtils.copyProperties(source, instance, ignoreProperties);
             }
             return instance;
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
+        } catch (InvocationTargetException | InstantiationException | NoSuchMethodException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static <E, T> List<T> copyList(List<E> sources, Class<T> c) {
         if (CollectionUtils.isEmpty(sources)) {
-            return new ArrayList<T>();
+            return new ArrayList<>();
         }
-        List<T> list = new ArrayList<T>();
+        List<T> list = new ArrayList<>();
         for (E source : sources) {
             list.add(copy(source, c));
         }
