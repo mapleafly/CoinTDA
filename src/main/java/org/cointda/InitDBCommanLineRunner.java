@@ -10,7 +10,7 @@ import org.cointda.service.IQuotesLatestService;
 import org.cointda.service.feignc.ICoinMarketCapIdMapFeignClient;
 import org.cointda.service.feignc.IListingsLatestFeignClient;
 import org.cointda.service.feignc.IQuotesLatestFeignClient;
-import org.springframework.beans.BeanUtils;
+import org.cointda.util.CopyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -57,13 +57,15 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
         List<QuotesLatestDto> listQuotesLatestDto = iQuotesLatestService.getJson("id","1,1982", "USD", aux);
         List<QuotesLatest> listQuotesLatest = new ArrayList<>();
         if(listQuotesLatestDto != null){
-            for(QuotesLatestDto dto : listQuotesLatestDto){
-                QuotesLatest quotesLatest = new QuotesLatest();
-                BeanUtils.copyProperties(dto, quotesLatest);
-                listQuotesLatest.add(quotesLatest);
-                log.info("listQuotesLatestDto = "+dto.toString());
-                log.info("quotesLatest = "+quotesLatest.toString());
-            }
+            List<QuotesLatest> list = CopyUtil.copyList(listQuotesLatestDto, QuotesLatest.class);
+            list.stream().forEach(b -> log.info(b.toString()));
+            //for(QuotesLatestDto dto : listQuotesLatestDto){
+            //    QuotesLatest quotesLatest = new QuotesLatest();
+            //    BeanUtils.copyProperties(dto, quotesLatest);
+            //    listQuotesLatest.add(quotesLatest);
+            //    log.info("listQuotesLatestDto = "+dto.toString());
+            //    log.info("quotesLatest = "+quotesLatest.toString());
+            //}
         }
         //JSONObject jsonObject = coinMarketCapIdMapService.getResult("active", "5000", "cmc_rank");
         //log.info("jsonObject.toString() ==" + jsonObject.toString());
