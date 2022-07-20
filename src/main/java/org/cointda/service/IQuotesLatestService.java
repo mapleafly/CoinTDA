@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface IQuotesLatestService {
 
-    public List<QuotesLatestDto> getJson(String key, String values, String convert, String aux);
+    List<QuotesLatestDto> getJson(String key, String values, String convert, String aux);
 
 }
