@@ -3,7 +3,7 @@ package org.cointda.service;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
-import org.cointda.dto.quote.CMCQuotesLatestDto;
+import org.cointda.dto.CMCQuotesLatestDto;
 import org.cointda.entity.CMCQuotesLatest;
 
 import java.io.Serializable;

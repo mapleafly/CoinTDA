@@ -1,8 +1,8 @@
 package org.cointda.util;
 
 import org.cointda.dto.Platform;
-import org.cointda.dto.quote.Quote;
-import org.cointda.dto.quote.CMCQuotesLatestDto;
+import org.cointda.dto.Quote;
+import org.cointda.dto.CMCQuotesLatestDto;
 import org.cointda.entity.CMCQuotesLatest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.lang.Nullable;

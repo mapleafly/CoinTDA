@@ -1,9 +1,8 @@
-package org.cointda.dto.quote;
+package org.cointda.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.cointda.dto.Platform;
 
 import java.util.List;
 

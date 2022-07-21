@@ -1,4 +1,4 @@
-package org.cointda.dto.quote;
+package org.cointda.dto;
 
 import lombok.Getter;
 import lombok.Setter;

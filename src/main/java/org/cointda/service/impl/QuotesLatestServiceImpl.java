@@ -9,10 +9,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.cointda.dto.Platform;
 import org.cointda.dto.Status;
-import org.cointda.dto.quote.Quote;
-import org.cointda.dto.quote.CMCQuotesLatestDto;
+import org.cointda.dto.Quote;
+import org.cointda.dto.CMCQuotesLatestDto;
 import org.cointda.entity.CMCQuotesLatest;
-import org.cointda.mapper.QuotesLatestMapper;
+import org.cointda.mapper.CMCQuotesLatestMapper;
 import org.cointda.service.IQuotesLatestService;
 import org.cointda.service.feignc.IQuotesLatestFeignClient;
 import org.cointda.util.DateHelper;
@@ -28,13 +28,13 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class QuotesLatestServiceImpl extends ServiceImpl<QuotesLatestMapper, CMCQuotesLatest> implements IQuotesLatestService {
+public class QuotesLatestServiceImpl extends ServiceImpl<CMCQuotesLatestMapper, CMCQuotesLatest> implements IQuotesLatestService {
 
     @Autowired
     IQuotesLatestFeignClient iQuotesLatestFeignClient;
 
     @Resource
-    private QuotesLatestMapper quotesLatestMapper;
+    private CMCQuotesLatestMapper CMCQuotesLatestMapper;
 
     /**
      * @param key     查询参数 - by ID, symbol, or slug
@@ -207,36 +207,36 @@ public class QuotesLatestServiceImpl extends ServiceImpl<QuotesLatestMapper, CMC
      */
     @Override
     public int insert(CMCQuotesLatest entity) {
-        return quotesLatestMapper.insert(entity);
+        return CMCQuotesLatestMapper.insert(entity);
     }
 
     @Override
     public int update(CMCQuotesLatest entity) {
-        return quotesLatestMapper.updateById(entity);
+        return CMCQuotesLatestMapper.updateById(entity);
     }
 
     @Override
     public int deleteByID(Serializable id) {
-        return quotesLatestMapper.deleteById(id);
+        return CMCQuotesLatestMapper.deleteById(id);
     }
 
     @Override
     public int deleteById(CMCQuotesLatest entity) {
-        return quotesLatestMapper.deleteById(entity);
+        return CMCQuotesLatestMapper.deleteById(entity);
     }
 
     @Override
     public CMCQuotesLatest selectById(Serializable id) {
-        return quotesLatestMapper.selectById(id);
+        return CMCQuotesLatestMapper.selectById(id);
     }
 
     @Override
     public List<CMCQuotesLatest> selectBatchIds(Collection<? extends Serializable> idList) {
-        return quotesLatestMapper.selectBatchIds(idList);
+        return CMCQuotesLatestMapper.selectBatchIds(idList);
     }
 
     @Override
     public List<CMCQuotesLatest> selectList(Wrapper<CMCQuotesLatest> queryWrapper) {
-        return quotesLatestMapper.selectList(queryWrapper);
+        return CMCQuotesLatestMapper.selectList(queryWrapper);
     }
 }

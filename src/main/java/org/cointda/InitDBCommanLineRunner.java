@@ -2,7 +2,7 @@ package org.cointda;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cointda.config.CoinMarketCapConfig;
-import org.cointda.dto.quote.CMCQuotesLatestDto;
+import org.cointda.dto.CMCQuotesLatestDto;
 import org.cointda.entity.CMCQuotesLatest;
 import org.cointda.entity.TradeInfo;
 import org.cointda.mapper.TradeInfoMapper;
