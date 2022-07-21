@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cointda.dto.Platform;
 import org.cointda.dto.Status;
 import org.cointda.dto.quote.Quote;
-import org.cointda.dto.quote.QuotesLatestDto;
+import org.cointda.dto.quote.CMCQuotesLatestDto;
 import org.cointda.entity.CMCQuotesLatest;
 import org.cointda.mapper.QuotesLatestMapper;
 import org.cointda.service.IQuotesLatestService;
@@ -43,8 +43,8 @@ public class QuotesLatestServiceImpl extends ServiceImpl<QuotesLatestMapper, CMC
      * @param aux     结果中需要的辅助数据
      */
     @Override
-    public List<QuotesLatestDto> getJson(String key, String values, String convert, String aux) {
-        List<QuotesLatestDto> listQuotesLatestDto = new ArrayList<>();
+    public List<CMCQuotesLatestDto> getJson(String key, String values, String convert, String aux) {
+        List<CMCQuotesLatestDto> listCMCQuotesLatestDto = new ArrayList<>();
         String strJson = getHttpJson(key, values, convert, aux);
         if (strJson == null || strJson.isEmpty()) {
             return null;
@@ -64,74 +64,74 @@ public class QuotesLatestServiceImpl extends ServiceImpl<QuotesLatestMapper, CMC
         JsonNode data = rootNode.path("data");
         for (String id : values.split(",")) {
             JsonNode coin = data.path(id);
-            QuotesLatestDto quotesLatestDto = new QuotesLatestDto();
-            quotesLatestDto.setId(coin.get("id").asInt());
+            CMCQuotesLatestDto CMCQuotesLatestDto = new CMCQuotesLatestDto();
+            CMCQuotesLatestDto.setId(coin.get("id").asInt());
             if (coin.hasNonNull("name")) {
-                quotesLatestDto.setName(coin.get("name").asText());
+                CMCQuotesLatestDto.setName(coin.get("name").asText());
             }
             if (coin.hasNonNull("symbol")) {
-                quotesLatestDto.setSymbol(coin.get("symbol").asText());
+                CMCQuotesLatestDto.setSymbol(coin.get("symbol").asText());
             }
             if (coin.hasNonNull("slug")) {
-                quotesLatestDto.setSlug(coin.get("slug").asText());
+                CMCQuotesLatestDto.setSlug(coin.get("slug").asText());
             }
             if (coin.hasNonNull("num_market_pairs")) {
-                quotesLatestDto.setNum_market_pairs(coin.get("num_market_pairs").asInt());
+                CMCQuotesLatestDto.setNum_market_pairs(coin.get("num_market_pairs").asInt());
             }
             if (coin.hasNonNull("date_added")) {
                 String date = DateHelper.utcToLocal(coin.get("date_added").asText());
-                quotesLatestDto.setDate_added(date);
+                CMCQuotesLatestDto.setDate_added(date);
             }
             if (coin.hasNonNull("max_supply")) {
-                quotesLatestDto.setMax_supply(coin.get("max_supply").asText());
+                CMCQuotesLatestDto.setMax_supply(coin.get("max_supply").asText());
             }
             if (coin.hasNonNull("circulating_supply")) {
-                quotesLatestDto.setCirculating_supply(coin.get("circulating_supply").asText());
+                CMCQuotesLatestDto.setCirculating_supply(coin.get("circulating_supply").asText());
             }
             if (coin.hasNonNull("total_supply")) {
-                quotesLatestDto.setTotal_supply(coin.get("total_supply").asText());
+                CMCQuotesLatestDto.setTotal_supply(coin.get("total_supply").asText());
             }
             if (coin.hasNonNull("is_active")) {
-                quotesLatestDto.setIs_active(coin.get("is_active").asInt());
+                CMCQuotesLatestDto.setIs_active(coin.get("is_active").asInt());
             }
             if (coin.hasNonNull("is_fiat")) {
-                quotesLatestDto.setIs_fiat(coin.get("is_fiat").asInt());
+                CMCQuotesLatestDto.setIs_fiat(coin.get("is_fiat").asInt());
             }
             if (coin.hasNonNull("cmc_rank")) {
-                quotesLatestDto.setCmc_rank(coin.get("cmc_rank").asInt());
+                CMCQuotesLatestDto.setCmc_rank(coin.get("cmc_rank").asInt());
             }
             if (coin.hasNonNull("last_updated")) {
                 log.info("11111111111111111111");
                 log.info(coin.get("last_updated").asText());
                 String date = DateHelper.utcToLocal(coin.get("last_updated").asText());
-                quotesLatestDto.setLast_updated(date);
+                CMCQuotesLatestDto.setLast_updated(date);
             }
             if (coin.hasNonNull("self_reported_circulating_supply")) {
-                quotesLatestDto.setSelf_reported_circulating_supply(coin.get("self_reported_circulating_supply").asText());
+                CMCQuotesLatestDto.setSelf_reported_circulating_supply(coin.get("self_reported_circulating_supply").asText());
             }
             if (coin.hasNonNull("self_reported_market_cap")) {
-                quotesLatestDto.setSelf_reported_market_cap(coin.get("self_reported_market_cap").asText());
+                CMCQuotesLatestDto.setSelf_reported_market_cap(coin.get("self_reported_market_cap").asText());
             }
 
             if (coin.hasNonNull("platform")) {
                 Platform p = mapper.convertValue(coin.path("platform"), Platform.class);
-                quotesLatestDto.setPlatform(p);
+                CMCQuotesLatestDto.setPlatform(p);
             }
 
             Quote quoteDto = getQuote(coin, convert);
             if(quoteDto != null){
-                quotesLatestDto.setQuote(quoteDto);
+                CMCQuotesLatestDto.setQuote(quoteDto);
             }
 
             List<String> listTags = getTags(coin);
             if (listTags != null) {
-                quotesLatestDto.setTags(listTags);
+                CMCQuotesLatestDto.setTags(listTags);
             }
 
-            listQuotesLatestDto.add(quotesLatestDto);
+            listCMCQuotesLatestDto.add(CMCQuotesLatestDto);
         }
 
-        return listQuotesLatestDto;
+        return listCMCQuotesLatestDto;
     }
 
     private String getHttpJson(String key, String values, String convert, String aux) {

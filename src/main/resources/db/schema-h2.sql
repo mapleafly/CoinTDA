@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS trade_info
     primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS coinMarketCap_id_map
+CREATE TABLE IF NOT EXISTS cmc_map
 (
     id integer NOT NULL,
     name VARCHAR(100) NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS coinMarketCap_id_map
     primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS coinMarketCap_listings  (
+CREATE TABLE IF NOT EXISTS cmc_listings_latest  (
     id integer NOT NULL,
     name VARCHAR(100),
     symbol VARCHAR(100),
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS coinMarketCap_listings  (
     primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS CMCQuotesLatest
+CREATE TABLE IF NOT EXISTS cmc_quotes_latest
 (
     id integer NOT NULL,
     name VARCHAR(100),

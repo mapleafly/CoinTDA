@@ -2,7 +2,7 @@ package org.cointda;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cointda.config.CoinMarketCapConfig;
-import org.cointda.dto.quote.QuotesLatestDto;
+import org.cointda.dto.quote.CMCQuotesLatestDto;
 import org.cointda.entity.CMCQuotesLatest;
 import org.cointda.entity.TradeInfo;
 import org.cointda.mapper.TradeInfoMapper;
@@ -55,11 +55,11 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
         //num_market_pairs,cmc_rank,date_added,tags,platform,max_supply,circulating_supply,total_supply,market_cap_by_total_supply,volume_24h_reported,volume_7d,volume_7d_reported,volume_30d,volume_30d_reported,is_active,is_fiat
         //log.info("quotesLatestService = "+ iQuotesLatestFeignClient.getHttpJson("1982", "USD", "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active"));
         String aux = "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active";
-        List<QuotesLatestDto> listQuotesLatestDto = iQuotesLatestService.getJson("id","1,1982", "USD", aux);
+        List<CMCQuotesLatestDto> listCMCQuotesLatestDto = iQuotesLatestService.getJson("id","1,1982", "USD", aux);
         List<CMCQuotesLatest> listCMCQuotesLatest = new ArrayList<>();
-        if(listQuotesLatestDto != null){
-            List<CMCQuotesLatest> list = CopyUtil.copyList(listQuotesLatestDto);
-            listQuotesLatestDto.stream().forEach(b -> log.info("dto::"+b.toString()));
+        if(listCMCQuotesLatestDto != null){
+            List<CMCQuotesLatest> list = CopyUtil.copyList(listCMCQuotesLatestDto);
+            listCMCQuotesLatestDto.stream().forEach(b -> log.info("dto::"+b.toString()));
             list.stream().forEach(b -> log.info("last::"+b.toString()));
             iQuotesLatestService.saveOrUpdateBatch(list);
 

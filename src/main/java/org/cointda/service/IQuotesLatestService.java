@@ -3,7 +3,7 @@ package org.cointda.service;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
-import org.cointda.dto.quote.QuotesLatestDto;
+import org.cointda.dto.quote.CMCQuotesLatestDto;
 import org.cointda.entity.CMCQuotesLatest;
 
 import java.io.Serializable;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface IQuotesLatestService extends IService<CMCQuotesLatest> {
 
-    List<QuotesLatestDto> getJson(String key, String values, String convert, String aux);
+    List<CMCQuotesLatestDto> getJson(String key, String values, String convert, String aux);
 
     int insert(CMCQuotesLatest entity);
     int update(CMCQuotesLatest entity);

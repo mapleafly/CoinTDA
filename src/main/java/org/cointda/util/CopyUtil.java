@@ -2,7 +2,7 @@ package org.cointda.util;
 
 import org.cointda.dto.Platform;
 import org.cointda.dto.quote.Quote;
-import org.cointda.dto.quote.QuotesLatestDto;
+import org.cointda.dto.quote.CMCQuotesLatestDto;
 import org.cointda.entity.CMCQuotesLatest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.lang.Nullable;
@@ -49,7 +49,7 @@ public class CopyUtil {
         return list;
     }
 
-    public static CMCQuotesLatest copy(QuotesLatestDto dto){
+    public static CMCQuotesLatest copy(CMCQuotesLatestDto dto){
         if(dto == null){
             return null;
         }
@@ -91,12 +91,12 @@ public class CopyUtil {
         return CMCQuotesLatest;
     }
 
-    public static List<CMCQuotesLatest> copyList(List<QuotesLatestDto> dtoList){
+    public static List<CMCQuotesLatest> copyList(List<CMCQuotesLatestDto> dtoList){
         if(dtoList == null || dtoList.isEmpty()){
             return null;
         }
         List<CMCQuotesLatest> list = new ArrayList<>();
-        for(QuotesLatestDto dto : dtoList){
+        for(CMCQuotesLatestDto dto : dtoList){
             if(dto != null) {
                 list.add(copy(dto));
             }

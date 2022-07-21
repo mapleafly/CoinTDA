@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class QuotesLatestDto {
+public class CMCQuotesLatestDto {
     private Integer id;
     private String name;
     private String symbol;
