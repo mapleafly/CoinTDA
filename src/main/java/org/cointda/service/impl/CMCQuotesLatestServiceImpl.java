@@ -13,8 +13,8 @@ import org.cointda.dto.Quote;
 import org.cointda.dto.CMCQuotesLatestDto;
 import org.cointda.entity.CMCQuotesLatest;
 import org.cointda.mapper.CMCQuotesLatestMapper;
-import org.cointda.service.IQuotesLatestService;
-import org.cointda.service.feignc.IQuotesLatestFeignClient;
+import org.cointda.service.ICMCQuotesLatestService;
+import org.cointda.service.feignc.ICMCQuotesLatestFeignClient;
 import org.cointda.util.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,10 +28,10 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class QuotesLatestServiceImpl extends ServiceImpl<CMCQuotesLatestMapper, CMCQuotesLatest> implements IQuotesLatestService {
+public class CMCQuotesLatestServiceImpl extends ServiceImpl<CMCQuotesLatestMapper, CMCQuotesLatest> implements ICMCQuotesLatestService {
 
     @Autowired
-    IQuotesLatestFeignClient iQuotesLatestFeignClient;
+    ICMCQuotesLatestFeignClient ICMCQuotesLatestFeignClient;
 
     @Resource
     private CMCQuotesLatestMapper CMCQuotesLatestMapper;
@@ -138,15 +138,15 @@ public class QuotesLatestServiceImpl extends ServiceImpl<CMCQuotesLatestMapper, 
         String strJson;
         switch (key) {
             case "id":
-                strJson = iQuotesLatestFeignClient.getHttpJsonById(values, convert,
+                strJson = ICMCQuotesLatestFeignClient.getHttpJsonById(values, convert,
                     aux);
                 break;
             case "symbol":
-                strJson = iQuotesLatestFeignClient.getHttpJsonBySymbol(values, convert,
+                strJson = ICMCQuotesLatestFeignClient.getHttpJsonBySymbol(values, convert,
                     aux);
                 break;
             case "slug":
-                strJson = iQuotesLatestFeignClient.getHttpJsonBySlug(values, convert,
+                strJson = ICMCQuotesLatestFeignClient.getHttpJsonBySlug(values, convert,
                     aux);
                 break;
             default:

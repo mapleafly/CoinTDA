@@ -6,10 +6,10 @@ import org.cointda.dto.CMCQuotesLatestDto;
 import org.cointda.entity.CMCQuotesLatest;
 import org.cointda.entity.TradeInfo;
 import org.cointda.mapper.TradeInfoMapper;
-import org.cointda.service.IQuotesLatestService;
-import org.cointda.service.feignc.ICoinMarketCapIdMapFeignClient;
-import org.cointda.service.feignc.IListingsLatestFeignClient;
-import org.cointda.service.feignc.IQuotesLatestFeignClient;
+import org.cointda.service.ICMCQuotesLatestService;
+import org.cointda.service.feignc.ICMCMapFeignClient;
+import org.cointda.service.feignc.ICMCListingsLatestFeignClient;
+import org.cointda.service.feignc.ICMCQuotesLatestFeignClient;
 import org.cointda.util.CopyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -33,14 +33,14 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
     private CoinMarketCapConfig coinMarketCapConfig;
 
     @Autowired
-    ICoinMarketCapIdMapFeignClient iCoinMarketCapIdMapFeignClient;
+    ICMCMapFeignClient ICMCMapFeignClient;
     @Autowired
-    IListingsLatestFeignClient iListingsLatestFeignClient;
+    ICMCListingsLatestFeignClient ICMCListingsLatestFeignClient;
     @Autowired
-    IQuotesLatestFeignClient iQuotesLatestFeignClient;
+    ICMCQuotesLatestFeignClient ICMCQuotesLatestFeignClient;
 
     @Autowired
-    IQuotesLatestService iQuotesLatestService;
+    ICMCQuotesLatestService ICMCQuotesLatestService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -55,15 +55,15 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
         //num_market_pairs,cmc_rank,date_added,tags,platform,max_supply,circulating_supply,total_supply,market_cap_by_total_supply,volume_24h_reported,volume_7d,volume_7d_reported,volume_30d,volume_30d_reported,is_active,is_fiat
         //log.info("quotesLatestService = "+ iQuotesLatestFeignClient.getHttpJson("1982", "USD", "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active"));
         String aux = "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active";
-        List<CMCQuotesLatestDto> listCMCQuotesLatestDto = iQuotesLatestService.getJson("id","1,1982", "USD", aux);
+        List<CMCQuotesLatestDto> listCMCQuotesLatestDto = ICMCQuotesLatestService.getJson("id","1,1982", "USD", aux);
         List<CMCQuotesLatest> listCMCQuotesLatest = new ArrayList<>();
         if(listCMCQuotesLatestDto != null){
             List<CMCQuotesLatest> list = CopyUtil.copyList(listCMCQuotesLatestDto);
             listCMCQuotesLatestDto.stream().forEach(b -> log.info("dto::"+b.toString()));
             list.stream().forEach(b -> log.info("last::"+b.toString()));
-            iQuotesLatestService.saveOrUpdateBatch(list);
+            ICMCQuotesLatestService.saveOrUpdateBatch(list);
 
-            iQuotesLatestService.selectList(null).stream().forEach(a -> log.info("sql::"+a.toString()));
+            ICMCQuotesLatestService.selectList(null).stream().forEach(a -> log.info("sql::"+a.toString()));
             //for(QuotesLatestDto dto : listQuotesLatestDto){
             //    QuotesLatest quotesLatest = new QuotesLatest();
             //    BeanUtils.copyProperties(dto, quotesLatest);

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * 使用FeignClient，远程获取json数据
  */
 @FeignClient(name = "IQuotesLatestFeignClient", url = "${coin-market-cap.quotesLatest}", configuration = FeignClientConfig.class)
-public interface IQuotesLatestFeignClient {
+public interface ICMCQuotesLatestFeignClient {
 
     /**
      *

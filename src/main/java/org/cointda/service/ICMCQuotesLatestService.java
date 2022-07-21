@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 
-public interface IQuotesLatestService extends IService<CMCQuotesLatest> {
+public interface ICMCQuotesLatestService extends IService<CMCQuotesLatest> {
 
     List<CMCQuotesLatestDto> getJson(String key, String values, String convert, String aux);
 
