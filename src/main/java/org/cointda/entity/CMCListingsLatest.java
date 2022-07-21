@@ -11,8 +11,8 @@ import java.io.Serializable;
  * 最新价格全表
  */
 @Data
-@TableName("oinMarketCap_listings")
-public class CoinMarketCapListings implements Serializable {
+@TableName("cmc_listings_latest")
+public class CMCListingsLatest implements Serializable {
     //CoinMarketCap定义的id
     @TableId
     private Integer id;

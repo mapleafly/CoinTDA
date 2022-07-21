@@ -11,7 +11,7 @@ import org.cointda.dto.Platform;
 import org.cointda.dto.Status;
 import org.cointda.dto.quote.Quote;
 import org.cointda.dto.quote.QuotesLatestDto;
-import org.cointda.entity.QuotesLatest;
+import org.cointda.entity.CMCQuotesLatest;
 import org.cointda.mapper.QuotesLatestMapper;
 import org.cointda.service.IQuotesLatestService;
 import org.cointda.service.feignc.IQuotesLatestFeignClient;
@@ -28,7 +28,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class QuotesLatestServiceImpl extends ServiceImpl<QuotesLatestMapper, QuotesLatest> implements IQuotesLatestService {
+public class QuotesLatestServiceImpl extends ServiceImpl<QuotesLatestMapper, CMCQuotesLatest> implements IQuotesLatestService {
 
     @Autowired
     IQuotesLatestFeignClient iQuotesLatestFeignClient;
@@ -206,12 +206,12 @@ public class QuotesLatestServiceImpl extends ServiceImpl<QuotesLatestMapper, Quo
      * @return int n 表示插入几条数据，如果n=0 表示插入失败
      */
     @Override
-    public int insert(QuotesLatest entity) {
+    public int insert(CMCQuotesLatest entity) {
         return quotesLatestMapper.insert(entity);
     }
 
     @Override
-    public int update(QuotesLatest entity) {
+    public int update(CMCQuotesLatest entity) {
         return quotesLatestMapper.updateById(entity);
     }
 
@@ -221,22 +221,22 @@ public class QuotesLatestServiceImpl extends ServiceImpl<QuotesLatestMapper, Quo
     }
 
     @Override
-    public int deleteById(QuotesLatest entity) {
+    public int deleteById(CMCQuotesLatest entity) {
         return quotesLatestMapper.deleteById(entity);
     }
 
     @Override
-    public QuotesLatest selectById(Serializable id) {
+    public CMCQuotesLatest selectById(Serializable id) {
         return quotesLatestMapper.selectById(id);
     }
 
     @Override
-    public List<QuotesLatest> selectBatchIds(Collection<? extends Serializable> idList) {
+    public List<CMCQuotesLatest> selectBatchIds(Collection<? extends Serializable> idList) {
         return quotesLatestMapper.selectBatchIds(idList);
     }
 
     @Override
-    public List<QuotesLatest> selectList(Wrapper<QuotesLatest> queryWrapper) {
+    public List<CMCQuotesLatest> selectList(Wrapper<CMCQuotesLatest> queryWrapper) {
         return quotesLatestMapper.selectList(queryWrapper);
     }
 }

@@ -10,8 +10,8 @@ import java.io.Serializable;
  * 最新价格表
  */
 @Data
-@TableName("quotesLatest")
-public class QuotesLatest implements Serializable {
+@TableName("cmc_quotes_latest")
+public class CMCQuotesLatest implements Serializable {
     //CoinMarketCap定义的id
     @TableId
     private Integer id;

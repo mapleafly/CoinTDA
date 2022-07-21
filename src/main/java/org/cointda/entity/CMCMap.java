@@ -16,8 +16,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@TableName("coinMarketCap_id_map")
-public class CoinMarketCapIdMap implements Serializable {
+@TableName("cmc_map")
+public class CMCMap implements Serializable {
     @TableId
     private Integer id;
     private String name;
@@ -37,8 +37,8 @@ public class CoinMarketCapIdMap implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o instanceof CoinMarketCapIdMap) {
-            CoinMarketCapIdMap bean = (CoinMarketCapIdMap) o;
+        if (o instanceof CMCMap) {
+            CMCMap bean = (CMCMap) o;
             //查看两个对象的id和is_active属性值是否相等,返回结果
             return Objects.equals(id, bean.id) && Objects.equals(isActive, bean.isActive);
         }

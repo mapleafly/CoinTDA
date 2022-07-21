@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS coinMarketCap_listings  (
     primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS quotesLatest
+CREATE TABLE IF NOT EXISTS CMCQuotesLatest
 (
     id integer NOT NULL,
     name VARCHAR(100),
