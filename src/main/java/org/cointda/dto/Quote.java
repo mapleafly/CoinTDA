@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-
 @Getter
 @Setter
 @ToString
@@ -24,5 +22,5 @@ public class Quote {
     private double market_cap_dominance;
     private long fully_diluted_market_cap;
     private double tvl;
-    private Date last_updated;
+    private String last_updated;
 }

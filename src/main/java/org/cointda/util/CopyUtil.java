@@ -105,9 +105,21 @@ public class CopyUtil {
         CMCQuotesLatest.setName(dto.getName());
         CMCQuotesLatest.setSymbol(dto.getSymbol());
         CMCQuotesLatest.setSlug(dto.getSlug());
-        CMCQuotesLatest.setLastUpdated(dto.getLast_updated());
+
+        String lastUpdated = dto.getLast_updated().replace("Z", " UTC");
+        String dataAdded = dto.getDate_added().replace("Z", " UTC");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+        SimpleDateFormat defaultFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            CMCQuotesLatest.setLastUpdated(defaultFormat.format(format.parse(lastUpdated)));
+            CMCQuotesLatest.setDateAdded(defaultFormat.format(format.parse(dataAdded)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //CMCQuotesLatest.setLastUpdated(dto.getLast_updated());
         CMCQuotesLatest.setNumMarketPairs(dto.getNum_market_pairs());
-        CMCQuotesLatest.setDateAdded(dto.getDate_added());
+        //CMCQuotesLatest.setDateAdded(dto.getDate_added());
         CMCQuotesLatest.setMaxSupply(dto.getMax_supply());
         CMCQuotesLatest.setCirculatingSupply(dto.getCirculating_supply());
         CMCQuotesLatest.setTotalSupply(dto.getTotal_supply());

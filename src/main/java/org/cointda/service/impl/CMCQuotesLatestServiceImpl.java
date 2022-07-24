@@ -7,15 +7,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.cointda.dto.Platform;
-import org.cointda.dto.Status;
-import org.cointda.dto.Quote;
 import org.cointda.dto.CMCQuotesLatestDto;
+import org.cointda.dto.Platform;
+import org.cointda.dto.Quote;
+import org.cointda.dto.Status;
 import org.cointda.entity.CMCQuotesLatest;
 import org.cointda.mapper.CMCQuotesLatestMapper;
 import org.cointda.service.ICMCQuotesLatestService;
 import org.cointda.service.feignc.ICMCQuotesLatestFeignClient;
-import org.cointda.util.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -79,8 +78,8 @@ public class CMCQuotesLatestServiceImpl extends ServiceImpl<CMCQuotesLatestMappe
                 CMCQuotesLatestDto.setNum_market_pairs(coin.get("num_market_pairs").asInt());
             }
             if (coin.hasNonNull("date_added")) {
-                String date = DateHelper.utcToLocal(coin.get("date_added").asText());
-                CMCQuotesLatestDto.setDate_added(date);
+                //String date = DateHelper.utcToLocal(coin.get("date_added").asText());
+                CMCQuotesLatestDto.setDate_added(coin.get("date_added").asText());
             }
             if (coin.hasNonNull("max_supply")) {
                 CMCQuotesLatestDto.setMax_supply(coin.get("max_supply").asText());
@@ -103,8 +102,8 @@ public class CMCQuotesLatestServiceImpl extends ServiceImpl<CMCQuotesLatestMappe
             if (coin.hasNonNull("last_updated")) {
                 log.info("11111111111111111111");
                 log.info(coin.get("last_updated").asText());
-                String date = DateHelper.utcToLocal(coin.get("last_updated").asText());
-                CMCQuotesLatestDto.setLast_updated(date);
+                //String date = DateHelper.utcToLocal(coin.get("last_updated").asText());
+                CMCQuotesLatestDto.setLast_updated(coin.get("last_updated").asText());
             }
             if (coin.hasNonNull("self_reported_circulating_supply")) {
                 CMCQuotesLatestDto.setSelf_reported_circulating_supply(coin.get("self_reported_circulating_supply").asText());
