@@ -1,14 +1,17 @@
 package org.cointda.util;
 
+import org.cointda.dto.CMCMapDto;
+import org.cointda.dto.CMCQuotesLatestDto;
 import org.cointda.dto.Platform;
 import org.cointda.dto.Quote;
-import org.cointda.dto.CMCQuotesLatestDto;
+import org.cointda.entity.CMCMap;
 import org.cointda.entity.CMCQuotesLatest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +48,50 @@ public class CopyUtil {
         List<T> list = new ArrayList<>();
         for (E source : sources) {
             list.add(copy(source, c));
+        }
+        return list;
+    }
+    public static CMCMap copy(CMCMapDto dto){
+        if(dto == null){
+            return null;
+        }
+
+        CMCMap cmcMap = new CMCMap();
+        cmcMap.setId(dto.getId());
+        cmcMap.setName(dto.getName());
+        cmcMap.setSymbol(dto.getSymbol());
+        cmcMap.setSlug(dto.getSlug());
+        cmcMap.setIsActive(dto.getIsActive());
+        cmcMap.setRank(dto.getRank());
+
+        String firstDateTime = dto.getFirstHistoricalData().replace("Z", " UTC");
+        String lastDateTime = dto.getLastHistoricalData().replace("Z", " UTC");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+        SimpleDateFormat defaultFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            cmcMap.setFirstHistoricalData(defaultFormat.format(format.parse(firstDateTime)));
+            cmcMap.setLastHistoricalData(defaultFormat.format(format.parse(lastDateTime)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Platform platform = dto.getPlatform();
+        if(platform != null){
+            cmcMap.setPlatformId(platform.getId());
+            cmcMap.setTokenAddress(platform.getToken_address());
+        }
+
+        return cmcMap;
+    }
+    public static List<CMCMap> copyListCMCMap(List<CMCMapDto> dtoList){
+        if(dtoList == null || dtoList.isEmpty()){
+            return null;
+        }
+        List<CMCMap> list = new ArrayList<>();
+        for(CMCMapDto dto : dtoList){
+            if(dto != null) {
+                list.add(copy(dto));
+            }
         }
         return list;
     }
@@ -91,7 +138,7 @@ public class CopyUtil {
         return CMCQuotesLatest;
     }
 
-    public static List<CMCQuotesLatest> copyList(List<CMCQuotesLatestDto> dtoList){
+    public static List<CMCQuotesLatest> copyListCMCQuotes(List<CMCQuotesLatestDto> dtoList){
         if(dtoList == null || dtoList.isEmpty()){
             return null;
         }

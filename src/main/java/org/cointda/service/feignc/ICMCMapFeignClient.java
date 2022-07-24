@@ -9,15 +9,52 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * 使用FeignClient，远程获取json数据
  */
-@FeignClient(name = "ICoinMarketCapIdMapFeignClient", url = "${coin-market-cap.coinMarketCapIDMap}", configuration = FeignClientConfig.class)
+@FeignClient(name = "ICMCMapFeignClient", url = "${coin-market-cap.coinMarketCapIDMap}", configuration = FeignClientConfig.class)
 public interface ICMCMapFeignClient {
-    //@GetMapping(value = "/v1/cryptocurrency/map", consumes = MediaType.APPLICATION_JSON_VALUE)
-    //@Headers({"X-CMC_PRO_API_KEY:8f94c3a3-0a31-43e4-818e-a7e83791b1b3"})
+    /**
+     *
+     * @param listing_status 状态； "active" ， "inactive" , "untracked"
+     * @param limit  1...5000
+     * @param sort  排序："id" , "cmc_rank"
+     * @return
+     */
     @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
     @Headers(value = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
     public String getHttpJson(
         @RequestParam("listing_status") String listing_status,
-        @RequestParam("limit") String limit,
+        @RequestParam("start") Integer start,
+        @RequestParam("limit") Integer limit,
+        @RequestParam("sort") String sort,
+        @RequestParam("aux") String aux
+    );
+
+    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    @Headers(value = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    public String getHttpJson(
+        @RequestParam("start") Integer start,
+        @RequestParam("limit") Integer limit,
+        @RequestParam("sort") String sort,
+        @RequestParam("aux") String aux
+    );
+
+    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    @Headers(value = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    public String getHttpJson(
+        @RequestParam("start") Integer start,
+        @RequestParam("limit") Integer limit,
         @RequestParam("sort") String sort
+    );
+
+    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    @Headers(value = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    public String getHttpJson(
+        @RequestParam("limit") Integer limit,
+        @RequestParam("sort") String sort
+    );
+
+    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    @Headers(value = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    public String getHttpJson(
+         @RequestParam("limit") Integer limit
     );
 }
