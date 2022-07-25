@@ -1,17 +1,12 @@
 package org.cointda;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cointda.dto.CMCQuotesLatestDto;
-import org.cointda.entity.CMCQuotesLatest;
 import org.cointda.service.ICMCMapService;
 import org.cointda.service.ICMCQuotesLatestService;
-import org.cointda.util.CopyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Slf4j
 @Component
@@ -29,6 +24,7 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
         log.info("加载顺序1");
 
         ///////// quote test //////////
+/*
 
         String aux = "num_market_pairs,cmc_rank,date_added,platform,max_supply,circulating_supply,total_supply,is_active";
         List<CMCQuotesLatestDto> listCMCQuotesLatestDto = icmcQuotesLatestService.getJson("id", "1,1027,825,3408,1839,2010,4687,52,5426,74,4943", "USD", aux);
@@ -40,6 +36,7 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
 
             icmcQuotesLatestService.selectList(null).stream().forEach(a -> log.info("CMCQuotesLatest::sql::" + a.toString()));
         }
+*/
         ////// CMCMap test ////////
 /*
 

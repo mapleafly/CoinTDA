@@ -15,8 +15,7 @@
  */
 package org.cointda.util;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -24,6 +23,7 @@ import java.util.prefs.Preferences;
 /**
  * @author lif
  */
+@Slf4j
 public class PrefsHelper {
 
     // 主题
@@ -42,8 +42,10 @@ public class PrefsHelper {
     public static final String HOST = "host";
     public static final String PORT = "port";
 
-    private static final Logger logger = LogManager.getLogger(PrefsHelper.class.getName());
-    private static final Preferences preferences =
+    //coin-market-cap网站的 apikey
+    public static final String CMC_API_KEY = "cmcapikey";
+
+     private static final Preferences preferences =
         Preferences.userRoot().node("/org/mapleaf/cointda");
 
     /**
@@ -65,7 +67,7 @@ public class PrefsHelper {
         try {
             preferences.flush();
         } catch (BackingStoreException e) {
-            logger.error(e);
+            log.error(e.toString());
         }
     }
 
