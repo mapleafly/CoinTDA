@@ -38,14 +38,12 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
         }
 */
         ////// CMCMap test ////////
-/*
 
-        List<CMCMapDto> cmcMapDtoList = icmcMapService.getJson(50, "cmc_rank");
+     /*   List<CMCMapDto> cmcMapDtoList = icmcMapService.getJson(50, "cmc_rank");
         List<CMCMap> cmcMaps = CopyUtil.copyListCMCMap(cmcMapDtoList);
         icmcMapService.saveOrUpdateBatch(cmcMaps);
-        //icmcMapService.selectList(null).stream().forEach(a -> log.info("CMCMap::sql::"+a.toString()));
+        icmcMapService.selectList(null).stream().forEach(a -> log.info("CMCMap::sql::"+a.toString()));
 */
-
 
     }
 }
