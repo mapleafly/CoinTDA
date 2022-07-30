@@ -61,6 +61,8 @@ public class PreferencesViewController implements Initializable {
     private TextField hostTextField;
     @FXML
     private CheckBox proxyCheck;
+    @FXML
+    private TextField apikeyTextField;
 
     /**
      * @param url 1
@@ -134,6 +136,9 @@ public class PreferencesViewController implements Initializable {
             portTextField.setDisable(true);
             portTextField.setText(PrefsHelper.getPreferencesValue(PrefsHelper.PORT, "62010"));
         }
+
+        //初始化coinmarketcap.com参数
+        apikeyTextField.setText(PrefsHelper.getPreferencesValue(PrefsHelper.CMC_API_KEY, ""));
     }
 
     /**
@@ -176,6 +181,8 @@ public class PreferencesViewController implements Initializable {
         } else {
             PrefsHelper.updatePreferencesValue(PrefsHelper.PROXY, BooleanEnum.NO.toString());
         }
+        //保存apikey
+        PrefsHelper.updatePreferencesValue(PrefsHelper.CMC_API_KEY, apikeyTextField.getText());
 
         // 刷新保存
         PrefsHelper.flushPreferences();

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/11.0.2" fx:controller="org.cointda.modules.prefs.PreferencesViewController">
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cointda.modules.prefs.PreferencesViewController">
    <children>
       <SplitPane dividerPositions="0.5" layoutX="100.0" layoutY="45.0" orientation="VERTICAL" prefHeight="700.0" prefWidth="850.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -79,6 +79,17 @@
                         <TextField fx:id="portTextField" prefHeight="23.0" prefWidth="99.0" />
                      </children>
                   </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="41.0" layoutY="337.0" prefHeight="40.0" prefWidth="726.0" spacing="20.0">
+                     <children>
+                        <Label prefHeight="19.0" prefWidth="210.0" text="X-CMC_PRO_API_KEY：" />
+                        <TextField fx:id="apikeyTextField" prefHeight="23.0" prefWidth="403.0" />
+                     </children>
+                  </HBox>
+                  <Label layoutX="37.0" layoutY="310.0" prefHeight="19.0" prefWidth="196.0" text="coinmarketcap.com参数">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
                </children></AnchorPane>
           <AnchorPane maxHeight="40.0" minHeight="0.0" minWidth="0.0" prefHeight="40.0" prefWidth="848.0">
                <children>
