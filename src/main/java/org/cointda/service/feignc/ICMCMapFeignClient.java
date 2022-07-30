@@ -27,7 +27,7 @@ public interface ICMCMapFeignClient {
         @RequestParam("sort") String sort,
         @RequestParam("aux") String aux
     );
-
+    //Todo 有待解决从首选项里取值赋予@GetMapping参数里面
     @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
     @Headers(value = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
     public String getHttpJson(
