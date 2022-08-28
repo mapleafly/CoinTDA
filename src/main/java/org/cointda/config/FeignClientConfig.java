@@ -22,15 +22,29 @@ import java.util.Set;
  */
 @Slf4j
 @Configuration
-public class FeignClientConfig{
-    //@Value("${proxy.host}")
+public class FeignClientConfig {
     BooleanEnum proxyEnum = BooleanEnum.valueOf(PrefsHelper.getPreferencesValue(PrefsHelper.PROXY, BooleanEnum.NO.toString()));
     private String proxyHost = PrefsHelper.getPreferencesValue(PrefsHelper.HOST, "127.0.0.1");
-    //@Value("${proxy.port}")
     private Integer proxyPort = Integer.valueOf(PrefsHelper.getPreferencesValue(PrefsHelper.PORT, "53214"));
     @Value("#{'${proxy.domains}'.split(',')}")
     private Set<String> domainList;
 
+    /**
+     * Feign拦截器
+     *
+     * @return
+     */
+    @Bean
+    public FeignAuthRequestInterceptor feignAuthRequestInterceptor() {
+        return new FeignAuthRequestInterceptor();
+    }
+
+    /**
+     * Feign代理设置
+     *
+     * @param builder
+     * @return
+     */
     @Bean
     public OkHttpClientFactory okHttpClientFactory(OkHttpClient.Builder builder) {
         return new ProxyOkHttpClientFactory(builder);
@@ -45,7 +59,7 @@ public class FeignClientConfig{
             builder.proxySelector(new ProxySelector() {
                 @Override
                 public List<Proxy> select(URI uri) {
-                    if(proxyEnum.equals(BooleanEnum.NO)){
+                    if (proxyEnum.equals(BooleanEnum.NO)) {
                         return Collections.singletonList(Proxy.NO_PROXY);
                     }
                     if (uri == null || !domainList.contains(uri.getHost())) {
@@ -61,15 +75,4 @@ public class FeignClientConfig{
             });
         }
     }
-
-    /**
-     * 自定义拦截器
-     * @return
-     */
-    @Bean
-    public FeignAuthRequestInterceptor feignAuthRequestInterceptor(){
-        return new FeignAuthRequestInterceptor();
-    }
-
-
 }

@@ -23,8 +23,7 @@ public class InitDBCommanLineRunner implements CommandLineRunner {
     ICMCQuotesLatestService icmcQuotesLatestService;
     @Autowired
     ICMCMapService icmcMapService;
-    //@Autowired
-    //CoinMarketCapConfig coinMarketCapConfig;
+
 
     @Override
     public void run(String... args) throws Exception {
