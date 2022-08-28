@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:~/.cointda/h2/cointdadbtest;AUTO_SERVER=TRUE
+    url: jdbc:h2:~/.cointda/h2/cointdadb;AUTO_SERVER=TRUE
     username: root
     password: test
   sql:
@@ -15,7 +15,6 @@ mybatis-plus:
     db-config:
       id-type: auto #id生成规则：数据库id自增
 coin-market-cap:
-  apiKey:
   customHeader: X-CMC_PRO_API_KEY
   httpHeader: application/json
   coinMarketCapIDMap: https://pro-api.coinmarketcap.com/v1/cryptocurrency/map
@@ -43,6 +42,6 @@ feign:
     enabled: true # 开启 okhttp
 
 proxy:
-  host: 127.0.0.1
-  port: 60368
+  #host: 127.0.0.1
+  #port: 53214
   domains: pro-api.coinmarketcap.com

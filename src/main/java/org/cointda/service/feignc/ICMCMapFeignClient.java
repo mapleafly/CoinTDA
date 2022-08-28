@@ -1,6 +1,5 @@
 package org.cointda.service.feignc;
 
-import feign.Headers;
 import org.cointda.config.FeignClientConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +17,7 @@ public interface ICMCMapFeignClient {
      * @param sort  排序："id" , "cmc_rank"
      * @return
      */
-    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
-    @Headers(value = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}"})
     public String getHttpJson(
         @RequestParam("listing_status") String listing_status,
         @RequestParam("start") Integer start,
@@ -27,9 +25,8 @@ public interface ICMCMapFeignClient {
         @RequestParam("sort") String sort,
         @RequestParam("aux") String aux
     );
-    //Todo 有待解决从首选项里取值赋予@GetMapping参数里面
-    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
-    @Headers(value = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+
+    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}"})
     public String getHttpJson(
         @RequestParam("start") Integer start,
         @RequestParam("limit") Integer limit,
@@ -37,23 +34,22 @@ public interface ICMCMapFeignClient {
         @RequestParam("aux") String aux
     );
 
-    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
-    @Headers(value = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}"})
     public String getHttpJson(
         @RequestParam("start") Integer start,
         @RequestParam("limit") Integer limit,
         @RequestParam("sort") String sort
     );
 
-    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
-    @Headers(value = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    //@GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=#{T(org.cointda.util.PrefsHelper).getCmcApiKey()}"})
+    //@Headers(value = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=#{T(org.cointda.util.PrefsHelper).getCmcApiKey()}"})
+    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}"})
     public String getHttpJson(
         @RequestParam("limit") Integer limit,
         @RequestParam("sort") String sort
     );
 
-    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
-    @Headers(value = {"Accept=${coin-market-cap.httpHeader}", "${coin-market-cap.customHeader}=${coin-market-cap.apiKey}"})
+    @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}"})
     public String getHttpJson(
          @RequestParam("limit") Integer limit
     );

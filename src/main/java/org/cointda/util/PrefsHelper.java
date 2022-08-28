@@ -87,4 +87,7 @@ public class PrefsHelper {
         preferences.remove(k);
     }
 
+    public static String getCmcApiKey(){
+        return preferences.get(CMC_API_KEY, "");
+    }
 }

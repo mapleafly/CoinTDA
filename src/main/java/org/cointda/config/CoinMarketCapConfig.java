@@ -1,17 +1,35 @@
 package org.cointda.config;
 
-import org.cointda.util.PrefsHelper;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 
 //@Data
-@Component
+//@Component
+@Slf4j
+//@Configuration
 //@ConfigurationProperties(prefix = "coin-market-cap")
 public class CoinMarketCapConfig {
-    @Bean("CMCApiKey")
-    String getApiKey(){
-        return PrefsHelper.getPreferencesValue(PrefsHelper.CMC_API_KEY, "");
+/*
+
+    @Value("${coin-market-cap.customHeader}")
+    private String customHeader;
+    @Value("${coin-market-cap.httpHeader}")
+    private String httpHeader;
+
+    @Bean("cmcHeaders")
+    String getHeaders(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Accept=")
+            .append(httpHeader)
+            .append(",")
+            .append(customHeader)
+            .append("=")
+            .append(PrefsHelper.getPreferencesValue(PrefsHelper.CMC_API_KEY, ""));
+
+        log.info("CoinMarketCapConfig::getheaders()::" + sb.toString());
+        return sb.toString();
     }
+*/
+
     //private String apiKey;
     //private String customHeader;
     //private String httpHeader;

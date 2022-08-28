@@ -22,7 +22,7 @@ import java.util.Set;
  */
 @Slf4j
 @Configuration
-public class FeignClientConfig {
+public class FeignClientConfig{
     //@Value("${proxy.host}")
     BooleanEnum proxyEnum = BooleanEnum.valueOf(PrefsHelper.getPreferencesValue(PrefsHelper.PROXY, BooleanEnum.NO.toString()));
     private String proxyHost = PrefsHelper.getPreferencesValue(PrefsHelper.HOST, "127.0.0.1");
@@ -61,4 +61,15 @@ public class FeignClientConfig {
             });
         }
     }
+
+    /**
+     * 自定义拦截器
+     * @return
+     */
+    @Bean
+    public FeignAuthRequestInterceptor feignAuthRequestInterceptor(){
+        return new FeignAuthRequestInterceptor();
+    }
+
+
 }
