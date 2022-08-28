@@ -6,7 +6,7 @@ coinMarketCapIDMap: https://pro-api.coinmarketcap.com/v1/cryptocurrency/map
 metadata: https://pro-api.coinmarketcap.com/v1/cryptocurrency/info
 latestlistings: https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest
 historicalListings: https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/historical 
-latestQuotes: https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest 
+latestQuotes: https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest
 historicalQuotes: https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/historical
 latestMarketPairs: https://pro-api.coinmarketcap.com/v1/cryptocurrency/market-pairs/latest -
 latestOHLCV: https://pro-api.coinmarketcap.com/v1/cryptocurrency/ohlcv/latest 

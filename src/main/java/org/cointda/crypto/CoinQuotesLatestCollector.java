@@ -9,6 +9,7 @@ import org.cointda.bean.CoinQuotesLatestBean;
 import org.cointda.bean.CryptocurrencyBean;
 import org.cointda.util.DateHelper;
 import org.cointda.util.HttpHelper;
+import org.cointda.util.PrefsHelper;
 import org.cointda.util.YmalFc;
 
 import java.io.IOException;
@@ -47,7 +48,8 @@ public class CoinQuotesLatestCollector {
     public CoinQuotesLatestCollector() {
         YmalFc<CryptocurrencyBean> ymalFc = new YmalFc<>(CryptocurrencyBean.class);
         CryptocurrencyBean contact = ymalFc.build();
-        apiKey = contact.getApiKey();
+        //apiKey = contact.getApiKey();
+        apiKey = PrefsHelper.getPreferencesValue(PrefsHelper.CMC_API_KEY, "");
         uri = contact.getLatestQuotes();
         customHeader = contact.getCustomHeader();
         httpHeaders = contact.getHttpHeader();

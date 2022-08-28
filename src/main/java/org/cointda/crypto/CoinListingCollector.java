@@ -24,6 +24,7 @@ import org.cointda.bean.CoinMarketCapListingBean;
 import org.cointda.bean.CryptocurrencyBean;
 import org.cointda.util.DateHelper;
 import org.cointda.util.HttpHelper;
+import org.cointda.util.PrefsHelper;
 import org.cointda.util.YmalFc;
 
 import java.io.IOException;
@@ -46,7 +47,8 @@ public class CoinListingCollector {
     public CoinListingCollector() {
         YmalFc<CryptocurrencyBean> ymalFc = new YmalFc<>(CryptocurrencyBean.class);
         CryptocurrencyBean contact = ymalFc.build();
-        apiKey = contact.getApiKey();
+        //apiKey = contact.getApiKey();
+        apiKey = PrefsHelper.getPreferencesValue(PrefsHelper.CMC_API_KEY, "");
         uri = contact.getLatestlistings();
         customHeader = contact.getCustomHeader();
         httpHeaders = contact.getHttpHeader();
