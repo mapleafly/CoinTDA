@@ -32,7 +32,6 @@ public class SpringBootApp implements CommandLineRunner {
         Application.launch(App.class, args);
 
         //todo 下一步计划
-        // 1.完善ICMCListingsLatestFeignClient
         // 2.创建ICMCListingsLatestService及实现类
         // 3.实现各种业务Service
         // 4.替换数据库

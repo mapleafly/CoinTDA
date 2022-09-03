@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * 使用FeignClient，远程获取json数据
  */
+@Deprecated
 @FeignClient(name = "ICMCListingsLatestFeignClient", url = "${coin-market-cap.latestListings}", configuration = FeignClientConfig.class)
 public interface ICMCListingsLatestFeignClient {
     @GetMapping(headers = {"Accept=${coin-market-cap.httpHeader}"})
